@@ -3,69 +3,114 @@ class MyObject( object ):
     def __repr__( self ):
         return "%s %s" % ( str( self ), super( MyObject, self ).__repr__( ) )
 
+class Condition( MyObject ):
+    def __init__( self, attToCheck, valToCheck, partToCheck, op ):
+        self.attToCheck = attToCheck.upper( )
+        self.partToCheck = partToCheck.upper( )
+        self.valToCheck = valToCheck.upper( )
+        self.op = op.lower( )
+
+    def check( self, circumstance ):
+        vals = getattr( getattr( circumstance, self.partToCheck ), self.attToCheck, [ self.valToCheck ] )
+        if self.op == "in":
+            return self.valToCheck in vals
+        elif self.op == "not in":
+            return self.valToCheck not in vals
+        
+    def __str__( self ):
+        return "( %s %s %s's %s )" % ( self.valToCheck, self.op, self.partToCheck, self.attToCheck )
+        
+class Conditions( MyObject ):
+    def __init__( self, conditions, op ):
+        self.conditions = [ ]
+        for c in conditions:
+            if isinstance( c, str ):
+                c = c.split( )
+                self.conditions.append( Condition( c[ -1 ], c[ 0 ], c[ -2 ], " ".join( c[ 1:-2 ] ) ) )
+            elif isinstance( c, tuple ):
+                self.conditions.append( Conditions( c[ :-1 ], c[ -1 ] ) )
+        self.op = op.lower( )
+
+    def __str__( self ):
+        return ( " %s " % self.op ).join( [ str( c ) for c in self.conditions ] )
+        
+    def check( self, circumstance ):
+        for c in self.conditions:
+            truth = c.check( circumstance )
+            if self.op == "and" and truth == False:
+                return False
+            elif self.op == "or" and truth == True:
+                return True
+        if self.op == "and":
+            return True
+        elif self.op == "or":
+            return False
+
+
 class Modifier( MyObject ):
-    def __init__( self, cause, number, conditions, condition=True ):
-        self.cause = cause
-        self.targets = { }
-        self.number = number
+    def __init__( self, parent, target, conditions ):
+        self.parent = parent
+        self.target = target
         self.conditions = conditions
-        self.condition = condition
-        self.targetId = None
 
     def __add__( self, other ):
-        number = int( self )
-        return number + other
+        try:
+            return int( self ) + other
+        except:
+            return other
     __radd__ = __add__
 
     def __int__( self ):
-        if self.targetId is None or self.conditions[ self.condition ]( self.target ):
+        if self.conditions.check( self.target.situation ):
         #If the circumstances are right, add me to the value
-            return self.number
+            return int( self.parent )
         else:
-            return 0
+            raise "I don't modify %s under these circumstances" % self.target.name
 
-    def addTarget( self, target ):
-        self.targets[ target.key ] = target
-        target.modifiers[ self.key ] = self
+    def __str__( self ):
+        try:
+            num = int( self )
+            return str( self.parent )
+        except:
+            return "\b"
+
+    #Properties
+    def getKey( self ):
+        return self.parent.key
+    key = property( fget=getKey, doc="The unique key for this Modifier's ModifierFactory" )
+    
+    def getNumber( self ):
+        return self.parent.number
+    number = property( fget=getNumber, doc="This Attributes base value" )
+
+class ModifierFactory( MyObject ):
+    def __init__( self, cause, number ):
+        self.cause = cause
+        self.targets = { }
+        self.number = number
+        self.targetId = None
+
+    def __int__( self ):
+        return self.number
 
     def __str__( self ):
         number = self.number
         return "%s%s ( from %s )" % ( number > -1 and "+" or "", number, str( self.cause ) )
 
-    def addTarget( self, target ):
-        self.targets[ target.key ] = target
-        target.modifiers[ self.key ] = self
-
-    def addToTargets( self ):
-        for target in self.targets.values( ):
-            target.modifiers[ self.key ] = self
-
-    def removeFromTargets( self ):
-        for target in self.targets.values( ):
-            del target.modifiers[ self.key ]
+    def addTarget( self, target, conditions ):
+        mod = Modifier( self, target, conditions )
+        self.targets[ target.key ] = mod
+        target.modifiers[ self.key ] = mod
 
     def removeTarget( self, target ):
         del self.targets[ target.key ]
         del target.modifiers[ self.key ]
 
-    def resolveForTarget ( self, targetId ):
-        if targetId not in self.targets:
-            targetId = targetId.key
-        targ = self.targetId
-        self.targetId = targetId
-        number = int( self )
-        self.targetId = targ
-        return number
-
     #Properties
     def getKey( self ):
         return "%s: %s %s" % ( self.__class__.__name__, getattr( self.cause, 'key', self.cause ), " ".join( self.targets.keys( ) ) )
-    key = property( fget=getKey, doc="The unique ke for this Modifier" )
+    key = property( fget=getKey, doc="The unique key for this ModifierFactory" )
     
-    def getTarget( self ):
-        return self.targets[ self.targetId ]
-    target = property( fget=getTarget, doc="The current target of this modifier" )
-
     def getNumber( self ):
         return self._number( )
 
@@ -142,7 +187,7 @@ class Stat( Attribute ):
         try:
             self.modprovided.number = value
         except:
-            self.modprovided = Modifier( self, value, self.conditions )
+            self.modprovided = ModifierFactory( self, value )
     mod = property( fget=getMod, fset=setMod, doc="The modifier this Stat provides" )
 
 class CharacterMetaclass( type ):
@@ -182,9 +227,14 @@ class Character( MyObject ):
         Set the attributes that are specific to the system.  Since this is generic, we'll pass
         """
         for tag, ( attType, attName, targetStrs ) in self.attTypes.iteritems( ):
-            for targetStr in targetStrs:
-                target = self.attrs[ targetStr ]
-                self.attrs[ tag ].mod.addTarget( target )
+            for modStr, targetCondition in targetStrs.iteritems( ):
+                target = self.attrs[ tag ]
+                mod = self.attrs[ modStr ].mod
+                if len( targetCondition ) > 0:
+                    condition = Conditions( targetCondition[ :-1 ], targetCondition[ -1 ] )
+                else:
+                    condition = Conditions( ( ), "and" )
+                mod.addTarget( target, condition )
 
     def __str__( self ):
         return "%s\n\t%s\n" % ( self.name, "\n\t".join( [ str( attr ) for attr in self.attrs.values( ) ] ) )
