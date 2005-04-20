@@ -1,0 +1,221 @@
+---
+# TODO - quoting of quote characters
+#      - reduce/add what's necessary for cswookie's character model
+#      - autoquote and break block text like descriptions
+#      - remove spaces at line ends.. equipment?
+#      - add ~ to blank fields
+# use @r to fix..
+#
+#  This file MUST NOT have blank lines.  PCGen puts a single space on
+#  every blank line, which breaks yaml parsing.  Use a single # mark instead
+#
+name:       |NAME|
+race:       |RACE|
+player:     |PLAYER|
+classes:    |CLASSLIST|
+maxhp:      |HP|
+experience: |EXP.CURRENT| / |EXP.NEXT|
+alignment:  |ALIGNMENT|
+vision:     |VISION|
+speed:      |MOVEMENT|
+languages:  |LANGUAGES|
+stats:
+|FOR,%stat,0,COUNT[STATS]-1,1,1|
+   |STAT.%stat.NAME|: |STAT.%stat|  # |STAT.%stat.MOD|
+|ENDFOR|
+#
+#
+skills:
+|FOR,%skill,0,COUNT[SKILLS],1,1|
+    - name: |SKILL.%skill|
+      total: |SKILL.%skill.TOTAL|
+      ranks: |SKILL.%skill.RANK|
+      abilitymod: |SKILL.%skill.ABMOD|
+      misc: |SKILL.%skill.MISC|
+|ENDFOR|
+#
+#
+# feats:
+|FOR,%feat,0,COUNT[FEATS]-1,1,1|
+# |FEAT.%feat|
+#  |FEAT.%feat.DESC|
+#
+|ENDFOR|
+|FOR,%feat,0,COUNT[FEATSAUTO]-1,1,1|
+#|FEATAUTO.%feat|
+#  |FEATAUTO.%feat.DESC|
+#
+|ENDFOR|
+|FOR,%feat,0,COUNT[VFEATS]-1,1,1|
+#|VFEAT.%feat|
+#  |VFEAT.%feat.DESC|
+#
+|ENDFOR|
+#
+#
+# specialabilities:
+|FOR,%,0,COUNT[SA],1,1|
+# |SPECIALABILITY.%|
+|ENDFOR|
+#
+# |TEMPLATELIST|
+#
+# -------------------------- Combat --------------------------
+#
+ac:
+    total:|BONUS.COMBAT.AC.TOTAL|
+    touch: |BONUS.COMBAT.AC.TOTAL.!Armor.!NaturalArmor|
+    flatfooted: |BONUS.COMBAT.AC.TOTAL.!Ability.PRESTAT:1,DEX=10.!PRESA:1,Uncanny Dodge.MIN=0|
+initiative: |INITIATIVEMOD.SIGN|
+bab: |ATTACK.MELEE|
+meleetohit:  |ATTACK.MELEE.TOTAL|
+rangedtohit: |ATTACK.RANGED.TOTAL|
+#
+saves:
+    fort: |CHECK.FORTITUDE.TOTAL.SIGN|
+    ref: |CHECK.REFLEX.TOTAL.SIGN|
+    will: |CHECK.WILLPOWER.TOTAL.SIGN|
+#
+unarmedhit: |WEAPONH.TOTALHIT|
+unarmeddamage: |WEAPONH.DAMAGE|
+unarmedcritical: |WEAPONH.CRIT|/x|WEAPONH.MULT|
+#
+weapons:
+|FOR,%weap,0,COUNT[EQTYPE.WEAPON]-1,1,0|
+    - name: |WEAPON.%weap.NAME.NOSTAR|
+      tohit: |WEAPON.%weap.TOTALHIT|
+      damage: |WEAPON.%weap.DAMAGE|
+      critical: |WEAPON.%weap.CRIT|/x|WEAPON.%weap.MULT|
+|IIF(WEAPON.%weap.CATEGORY:Ranged)| 
+      range: |WEAPON.%weap.RANGE|
+|ENDIF|
+|IIF(WEAPON.%weap.SPROP: )|
+      specialproperties: |WEAPON.%weap.SPROP|
+|ENDIF|
+|ENDFOR|
+#
+#
+# --------------------- Special Abilities --------------------
+# |%VAR.RAGE.GTEQ.1||NAME| can rage |VAR.RAGE.INTVAL|x per day for |(STAT.2.MOD+2).INTVAL| rounds.
+# |%||%VAR.TOTALPOWERPOINTS.GTEQ.1||NAME| has |VAR.POWERPOINTS.INTVAL| power points.
+# |%|
+# |IIF(HASFEAT:Turn Undead.OR.HASFEAT:Rebuke Undead)|
+# |NAME| can Turn/Rebuke undead |VAR.TurnTimesUndead.INTVAL| times per day.
+# Turning check:  1d20|VAR.TurnCheckUndead.INTVAL.SIGN.NOZERO|
+# Turning damage: |VAR.TurnDiceUndead.INTVAL|d|VAR.TurnDieSizeUndead.INTVAL||VAR.TurnDamagePlusUndead.INTVAL.SIGN.NOZERO|
+# Turning Results
+# Check        Max HD
+# Result      Affected
+#  >0         |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL-4])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL-4|
+# 1 - 3       |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL-3])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL-3|
+# 4 - 6       |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL-2])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL-2|
+# 7 - 9       |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL-1])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL-1|
+# 10 - 12     |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL+0])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL|
+# 13 - 15     |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL+1])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL+1|
+# 16 - 18     |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL+2])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL+2|
+# 19 - 21     |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL+3])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL+3|
+# 22 +        |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL+4])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL+4|
+# |ENDIF|
+#
+#
+# ------------------------- Equipment ------------------------
+|FOR,%equip,0,15,1,1|
+|IIF(EQ.NOT.Contained.NOT.CONTAINER.%equip.NAME: )|
+|IIF(EQ.NOT.Contained.NOT.CONTAINER.%equip.SPROP: )|
+# |EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME|
+|FOR.1,((48-STRLEN[EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME])).INTVAL,48, ,NONE,NONE,1|
+# |EQ.NOT.Contained.NOT.CONTAINER.%equip.QTY.INTVAL|  |EQ.NOT.Contained.NOT.CONTAINER.%equip.TOTALWT.INTVAL|lbs Special: |EQ.NOT.Contained.NOT.CONTAINER.%equip.SPROP|
+|ELSE|
+# |EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME|
+|FOR.1,((48-STRLEN[EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME])).INTVAL,48, ,NONE,NONE,1|
+# |EQ.NOT.Contained.NOT.CONTAINER.%equip.QTY.INTVAL| |EQ.NOT.Contained.NOT.CONTAINER.%equip.TOTALWT.INTVAL|lbs
+|ENDIF|
+|ENDIF|
+|ENDFOR|
+#
+|FOR,%container,0,COUNT[CONTAINERS]-1,1,1|
+# |EQ.IS.CONTAINER.%container.LONGNAME| (|EQCONTAINER.%container.TOTALWEIGHT| lbs.)
+|FOR,%equip,0,EQ.IS.CONTAINER.%container.CONTENTSNUM-1,1,1|
+|IIF(EQ.IS.CONTAINER.%container.CONTENTS.%equip.SPROP: )|
+#    |EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME|
+|FOR.1,((45-STRLEN[EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME])).INTVAL,45, ,NONE,NONE,1|
+# |EQ.IS.CONTAINER.%container.CONTENTS.%equip.QTY.INTVAL| |EQ.IS.CONTAINER.%container.CONTENTS.%equip.TOTALWT.INTVAL|lbs Special: |EQ.IS.CONTAINER.%container.CONTENTS.%equip.SPROP|
+|ELSE|
+#    |EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME|
+|FOR.1,((45-STRLEN[EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME])).INTVAL,45, ,NONE,NONE,1|
+# |EQ.IS.CONTAINER.%container.CONTENTS.%equip.QTY.INTVAL| |EQ.IS.CONTAINER.%container.CONTENTS.%equip.TOTALWT.INTVAL|lbs
+|ENDIF|
+|ENDFOR|
+|ENDFOR|
+#
+# Total weight caried: |TOTAL.WEIGHT.INTVAL|
+# Current load:        |TOTAL.LOAD|
+#
+#    Encumbrance
+# Light:  |WEIGHT.LIGHT.INTVAL|
+# Medium: |WEIGHT.MEDIUM.INTVAL|
+# Heavy:  |WEIGHT.HEAVY.INTVAL|
+#
+#
+# --------------------------- Magic --------------------------
+# |%SPELLLISTBOOK.0.0.1|
+# Innate Spells
+|FOR,%spell,0,COUNT[SPELLSINBOOK0.1.0]-1,1,0|
+# |SPELLMEM.0.1.0.%spell.NAME| (|SPELLMEM.0.1.0.%spell.SCHOOL|) - |SPELLMEM.0.1.0.%spell.TIMES| per day
+# Saves: |SPELLMEM.0.1.0.%spell.SAVEINFO|
+# DC: |SPELLMEM.0.1.0.%spell.DC|
+# Casting: |SPELLMEM.0.1.0.%spell.CASTINGTIME|
+# Duration: |SPELLMEM.0.1.0.%spell.DURATION|
+# Range: |SPELLMEM.0.1.0.%spell.RANGE|
+# Components: |SPELLMEM.0.1.0.%spell.COMPONENTS|
+# SR: |SPELLMEM.0.1.0.%spell.SR|
+# Effect: |SPELLMEM.0.1.0.%spell.EFFECT|
+# Target: |SPELLMEM.0.1.0.%spell.TARGET|
+#
+|ENDFOR|
+# |%|
+|FOR,%class,COUNT[SPELLRACE],COUNT[CLASSES],1,0|
+# |%SPELLLISTCLASS.%class|
+#
+# |SPELLLISTCLASS.%class| Spells
+|FOR,%sbook,0,COUNT[SPELLBOOKS]-1,1,1|
+# |%SPELLLISTBOOK.%class.1.%sbook|
+# |SPELLBOOKNAME%sbook|
+|FOR,%level,0,MAXSPELLLEVEL.%class,1,1|
+# |%||%SPELLLISTBOOK.%class.%level.%sbook|
+#
+# Level |%level|
+|FOR,%spell,0,COUNT[SPELLSINBOOK.%class.%sbook.%level]-1,1,0|
+|IIF(%sbook:0)|
+# |SPELLMEM.%class.%sbook.%level.%spell.NAME| (|SPELLMEM.%class.%sbook.%level.%spell.SCHOOL|)
+# Saves: |SPELLMEM.%class.%sbook.%level.%spell.SAVEINFO| DC: |SPELLMEM.%class.%sbook.%level.%spell.DC| Casting: |SPELLMEM.%class.%sbook.%level.%spell.CASTINGTIME|
+# Duration: |SPELLMEM.%class.%sbook.%level.%spell.DURATION| Range: |SPELLMEM.%class.%sbook.%level.%spell.RANGE| Components: |SPELLMEM.%class.%sbook.%level.%spell.COMPONENTS|
+# SR: |SPELLMEM.%class.%sbook.%level.%spell.SR| Effect: |SPELLMEM.%class.%sbook.%level.%spell.EFFECT| Target: |SPELLMEM.%class.%sbook.%level.%spell.TARGET|
+#
+|ELSE|
+# |SPELLMEM.%class.%sbook.%level.%spell.NAME| (|SPELLMEM.%class.%sbook.%level.%spell.SCHOOL|) - |SPELLMEM.%class.%sbook.%level.%spell.TIMES| per day
+|ENDIF|
+|ENDFOR|
+# |%||%SPELLLISTBOOK.%class.1.%sbook|
+|ENDFOR|
+# |%||%SPELLLISTCLASS.%class|
+|ENDFOR|
+# |%|
+|ENDFOR|
+#
+#
+# ------------------------ Description -----------------------
+height: ~|HEIGHT|
+weight: ~|WEIGHT|
+gender: ~|GENDER.LONG| 
+eyes: ~|COLOR.EYE|
+hair: ~|COLOR.HAIR|,|LENGTH.HAIR|
+skin: ~|COLOR.SKIN|
+dominanthand: ~|HANDED|
+quirks: ~|PERSONALITY1|, |PERSONALITY2| 
+speechstyle: ~|SPEECHTENDENCY|
+quotable: ~|CATCHPHRASE|
+description: ~
+# |DESCRIPTION|
+background: ~
+# |BIO|
