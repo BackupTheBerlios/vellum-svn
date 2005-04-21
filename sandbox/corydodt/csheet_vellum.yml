@@ -1,23 +1,20 @@
 ---
-# TODO - quoting of quote characters
-#      - reduce/add what's necessary for cswookie's character model
+# TODO - reduce/add what's necessary for cswookie's character model
 #      - autoquote and break block text like descriptions
-#      - remove spaces at line ends.. equipment?
-#      - add ~ to blank fields
 # use @r to fix..
 #
 #  This file MUST NOT have blank lines.  PCGen puts a single space on
 #  every blank line, which breaks yaml parsing.  Use a single # mark instead
 #
-name:       |NAME|
+name:       '|NAME|'
 race:       |RACE|
 player:     |PLAYER|
 classes:    |CLASSLIST|
 maxhp:      |HP|
 experience: |EXP.CURRENT| / |EXP.NEXT|
 alignment:  |ALIGNMENT|
-vision:     |VISION|
-speed:      |MOVEMENT|
+vision:     '|VISION|'
+speed:      '|MOVEMENT|'
 languages:  |LANGUAGES|
 stats:
 |FOR,%stat,0,COUNT[STATS]-1,1,1|
@@ -82,15 +79,15 @@ unarmedcritical: |WEAPONH.CRIT|/x|WEAPONH.MULT|
 #
 weapons:
 |FOR,%weap,0,COUNT[EQTYPE.WEAPON]-1,1,0|
-    - name: |WEAPON.%weap.NAME.NOSTAR|
+    - name: '|WEAPON.%weap.NAME.NOSTAR|'
       tohit: |WEAPON.%weap.TOTALHIT|
       damage: |WEAPON.%weap.DAMAGE|
       critical: |WEAPON.%weap.CRIT|/x|WEAPON.%weap.MULT|
 |IIF(WEAPON.%weap.CATEGORY:Ranged)| 
-      range: |WEAPON.%weap.RANGE|
+      range: '|WEAPON.%weap.RANGE|'
 |ENDIF|
 |IIF(WEAPON.%weap.SPROP: )|
-      specialproperties: |WEAPON.%weap.SPROP|
+      specialproperties: '|WEAPON.%weap.SPROP|'
 |ENDIF|
 |ENDFOR|
 #
@@ -193,17 +190,17 @@ weapons:
 #
 #
 # ------------------------ Description -----------------------
-height: |HEIGHT|
-weight: |WEIGHT|
-gender: |GENDER.LONG|
-eyes: |COLOR.EYE|
-haircolor: |COLOR.HAIR|
-hairlength: |LENGTH.HAIR|
-skin: |COLOR.SKIN|
-dominanthand: |HANDED|
-quirks1: |PERSONALITY1|
-quirks2: |PERSONALITY2|
-speechstyle: |SPEECHTENDENCY|
-quotable: |CATCHPHRASE|
-description: |DESC|
-background: |BIO|
+height: '|HEIGHT|'
+weight: '|WEIGHT|'
+gender: '|GENDER.LONG|'
+eyes: '|COLOR.EYE|'
+haircolor: '|COLOR.HAIR|'
+hairlength: '|LENGTH.HAIR|'
+skin: '|COLOR.SKIN|'
+dominanthand: '|HANDED|'
+quirks1: '|PERSONALITY1|'
+quirks2: '|PERSONALITY2|'
+speechstyle: '|SPEECHTENDENCY|'
+quotable: '|CATCHPHRASE|'
+description: '|DESC|'
+background: '|BIO|'
