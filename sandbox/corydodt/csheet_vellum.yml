@@ -122,41 +122,29 @@ weapons:
 |FOR,%equip,0,15,1,1|
 |IIF(EQ.NOT.Contained.NOT.CONTAINER.%equip.NAME: )|
 |IIF(EQ.NOT.Contained.NOT.CONTAINER.%equip.SPROP: )|
-# |EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME|
-|FOR.1,((48-STRLEN[EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME])).INTVAL,48, ,NONE,NONE,1|
-# |EQ.NOT.Contained.NOT.CONTAINER.%equip.QTY.INTVAL|  |EQ.NOT.Contained.NOT.CONTAINER.%equip.TOTALWT.INTVAL|lbs Special: |EQ.NOT.Contained.NOT.CONTAINER.%equip.SPROP|
+#|EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME||FOR.1,((48-STRLEN[EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME])).INTVAL,48, ,NONE,NONE,1||EQ.NOT.Contained.NOT.CONTAINER.%equip.QTY.INTVAL|	|EQ.NOT.Contained.NOT.CONTAINER.%equip.TOTALWT.INTVAL|lbs	Special: |EQ.NOT.Contained.NOT.CONTAINER.%equip.SPROP|
 |ELSE|
-# |EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME|
-|FOR.1,((48-STRLEN[EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME])).INTVAL,48, ,NONE,NONE,1|
-# |EQ.NOT.Contained.NOT.CONTAINER.%equip.QTY.INTVAL| |EQ.NOT.Contained.NOT.CONTAINER.%equip.TOTALWT.INTVAL|lbs
+#|EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME||FOR.1,((48-STRLEN[EQ.NOT.Contained.NOT.CONTAINER.%equip.LONGNAME])).INTVAL,48, ,NONE,NONE,1||EQ.NOT.Contained.NOT.CONTAINER.%equip.QTY.INTVAL|	|EQ.NOT.Contained.NOT.CONTAINER.%equip.TOTALWT.INTVAL|lbs
 |ENDIF|
 |ENDIF|
 |ENDFOR|
-#
 |FOR,%container,0,COUNT[CONTAINERS]-1,1,1|
-# |EQ.IS.CONTAINER.%container.LONGNAME| (|EQCONTAINER.%container.TOTALWEIGHT| lbs.)
+#|EQ.IS.CONTAINER.%container.LONGNAME| (|EQCONTAINER.%container.TOTALWEIGHT| lbs.)
 |FOR,%equip,0,EQ.IS.CONTAINER.%container.CONTENTSNUM-1,1,1|
 |IIF(EQ.IS.CONTAINER.%container.CONTENTS.%equip.SPROP: )|
-#    |EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME|
-|FOR.1,((45-STRLEN[EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME])).INTVAL,45, ,NONE,NONE,1|
-# |EQ.IS.CONTAINER.%container.CONTENTS.%equip.QTY.INTVAL| |EQ.IS.CONTAINER.%container.CONTENTS.%equip.TOTALWT.INTVAL|lbs Special: |EQ.IS.CONTAINER.%container.CONTENTS.%equip.SPROP|
+#   |EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME||FOR.1,((45-STRLEN[EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME])).INTVAL,45, ,NONE,NONE,1||EQ.IS.CONTAINER.%container.CONTENTS.%equip.QTY.INTVAL|	|EQ.IS.CONTAINER.%container.CONTENTS.%equip.TOTALWT.INTVAL|lbs	Special: |EQ.IS.CONTAINER.%container.CONTENTS.%equip.SPROP|
 |ELSE|
-#    |EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME|
-|FOR.1,((45-STRLEN[EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME])).INTVAL,45, ,NONE,NONE,1|
-# |EQ.IS.CONTAINER.%container.CONTENTS.%equip.QTY.INTVAL| |EQ.IS.CONTAINER.%container.CONTENTS.%equip.TOTALWT.INTVAL|lbs
+#   |EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME||FOR.1,((45-STRLEN[EQ.IS.CONTAINER.%container.CONTENTS.%equip.LONGNAME])).INTVAL,45, ,NONE,NONE,1||EQ.IS.CONTAINER.%container.CONTENTS.%equip.QTY.INTVAL|	|EQ.IS.CONTAINER.%container.CONTENTS.%equip.TOTALWT.INTVAL|lbs
 |ENDIF|
 |ENDFOR|
 |ENDFOR|
+#  Total weight caried: |TOTAL.WEIGHT|
+#  Current load:        |TOTAL.LOAD|
 #
-# Total weight caried: |TOTAL.WEIGHT.INTVAL|
-# Current load:        |TOTAL.LOAD|
-#
-#    Encumbrance
-# Light:  |WEIGHT.LIGHT.INTVAL|
-# Medium: |WEIGHT.MEDIUM.INTVAL|
-# Heavy:  |WEIGHT.HEAVY.INTVAL|
-#
-#
+#     Encumbrance
+#  Light:  |WEIGHT.LIGHT.INTVAL|   
+#  Medium: |WEIGHT.MEDIUM.INTVAL|   
+#  Heavy:  |WEIGHT.HEAVY.INTVAL|
 # --------------------------- Magic --------------------------
 # |%SPELLLISTBOOK.0.0.1|
 # Innate Spells
@@ -205,17 +193,17 @@ weapons:
 #
 #
 # ------------------------ Description -----------------------
-height: ~|HEIGHT|
-weight: ~|WEIGHT|
-gender: ~|GENDER.LONG| 
-eyes: ~|COLOR.EYE|
-hair: ~|COLOR.HAIR|,|LENGTH.HAIR|
-skin: ~|COLOR.SKIN|
-dominanthand: ~|HANDED|
-quirks: ~|PERSONALITY1|, |PERSONALITY2| 
-speechstyle: ~|SPEECHTENDENCY|
-quotable: ~|CATCHPHRASE|
-description: ~
-# |DESCRIPTION|
-background: ~
-# |BIO|
+height: |HEIGHT|
+weight: |WEIGHT|
+gender: |GENDER.LONG|
+eyes: |COLOR.EYE|
+haircolor: |COLOR.HAIR|
+hairlength: |LENGTH.HAIR|
+skin: |COLOR.SKIN|
+dominanthand: |HANDED|
+quirks1: |PERSONALITY1|
+quirks2: |PERSONALITY2|
+speechstyle: |SPEECHTENDENCY|
+quotable: |CATCHPHRASE|
+description: |DESC|
+background: |BIO|
