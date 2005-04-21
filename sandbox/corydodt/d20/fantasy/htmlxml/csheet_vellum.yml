@@ -15,7 +15,7 @@ experience: |EXP.CURRENT| / |EXP.NEXT|
 alignment:  |ALIGNMENT|
 vision:     '|VISION|'
 speed:      '|MOVEMENT|'
-languages:  |LANGUAGES|
+languages:  '|LANGUAGES|'
 stats:
 |FOR,%stat,0,COUNT[STATS]-1,1,1|
    |STAT.%stat.NAME|: |STAT.%stat|  # |STAT.%stat.MOD|
@@ -77,6 +77,7 @@ unarmedhit: |WEAPONH.TOTALHIT|
 unarmeddamage: |WEAPONH.DAMAGE|
 unarmedcritical: |WEAPONH.CRIT|/x|WEAPONH.MULT|
 #
+|%WEAPON.1|
 weapons:
 |FOR,%weap,0,COUNT[EQTYPE.WEAPON]-1,1,0|
     - name: '|WEAPON.%weap.NAME.NOSTAR|'
@@ -90,13 +91,14 @@ weapons:
       specialproperties: '|WEAPON.%weap.SPROP|'
 |ENDIF|
 |ENDFOR|
+|%|
 #
 #
 # --------------------- Special Abilities --------------------
 # |%VAR.RAGE.GTEQ.1||NAME| can rage |VAR.RAGE.INTVAL|x per day for |(STAT.2.MOD+2).INTVAL| rounds.
 # |%||%VAR.TOTALPOWERPOINTS.GTEQ.1||NAME| has |VAR.POWERPOINTS.INTVAL| power points.
 # |%|
-# |IIF(HASFEAT:Turn Undead.OR.HASFEAT:Rebuke Undead)|
+|IIF(HASFEAT:Turn Undead.OR.HASFEAT:Rebuke Undead)|
 # |NAME| can Turn/Rebuke undead |VAR.TurnTimesUndead.INTVAL| times per day.
 # Turning check:  1d20|VAR.TurnCheckUndead.INTVAL.SIGN.NOZERO|
 # Turning damage: |VAR.TurnDiceUndead.INTVAL|d|VAR.TurnDieSizeUndead.INTVAL||VAR.TurnDamagePlusUndead.INTVAL.SIGN.NOZERO|
@@ -112,7 +114,7 @@ weapons:
 # 16 - 18     |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL+2])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL+2|
 # 19 - 21     |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL+3])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL+3|
 # 22 +        |FOR.1,((8-STRLEN[VAR.TurnLevelUndead.INTVAL+4])/2+1).INTVAL,8, ,NONE,NONE,1||VAR.TurnLevelUndead.INTVAL+4|
-# |ENDIF|
+|ENDIF|
 #
 #
 # ------------------------- Equipment ------------------------
