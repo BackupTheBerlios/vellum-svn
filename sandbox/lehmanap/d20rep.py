@@ -6,6 +6,47 @@ class D20AbilityScore( Stat ):
         super( D20AbilityScore, self ).__init__( name, number )
         self.mod = lambda: int( math.floor( ( int( self ) - 10 ) / 2 ) )
 
+class D20Size( Stat ):
+    def __init__( self, magnitude ):
+        if isinstance( magnitude, D20Size ):
+            magnitude = magnitude.magnitude
+        elif isinstance( magnitude, str ):
+            magnitude = dict( [ ( val, key ) for key, val in self.sizeRanks.items( ) ] )[ magnitude ]
+        super( D20Size, self ).__init__( 'Size', magnitude, self.__int__ )
+
+    def __add__( self, other ):
+        return D20Size( self.number + other )
+    __radd__ = __add__
+
+    def __sub__( self, other ):
+        return D20Size( self.number - other )
+    __rsub__ = __sub__
+
+    def __int__( self ):
+        try:
+            magnitude = super( D20Size, self ).__int__( )
+            absval = abs( magnitude )
+            vector = magnitude/ absval
+            return ( 2 ** ( absval - 1 ) ) * vector
+        except:
+            return 0
+
+    def __str__( self ):
+        try:
+            category = self.sizeRanks[ super( D20Size, self ).__int__( ) ]
+            category = "%s (%s)" % ( category, self.sizeNames[ category ] )
+        except:
+            category = "No category for this size"
+        return "%s %s" % ( super( D20Size, self ).__str__( ), category )
+
+    #Properties
+    def getLetter( self ):
+        return self.sizeRanks[ self.number ]
+    letter = property( fget=getLetter, doc="The letter of this size" )
+
+    sizeRanks = { -3:'F', -2:'T', -1:'S', 0:'M', 1:'L', 2:'H', 3:'C', 4:'G', }
+    sizeNames = { 'F':"Fine", 'T':"Tiny", 'S':"Small", 'M':"Medium", 'L':"Large", 'H':"Huge", 'C':"Collosal", 'G':"Gargantuan" }
+
 class D20Character( Character ):
     def __init__( self, name, attrs=None ):
         super( D20Character, self ).__init__( name, attrs )
@@ -23,7 +64,8 @@ class D20Character( Character ):
 
     def unreadyWeapon( self ):
         #This will need fixing.  It's just for testing purposes.  FIXME
-        self.ATT.situation = None
+        unarmed = Weapon( 'Unarmed', [ 'MELEE', 'UNARMED', 'BLUDGEON', 'CORPORIAL' ] )
+        self.ATT.situation = unarmed
 
     #Properties
     def setAbilityScore( self, tag, name, number, modsprovided=None ):
@@ -31,6 +73,12 @@ class D20Character( Character ):
             self.attrs[ tag ].number = number
         except:
             self.attrs[ tag ] = D20AbilityScore( name, number )
+
+    def setSize( self, tag, name, letter, modsprovided=None ):
+        try:
+            self.attrs[ tag ].letter = letter
+        except:
+            self.attrs[ tag ] = D20Size( letter )
 
     attTypes = { 
                 #Basic Attributes
@@ -43,35 +91,53 @@ class D20Character( Character ):
                 #END Basic Attributes
 
                 #Calculated Attributes
-                'AC' : ( Character.setAttribute, 'Armor Class', { }, 10 ),
+                'AC' : ( Character.setAttribute, 'Armor Class', {
+                                                                    '-1 SIZE' : ( ),
+                                                                }, 10 ),
                 'ATT' : ( Character.setAttribute, 'Attack Bonus', 
-                    { 
-                        'STR': ( "MELEE IN TOOL TYPES", "WPN_FINESSE NOT IN SUBJECT FEATS", "and" ),
-                        'DEX': ( "RANGE IN TOOL TYPES", "WPN_FINESSE NOT IN SUBJECT FEATS", "and" )
+                    {
+                        'STR': ( "MELEE IN TOOL TYPES", ( "WPN_FINESSE NOT IN SUBJECT FEATS", "FINESSABLE NOT IN TOOL TYPES", "or" ), "and" ),
+                        'DEX': ( "RANGE IN TOOL TYPES", "and" ),
+                        'SIZE': ( "GRAPPLE IN TOOL TYPES", "and" ),
+                        '-1 SIZE': ( "GRAPPLE NOT IN TOOL TYPES", "and" ),
                     }, -4 ),
                 'INIT' : ( Character.setAttribute, 'Initiative', { }, 0 ),
                 'SPEED' : ( Character.setAttribute, 'Movement Speed', { }, 30 ),
+                'SIZE' : ( setSize, 'Size Category', { }, 'M' )
                 }
 
 if __name__ == "__main__":
     sword = Weapon( 'Sword', [ 'MELEE', 'SLASHING', 'PIERCING', 'CORPORIAL' ] )
     bow = Weapon( 'Bow', [ 'RANGE', 'PIERCING', 'CORPORIAL' ] )
-    bob = D20Character( "Bob", { 'STR': 13, 'DEX':15, 'CON':12, 'INT':10, 'WIS':8, 'CHA':18 } )
-    dexmod = ModifierFactory( "Cause", 2 )
+    grapple = Weapon( 'Grapple', [ 'MELEE', 'GRAPPLE', 'CORPORIAL' ] )
+    bob = D20Character( "Bob", { 'STR': 13, 'DEX':15, 'CON':12, 'INT':10, 'WIS':8, 'CHA':18, 'HEIGHT':72, 'WEIGHT':221, 'WIDTH':24, 'DEPTH':12 } )
+    dexmod = ModifierFactory( "Cause", 3 )
     print "AC before Dex mod"
     print bob.AC
     dexmod.addTarget( bob.DEX, Conditions( ( ), "and" ) )
+    dexmod.addTarget( bob.SIZE )
     bob.beginCombat( )
     print "After"
     print bob.AC
     print "ATT before weapon"
-    print bob.ATT
+    bob.unreadyWeapon( )
+    print int( bob.ATT )
     bob.attack( bob, sword )
     print "After Sword"
-    print bob.ATT
+    print int( bob.ATT )
     bob.unreadyWeapon( )
     print "Sword Removed"
-    print bob.ATT
+    print int( bob.ATT )
     bob.attack( bob, bow )
     print "With Bow"
     print bob.ATT
+    strstone = Item( 'Strength Stone', 0, { 'WEIGHT':5, 'HEIGHT':6, 'WIDTH':6, 'DEPTH':6 }, 'A plain round stone', { 'CARRIER' : { 'STR' : ( 2, '' ) } } )
+    bob.unreadyWeapon( )
+    print "Sword + Strength Stone"
+    bob.attack( bob, sword )
+    bob.carry( strstone )
+    print int( bob.ATT )
+    bob.unreadyWeapon( )
+    bob.attack( bob, grapple )
+    print "Grappling"
+    print int( bob.ATT )
