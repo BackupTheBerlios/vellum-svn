@@ -14,7 +14,7 @@ from twisted.internet import reactor, protocol, task
 from twisted.python import log
 
 
-from vellum.server import encounter, alias
+from vellum.server import encounter, alias, linesyntax
 from vellum.server.fs import fs
 
 class UnknownHailError(Exception):
@@ -40,13 +40,8 @@ class Session:
     def respondTo_DEFAULT(self, user, args):
         raise UnknownHailError()
 
-    def respondTo_DICE(self, user, exp):
-        """[d1ce] expressions
-        Understands all the expressions in dice.py
-        Also understands aliases, for example:
-        <bob> [battleaxe 1d20+3] => rolls 1d20+3, and remembers that bob's
-            alias [battleaxe] is 1d20+3
-        When defining an alias, the dice expression must not contain spaces
+    def respondTo_INTERACTION(self, user, exp):
+        """
         """
         result = alias.resolve(user, exp)
         if result is not None:
@@ -159,7 +154,7 @@ class Session:
             member = getattr(self, att)
             if (att.startswith('respondTo_') 
                 and callable(member)
-                and att[10:].upper() != att[10:]):  # DICE and DEFAULT reserved.
+                and att[10:].upper() != att[10:]):  # CAPITALIZED are reserved.
                 _commands.append('%s: %s' % (att[10:], member.__doc__))
 
         _d = {'commands': '\n    '.join(_commands), }
@@ -179,23 +174,42 @@ class Session:
 
 
 
-    def handlePrivateDice(self, user, msg):
-        return self.doDice(user, msg, user, *self.observers)
+    def privateInteraction(self, user, msg, parsed):
+        return self.doInteraction(user, msg, parsed, user, *self.observers)
 
-    def handleDice(self, user, msg):
-        return self.doDice(user, msg, self.channel)
+    def interaction(self, user, msg, parsed):
+        return self.doInteraction(user, msg, parsed, self.channel)
 
-    def doDice(self, user, msg, *targets):
-        # FIXME - whoa, this is really broken
-        dice_expressions = re.findall(r'\[.+?\]|{.+?}', msg)
+    def doInteraction(self, user, msg, parsed, *recipients):
+        """Use actor's stats to apply each action to all targets"""
+        if parsed.actor:
+            actor = parsed.actor
+        else:
+            actor = user
+
+        results = []
+
+        for vp in parsed.verb_phrases:
+            if len(parsed.targets) == 0:
+                import pdb; pdb.set_trace()
+                results.append(alias.getResult(actor, 
+                                               tuple(vp.verbs), 
+                                               vp.dice))
+            else:
+                for item in parsed.targets:
+                    target = item.target
+                    results.append(alias.getResult(actor, 
+                                                   tuple(verb.verbs), 
+                                                   vp.dice, 
+                                                   target))
 
         # collect responses for each dice expression..
         strings = []
-        for exp in dice_expressions:
-            strings.append(self.respondTo_DICE(user, exp))
+        for exp in results:
+            strings.append(self.respondTo_INTERACTION(user, exp))
         text = '\n'.join(strings)
         
-        return Response(text, msg, *targets)
+        return Response(text, msg, *recipients)
                 
 
 
@@ -207,25 +221,25 @@ class Session:
     def privateCommand(self, user, command):
         return self.doCommand(user, command, user, *self.observers)
 
-    def doCommand(self, user, command, *targets):
+    def doCommand(self, user, command, *recipients):
         m = self.getCommandMethod(command)
         # try harder to find dice expressions when there's no command
         if m == self.respondTo_DEFAULT:
             if re.search(r'\[.+?\]|{.+?}', command) is not None:
                 text = self.handleDice(user, command)
-                return Response(text, *targets)
+                return Response(text, *recipients)
 
         context = command
 
         try:
             text = m(user, command)
-            return Response(text, context, *targets)
+            return Response(text, context, *recipients)
         except UnknownHailError, e:
-            return Response("wtf?", context, *targets)
+            return Response("wtf?", context, *recipients)
         except Exception, e:
             log.msg(''.join(traceback.format_exception(*sys.exc_info())))
             text = '** Sorry, %s: %s' % (user, str(e)), 
-            return Response(text, context, *targets)
+            return Response(text, context, *recipients)
         
     def getCommandMethod(self, command):
         command_word = 'DEFAULT'
@@ -371,6 +385,7 @@ class VellumTalk(irc.IRCClient):
         # create a session to respond to private messages from nicks
         # not in any channel I'm in
         self.defaultSession = Session('')
+        linesyntax.setBotName(self.nickname)
         # join my default channel
         self.join(self.factory.channel)
 
@@ -446,39 +461,26 @@ class VellumTalk(irc.IRCClient):
 
         session = self.findSession(channel)
 
-        # if the line begins with *foo, then I am talking as foo, and
-        # foo should be considered the user
-        # FIXME - where should this code be moved?
-        if msg.startswith('*'):
-            first = msg.split()[0]
-            name = first[1:]
-            if len(name) > 0:
-                user = name
-
-        # if the bot is being hailed, do stuff
-        _re = r'^(%s:) |^(\.)' % (self.nickname,)
-        _hail = re.compile(_re, re.I)
-        match = _hail.search(msg)
-
-        if match is not None:
-            command = msg[match.end():]
+        parsed = linesyntax.parseSentence(msg)
+        if parsed.command:
+            command = ' '.join(parsed.command.asList())
             if channel == user:
                 response = session.privateCommand(user, command)
             else:
                 response = session.command(user, command)
-        else:
-            # dice are handled if the bot is not being hailed
+            self.sendResponse(response)
+        elif parsed.verb_phrases:
             if channel == user:
-                response = session.handlePrivateDice(user, msg)
+                response = session.privateInteraction(user, msg, parsed)
             else:
-                response = session.handleDice(user, msg)
-
-        self.sendResponse(response)
+                response = session.interaction(user, msg, parsed)
+            self.sendResponse(response)
+        else:
+            pass
 
     # though it looks weird, actions will behave the same way as privmsgs.
     # for example, /me .hello will behave like "VellumTalk: hello" or ".hello"
     action = privmsg
-
 
 class VellumTalkFactory(protocol.ClientFactory):
     """A factory for VellumTalks.
@@ -501,15 +503,17 @@ class VellumTalkFactory(protocol.ClientFactory):
         reactor.stop()
 
 testcommands = [
-('MFen', 'VellumTalk', 'MFen', 'hello', r'Hello MFen\.'),
+('MFen', 'VellumTalk', 'MFen', 'hello', None),
 ('MFen', 'VellumTalk', 'MFen', 'VellumTalk: hello', r'Hello MFen\.'),
-('MFen', 'VellumTalk', 'MFen', 'VellumTalk: hello there', r'Hello MFen\.'),
+('MFen', 'VellumTalk', 'MFen', 'Vellumtalk: hello there', r'Hello MFen\.'),
 ('MFen', 'VellumTalk', 'MFen', '.hello', r'Hello MFen\.'),
-('MFen', '#vellum', '#vellum', 'hello', None),
-('MFen', '#vellum', '#vellum', 'VellumTalk: hello', r'Hello MFen\.'),
-('MFen', '#vellum', '#vellum', '.hello', r'Hello MFen\.'),
-('MFen', 'VellumTalk', 'MFen', 'inits', r'Initiative list: \(none\)'),
-('MFen', 'VellumTalk', 'MFen', 'combat', r'\*\* Beginning combat \*\*'),
+('MFen', '#vellum', '#testing', 'hello', None),
+('MFen', '#vellum', '#testing', 'VellumTalk: hello', r'Hello MFen\.'),
+('MFen', '#vellum', '#testing', '.hello', r'Hello MFen\.'),
+('MFen', 'VellumTalk', 'MFen', '.inits', r'Initiative list: \(none\)'),
+('MFen', 'VellumTalk', 'MFen', '.combat', r'\*\* Beginning combat \*\*'),
+('MFen', '#vellum',  'MFen', 'hello [argh 20] [foobar 30]',
+        r'MFen, you rolled: argh 20 = \[20\]'),
 ('MFen', '#vellum', '#vellum', '[init 20]', 
         r'MFen, you rolled: init 20 = \[20\]'),
 ('MFen', 'VellumTalk', 'MFen', 'n', r'\+\+ New round \+\+'),
@@ -584,6 +588,7 @@ def test():
         vt.defaultSession = Session('#testing')
         vt.makeConnection(transport)
         pos = ([0],)
+        linesyntax.setBotName('VellumTalk')
 
         def check(nick, channel, target, expected):
             _pos = pos[0] # ugh, python
@@ -608,7 +613,7 @@ def test():
                     print ' '*10 + ' '*len(target) + expected
                     print actual
                     return
-            print '+++'
+            sys.stdout.write('.')
 
 
         for nick, channel, target, sent, received in testcommands:

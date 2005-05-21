@@ -212,12 +212,12 @@ _test_sentences = [
 (".foobly doobly doo", "['foobly', 'doobly doo']"),
 ("*grimlock1 [attack 1d2+10]s the paladin. (@shara)", 
         "['grimlock1', 'attack', 1, 2, 10, 'shara']"),
-("I [attack 1d6+1] @grimlock1", "['None', 'attack', 1, 6, 1, 'grimlock1']"),
-("I [attack 1d6+1x2sort] @grimlock1", "['None', 'attack', 1, 6, 1, 2, 'sort', 'grimlock1']"),
+("I [attack 1d6+1] @grimlock1", "['attack', 1, 6, 1, 'grimlock1']"),
+("I [attack 1d6+1x2sort] @grimlock1", "['attack', 1, 6, 1, 2, 'sort', 'grimlock1']"),
 ("I [cast] a [fireball] @grimlock1 and @grimlock2", 
-        "['None', 'cast', 'fireball', 'grimlock1', 'grimlock2']"),
+        "['cast', 'fireball', 'grimlock1', 'grimlock2']"),
 ("I [cast] a [fireball] @grimlock1 and@grimlock2", 
-        "['None', 'cast', 'fireball', 'grimlock1', 'grimlock2']"),
+        "['cast', 'fireball', 'grimlock1', 'grimlock2']"),
 ]
 
 _test_sentences_altbot = [
@@ -283,7 +283,13 @@ def formatNormalized(actor, verb_phrases, targets):
         _fm_targets.append('@%s' % (targ,))
     fm_targets = ' '.join(_fm_targets)
 
-    return '*%s %s %s' % (actor, fm_verb_phrases, fm_targets)
+    if actor is not None:
+        _actor = '*%s ' % (actor,)
+    else:
+        _actor = ''
+
+
+    return '%s%s %s' % (_actor, fm_verb_phrases, fm_targets)
 
 
 
