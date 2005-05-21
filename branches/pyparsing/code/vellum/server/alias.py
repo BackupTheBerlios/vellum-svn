@@ -8,10 +8,8 @@ import errno
 
 from twisted.python import log
 
-from vellum.server import dice
+from vellum.server import dice, linesyntax
 from vellum.server.fs import fs
-
-roller = dice.Roller()
 
 aliases = {}
 
@@ -32,21 +30,15 @@ def loadAliases():
             log.msg('new aliases.pkl')
         else:
             raise
+    except EOFError, e:
+        # this indicates file not found as well, not sure why..
+        log.msg('new aliases.pkl')
 
 # This is horrible, FIXME
 loadAliases()
 atexit.register(saveAliases)
 
 
-def rollSafe(st):
-    try:
-        return roller.roll(st)
-    except RuntimeError, e:
-        return None
-
-def test_rollSafe():
-    assert type(rollSafe('1 d20 +1')) is type([])
-    assert rollSafe('1 d +1') is None
 
 
 alias_hooks = {}
@@ -97,33 +89,33 @@ def test_shortFormatAliases():
     finally:
         aliases = orig_aliases
 
+def resolve(actor, words, parsed_dice=None, target=None):
+    rolled = getResult(actor, words, parsed_dice, target)
+    return formatDice(rolled, parsed_dice.sorted)
 
-def parseAlias(st, user):
-    """Valid syntaxes:
-    [anything you want here] => look up entire str on alias table
-    [anything <dice_expression>] => assign <dice_expression> to anything
-    [<dice_expression>] => dice expression
-    """
-    # try the whole thing as a dice expression first
-    rolled = rollSafe(st)
-    if rolled is not None:
-        return rolled
+def getResult(actor, words, parsed_dice=None, target=None):
+    """Return a list of dice results"""
+    assert target is None # TODO
+    parse = linesyntax.dice.parseString
+    unparse = linesyntax.reverseFormatDice
 
-    # now it's either an alias reference or an alias assignment or junk
-    words = st.split()
-    dicetry = words[-1]
-    rolled = rollSafe(dicetry)
-    if rolled is None:
-        # alias or junk. roll it if we can
-        words = tuple(words)
-        expression = aliases.get(user, {}).get(words, '')
-        rolled = rollSafe(expression)
-    else:
-        # alias assignment
-        words = tuple(words[:-1])
-        aliases.setdefault(user, {})[words] = dicetry
+    # verb phrases with dice expressions set a new expression
+    if parsed_dice:
+        aliases.setdefault(actor, {})[words] = unparse(parsed_dice)
         saveAliases()
-    callAliasHooks(words, user, rolled)
+    else: # without dice expression, look it up or regard it as empty
+        _dict = aliases.get(actor, {})
+        looked_up = _dict.get(words, None)
+        if looked_up is None:
+            parsed_dice = None
+        else:
+            parsed_dice = parse(looked_up)
+
+    if parsed_dice is None:
+        rolled = None
+    else:
+        rolled = list(dice.roll(parsed_dice))
+    callAliasHooks(words, actor, rolled)
     return rolled
 
 def callAliasHooks(words, user, rolled):
@@ -131,88 +123,50 @@ def callAliasHooks(words, user, rolled):
     for hook in hooks:
         hook(user, rolled)
 
-def test_parseAlias():
+def test_getResult():
     global aliases
     orig_aliases = aliases
     aliases = {}
     try:
         # junk
-        assert parseAlias('anything', 'foo') is None
-        assert parseAlias('anything 1d1', 'foo')  == [1]
-        assert parseAlias('anything 1d 1', 'foo') == [1]
-        assert parseAlias('1 d 1', 'foo') == [1]
-        assert parseAlias('anything', 'bar') is None
-        assert parseAlias('anything 500', 'bar') == [500]
-        assert parseAlias('anything', 'bar') == [500]
-        assert parseAlias('anything', 'foo') == [1]
-        assert parseAlias('anything 5', 'foo') == [5]
-        assert parseAlias('anything', 'foo') == [5]
-    finally:
-        aliases = orig_aliases
-
-
-def resolve(user, alias):
-    if alias[0] == '{':
-        sorted = 1
-    else:
-        sorted = 0
-    alias = alias.strip('[]{}')
-
-    rolled = parseAlias(alias, user)
-
-    if rolled is not None:
-        return '%s = %s' % (alias, formatDice(rolled, sorted))
-
-def test_resolve():
-    global aliases
-    orig_aliases = aliases
-    aliases = {}
-    try:
-        try:
-            resolve('foo', '')
-        except IndexError:
-            pass
-        assert resolve('foo', '{xyz}') is None
-        assert resolve('foo', '[1d1]') == '1d1 = [1]'
-        assert resolve('foo', '{1 d1}') == '1 d1 = {1}'
-        remember = 'xyz 1d1x5 = {1, 1, 1, 1, 1} (sorted)'
-        assert resolve('foo', '{xyz 1d1x5}'
-                       ) == remember
-        assert resolve('foo', '{xyz 1d 1}') == 'xyz 1d 1 = {1}'
-        assert resolve('foo', '[xyz ]') == 'xyz  = [1, 1, 1, 1, 1]'
-        assert resolve('foo', '{ xyz}') == ' xyz = {1, 1, 1, 1, 1} (sorted)'
+        assert getResult('anything', 'foo') is None
+        _exp = linesyntax.dice.parseString('1d1')
+        assert getResult('anything', 'foo', _exp)  == [1]
+        assert getResult('anything', 'bar') is None
+        _exp = linesyntax.dice.parseString('500')
+        assert getResult('anything', 'bar', _exp) == [500]
+        assert getResult('anything', 'bar') == [500]
+        assert getResult('anything', 'foo') == [1]
+        _exp = linesyntax.dice.parseString('5')
+        assert getResult('anything', 'foo', _exp) == [5]
+        assert getResult('anything', 'foo') == [5]
     finally:
         aliases = orig_aliases
 
 
 def formatDice(rolls, sorted):
-    if sorted:
+    _sorted = ''
+    if sorted and len(rolls) > 1:
+        _sorted = ' (sorted)'
         rolls.sort()
-        rolls = map(str, rolls)
-        _roll = '{%s}' % (', '.join(rolls),)
-        if len(rolls) > 1:
-            _roll = _roll + ' (sorted)'
-    else:
-        rolls = map(str, rolls)
-        _roll = '[%s]' % (', '.join(rolls),)
-    return _roll
+    rolls = map(str, rolls)
+    ret = '[%s]%s' % (', '.join(rolls), _sorted)
+    return ret 
 
 def test_formatDice():
     assert formatDice([1,2,3,2], 0) == '[1, 2, 3, 2]'
-    assert formatDice([1,2,3,2], 1) == '{1, 2, 2, 3} (sorted)'
-    assert formatDice([], 1) == '{}'
+    assert formatDice([1,2,3,2], 1) == '[1, 2, 2, 3] (sorted)'
+    assert formatDice([], 1) == '[]'
     try:
         formatDice(None, 1)
-    except AttributeError:
+    except TypeError:
         pass
 
 
 def test():
-    test_rollSafe()
-    test_resolve()
     test_formatDice()
     test_shortFormatAliases()
-    test_parseAlias()
+    test_getResult()
     print 'all tests passed'
 
 
