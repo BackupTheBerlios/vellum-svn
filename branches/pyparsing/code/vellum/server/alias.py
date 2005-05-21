@@ -11,6 +11,8 @@ from twisted.python import log
 from vellum.server import dice
 from vellum.server.fs import fs
 
+roller = dice.Roller()
+
 aliases = {}
 
 def saveAliases():
@@ -36,6 +38,15 @@ loadAliases()
 atexit.register(saveAliases)
 
 
+def rollSafe(st):
+    try:
+        return roller.roll(st)
+    except RuntimeError, e:
+        return None
+
+def test_rollSafe():
+    assert type(rollSafe('1 d20 +1')) is type([])
+    assert rollSafe('1 d +1') is None
 
 
 alias_hooks = {}
@@ -114,9 +125,6 @@ def parseAlias(st, user):
         saveAliases()
     callAliasHooks(words, user, rolled)
     return rolled
-
-def getResult(actor, words, dice, target=None):
-    import pdb; pdb.set_trace()
 
 def callAliasHooks(words, user, rolled):
     hooks = alias_hooks.get(words, [])
