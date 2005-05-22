@@ -161,7 +161,6 @@ v_words_nonterminal = P.OneOrMore(v_word_nonterminal).setResultsName('verbs')
 # FIXME - [d20 1d10] should be an error
 v_content = P.Optional(v_words_nonterminal) + dice | v_words
 verb_phrase = Sup(o) + v_content + Sup(t)
-
 verb_phrase = verb_phrase.setResultsName('verb_phrase')
 
 _test_verb_phrases = [
@@ -205,19 +204,19 @@ _test_sentences = [
 ("testbot: n", "['n', '']"),
 ("testbot n", "['n', '']"),
 ("The [machinegun] being fired at @Shara by the *ninja goes rat-a-tat.",
-        "['ninja', 'machinegun', 'Shara']"),
+        "['ninja', ['machinegun'], 'Shara']"),
 ("*woop1", "[]"), # verb phrases are required
-("[foo] *woop2", "['woop2', 'foo']"),
+("[foo] *woop2", "['woop2', ['foo']]"),
 (".aliases shara", "['aliases', 'shara']"),
 (".foobly doobly doo", "['foobly', 'doobly doo']"),
 ("*grimlock1 [attack 1d2+10]s the paladin. (@shara)", 
-        "['grimlock1', 'attack', 1, 2, 10, 'shara']"),
-("I [attack 1d6+1] @grimlock1", "['attack', 1, 6, 1, 'grimlock1']"),
-("I [attack 1d6+1x2sort] @grimlock1", "['attack', 1, 6, 1, 2, 'sort', 'grimlock1']"),
+        "['grimlock1', ['attack', 1, 2, 10], 'shara']"),
+("I [attack 1d6+1] @grimlock1", "[['attack', 1, 6, 1], 'grimlock1']"),
+("I [attack 1d6+1x2sort] @grimlock1", "[['attack', 1, 6, 1, 2, 'sort'], 'grimlock1']"),
 ("I [cast] a [fireball] @grimlock1 and @grimlock2", 
-        "['cast', 'fireball', 'grimlock1', 'grimlock2']"),
+        "[['cast'], ['fireball'], 'grimlock1', 'grimlock2']"),
 ("I [cast] a [fireball] @grimlock1 and@grimlock2", 
-        "['cast', 'fireball', 'grimlock1', 'grimlock2']"),
+        "[['cast'], ['fireball'], 'grimlock1', 'grimlock2']"),
 ]
 
 _test_sentences_altbot = [
@@ -226,7 +225,7 @@ _test_sentences_altbot = [
 ]
 
 # convert scanned sentences into a normalized form and then parse them
-verb_phrases = P.OneOrMore(verb_phrase).setResultsName('verb_phrases')
+verb_phrases = P.OneOrMore(P.Group(verb_phrase)).setResultsName('verb_phrases')
 targets = P.OneOrMore(target).setResultsName('targets')
 normalized_sentence = (command | 
                        P.Optional(actor) + verb_phrases + P.Optional(targets) | 
@@ -247,7 +246,8 @@ def parseSentence(s):
             targets.append(item.target.character_name)
 
     normalized = formatNormalized(actor, verb_phrases, targets)
-    return normalized_sentence.parseString(normalized)
+    parsed = normalized_sentence.parseString(normalized)
+    return parsed
 
 def formatNormalized(actor, verb_phrases, targets):
     """Return a string with only the parts of speech, so a parseString
@@ -256,23 +256,10 @@ def formatNormalized(actor, verb_phrases, targets):
     _fm_verb_phrases = []
     for vp in verb_phrases:
         verb_list = ' '.join(vp.verbs)
-        _dice_expr = []
         if vp.dice:
-            if vp.dice.dice_count:
-                _dice_expr.append(str(vp.dice.dice_count))
-            if vp.dice.dice_size:
-                _dice_expr.append('d' + str(vp.dice.dice_size))
-            if vp.dice.dice_hilo:
-                _dice_expr.append(str(vp.dice.dice_hilo[0]))
-            if vp.dice.dice_filter:
-                _dice_expr.append(str(vp.dice.dice_filter))
-            if vp.dice.dice_bonus:
-                _dice_expr.append('%+d' % (vp.dice.dice_bonus,))
-            if vp.dice.dice_repeat:
-                _dice_expr.append('x' + str(vp.dice.dice_repeat))
-            if vp.dice.dice_sorted:
-                _dice_expr.append('sort')
-        dice_expr = ''.join(_dice_expr)
+            dice_expr = reverseFormatDice(vp.dice)
+        else:
+            dice_expr = ''
 
         verb_body = ' '.join((verb_list, dice_expr))
         _fm_verb_phrases.append('[%s]' % (verb_body,))
@@ -290,6 +277,25 @@ def formatNormalized(actor, verb_phrases, targets):
 
 
     return '%s%s %s' % (_actor, fm_verb_phrases, fm_targets)
+
+def reverseFormatDice(parsed_dice):
+    """Take a parsed dice expression and return the string form"""
+    _dice_expr = []
+    if parsed_dice.dice_count:
+        _dice_expr.append(str(parsed_dice.dice_count))
+    if parsed_dice.dice_size:
+        _dice_expr.append('d' + str(parsed_dice.dice_size))
+    if parsed_dice.dice_hilo:
+        _dice_expr.append(str(parsed_dice.dice_hilo[0]))
+    if parsed_dice.dice_filter:
+        _dice_expr.append(str(parsed_dice.dice_filter))
+    if parsed_dice.dice_bonus:
+        _dice_expr.append('%+d' % (parsed_dice.dice_bonus,))
+    if parsed_dice.dice_repeat:
+        _dice_expr.append('x' + str(parsed_dice.dice_repeat))
+    if parsed_dice.dice_sorted:
+        _dice_expr.append('sort')
+    return ''.join(_dice_expr)
 
 
 
