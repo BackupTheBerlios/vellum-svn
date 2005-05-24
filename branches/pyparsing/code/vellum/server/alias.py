@@ -91,7 +91,8 @@ def test_shortFormatAliases():
 
 def resolve(actor, words, parsed_dice=None, target=None):
     rolled = getResult(actor, words, parsed_dice, target)
-    return formatDice(rolled, parsed_dice.sorted)
+    expression = linesyntax.reverseFormatDice(parsed_dice)
+    return formatAlias(actor, words, expression, rolled, parsed_dice.sorted)
 
 def getResult(actor, words, parsed_dice=None, target=None):
     """Return a list of dice results"""
@@ -144,27 +145,40 @@ def test_getResult():
         aliases = orig_aliases
 
 
-def formatDice(rolls, sorted):
-    _sorted = ''
-    if sorted and len(rolls) > 1:
-        _sorted = ' (sorted)'
-        rolls.sort()
-    rolls = map(str, rolls)
-    ret = '[%s]%s' % (', '.join(rolls), _sorted)
-    return ret 
 
-def test_formatDice():
-    assert formatDice([1,2,3,2], 0) == '[1, 2, 3, 2]'
-    assert formatDice([1,2,3,2], 1) == '[1, 2, 2, 3] (sorted)'
-    assert formatDice([], 1) == '[]'
-    try:
-        formatDice(None, 1)
-    except TypeError:
-        pass
+def formatAlias(actor, verbs, expression, result, sorted=False, target=None):
+    if sorted:
+        result.sort()
+    rolls = '[%s]' % (', '.join(map(str, result)))
+    if sorted:
+        rolls = rolls + ' (sorted)'
+    return '%s, you rolled: %s = %s' % (actor, ' '.join(verbs + [expression]),
+                                           rolls)
+
+def test_formatAlias():
+    a = 'foobie bletch'
+    v1 = ['foo', 'bar']
+    v2 = []
+    v3 = ['foo']
+    dice = '1d20x3'
+    result = [10, 15, 5]
+    fmtd = formatAlias(a, v1, dice, result[:], False)
+    assert (fmtd == 'foobie bletch, you rolled: foo bar 1d20x3 = [10, 15, 5]'),\
+            fmtd
+
+    fmtd = formatAlias(a, v2, dice, result[:], False) 
+    assert (fmtd == 'foobie bletch, you rolled: 1d20x3 = [10, 15, 5]'), \
+            fmtd
+    fmtd = formatAlias(a, v3, dice, result[:], False) 
+    assert (fmtd == 'foobie bletch, you rolled: foo 1d20x3 = [10, 15, 5]'), \
+            fmtd
+    fmtd = formatAlias(a, v2, dice, result[:], True) 
+    assert (fmtd == 'foobie bletch, you rolled: 1d20x3 = [5, 10, 15] (sorted)'), \
+            fmtd
 
 
 def test():
-    test_formatDice()
+    test_formatAlias()
     test_shortFormatAliases()
     test_getResult()
     print 'all tests passed'
