@@ -148,19 +148,18 @@ def test_getResult():
 def formatAlias(actor, verbs, result, parsed_dice, target=None):
     assert target is None
     sorted = 0 
+    verbs = list(verbs)
     if parsed_dice is None or parsed_dice == '':
-        expression = ''
+        pass
     else:
-        expression = linesyntax.reverseFormatDice(parsed_dice)
+        verbs.append(linesyntax.reverseFormatDice(parsed_dice))
         if parsed_dice.dice_sorted:
             result.sort()
             sorted = 1
     rolls = '[%s]' % (', '.join(map(str, result)))
     if sorted:
         rolls = rolls + ' (sorted)'
-    return '%s, you rolled: %s = %s' % (actor, 
-                                        ' '.join(tuple(verbs) + (expression,)),
-                                        rolls)
+    return '%s, you rolled: %s = %s' % (actor, ' '.join(verbs), rolls)
 
 def test_formatAlias():
     a = 'foobie bletch'
@@ -169,6 +168,7 @@ def test_formatAlias():
     v3 = ['foo']
     parsed_dice = linesyntax.dice_string.parseString('1d20x3')
     parsed_dice2 = linesyntax.dice_string.parseString('1d20x3sort')
+    parsed_dice3 = ''
     result = [10, 15, 5]
     fmtd = formatAlias(a, v1, result[:], parsed_dice)
     assert (fmtd == 'foobie bletch, you rolled: foo bar 1d20x3 = [10, 15, 5]'),\
@@ -179,6 +179,9 @@ def test_formatAlias():
             fmtd
     fmtd = formatAlias(a, v3, result[:], parsed_dice) 
     assert (fmtd == 'foobie bletch, you rolled: foo 1d20x3 = [10, 15, 5]'), \
+            fmtd
+    fmtd = formatAlias(a, v3, result[:], parsed_dice3) 
+    assert (fmtd == 'foobie bletch, you rolled: foo = [10, 15, 5]'), \
             fmtd
     fmtd = formatAlias(a, v2, result[:], parsed_dice2) 
     assert (fmtd == 'foobie bletch, you rolled: 1d20x3sort = [5, 10, 15] (sorted)'), \
