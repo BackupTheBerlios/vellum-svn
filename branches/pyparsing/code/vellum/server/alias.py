@@ -91,8 +91,7 @@ def test_shortFormatAliases():
 
 def resolve(actor, words, parsed_dice=None, target=None):
     rolled = getResult(actor, words, parsed_dice, target)
-    expression = linesyntax.reverseFormatDice(parsed_dice)
-    return formatAlias(actor, words, expression, rolled, parsed_dice.sorted)
+    return formatAlias(actor, words, rolled, parsed_dice)
 
 def getResult(actor, words, parsed_dice=None, target=None):
     """Return a list of dice results"""
@@ -146,34 +145,43 @@ def test_getResult():
 
 
 
-def formatAlias(actor, verbs, expression, result, sorted=False, target=None):
-    if sorted:
-        result.sort()
+def formatAlias(actor, verbs, result, parsed_dice, target=None):
+    assert target is None
+    sorted = 0 
+    if parsed_dice is None or parsed_dice == '':
+        expression = ''
+    else:
+        expression = linesyntax.reverseFormatDice(parsed_dice)
+        if parsed_dice.dice_sorted:
+            result.sort()
+            sorted = 1
     rolls = '[%s]' % (', '.join(map(str, result)))
     if sorted:
         rolls = rolls + ' (sorted)'
-    return '%s, you rolled: %s = %s' % (actor, ' '.join(verbs + [expression]),
-                                           rolls)
+    return '%s, you rolled: %s = %s' % (actor, 
+                                        ' '.join(tuple(verbs) + (expression,)),
+                                        rolls)
 
 def test_formatAlias():
     a = 'foobie bletch'
     v1 = ['foo', 'bar']
     v2 = []
     v3 = ['foo']
-    dice = '1d20x3'
+    parsed_dice = linesyntax.dice_string.parseString('1d20x3')
+    parsed_dice2 = linesyntax.dice_string.parseString('1d20x3sort')
     result = [10, 15, 5]
-    fmtd = formatAlias(a, v1, dice, result[:], False)
+    fmtd = formatAlias(a, v1, result[:], parsed_dice)
     assert (fmtd == 'foobie bletch, you rolled: foo bar 1d20x3 = [10, 15, 5]'),\
             fmtd
 
-    fmtd = formatAlias(a, v2, dice, result[:], False) 
+    fmtd = formatAlias(a, v2, result[:], parsed_dice) 
     assert (fmtd == 'foobie bletch, you rolled: 1d20x3 = [10, 15, 5]'), \
             fmtd
-    fmtd = formatAlias(a, v3, dice, result[:], False) 
+    fmtd = formatAlias(a, v3, result[:], parsed_dice) 
     assert (fmtd == 'foobie bletch, you rolled: foo 1d20x3 = [10, 15, 5]'), \
             fmtd
-    fmtd = formatAlias(a, v2, dice, result[:], True) 
-    assert (fmtd == 'foobie bletch, you rolled: 1d20x3 = [5, 10, 15] (sorted)'), \
+    fmtd = formatAlias(a, v2, result[:], parsed_dice2) 
+    assert (fmtd == 'foobie bletch, you rolled: 1d20x3sort = [5, 10, 15] (sorted)'), \
             fmtd
 
 

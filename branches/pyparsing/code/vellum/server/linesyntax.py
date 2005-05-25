@@ -57,9 +57,9 @@ command_args = P.restOfLine.setResultsName('command_args')
 
 command = (P.StringStart() + 
            Sup(command_leader | hail) + 
-           identifier + 
+           identifier.setResultsName('command_identifier') + 
            Sup(P.Optional(P.White())) +
-           command_args).setResultsName('command')
+           command_args.setResultsName('command_args')).setResultsName('command')
 
 _test_commands = [(".hello", "['hello', '']"),
 (".foo bar", "['foo', 'bar']"),
@@ -102,10 +102,10 @@ dice_size = Sup(CL('d')) + number.setResultsName('dice_size')
 dice_bonus = P.oneOf('+ -') + number.setResultsName('dice_bonus')
 dice_filter = (P.oneOf('h l', caseless=True).setResultsName('dice_hilo') +
                number.setResultsName('dice_filter'))
-dice_sorted = CL('sort')
+dice_sorted = CL('sort').setResultsName('dice_sorted')
 dice_repeat = (Sup(CL('x')) + 
                number.setResultsName('dice_repeat') + 
-               P.Optional(dice_sorted.setResultsName('dice_sorted')))
+               P.Optional(dice_sorted))
 
 def combineBonus(sign, num):
     values = {'-':-1, '+':1}
