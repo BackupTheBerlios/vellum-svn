@@ -91,7 +91,10 @@ def test_shortFormatAliases():
 
 def resolve(actor, words, parsed_dice=None, target=None):
     rolled = getResult(actor, words, parsed_dice, target)
-    return formatAlias(actor, words, rolled, parsed_dice)
+    if rolled is None:
+        return None
+    else:
+        return formatAlias(actor, words, rolled, parsed_dice)
 
 def getResult(actor, words, parsed_dice=None, target=None):
     """Return a list of dice results"""
