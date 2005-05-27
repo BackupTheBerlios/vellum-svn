@@ -188,7 +188,7 @@ class AggregateModifier( Modifier ):
         return self.getNumber( )
 
     def __str__( self ):
-        return '\n'.join( [ str( mod ) for mod in self.mods.itervalues( ) ] )
+        return ( '\n' + tabbies ).join( [ str( mod ) for mod in self.mods.itervalues( ) ] )
 
     def getNumber( self ):
         vals = [ ]
@@ -220,11 +220,11 @@ class MinAggregateModifier( AggregateModifier ):
 
 class MaxAggregateModifier( AggregateModifier ):
     def __init__( self, mods ):
-        super( MinAggregateModifier, self ).__init__( mods, max )
+        super( MaxAggregateModifier, self ).__init__( mods, max )
 
 class CappedAggregateModifier( AggregateModifier ):
     def __init__( self, mods, cap ):
-        super( MinAggregateModifier, self ).__init__( mods, lambda: min( cap, sum( self.mods ) ) )
+        super( CappedAggregateModifier, self ).__init__( mods, lambda: min( cap, sum( self.mods ) ) )
 
 class ModifierFactory( MyObject ):
     def __init__( self, cause, number, name="" ):
@@ -278,8 +278,9 @@ class ModifierFactory( MyObject ):
     number = property( fget=getNumber, fset=setNumber, doc="This ModifierFactory's base value" )
 
 class ModifierDict( dict ):
-    def __init__( self, vals=None ):
+    def __init__( self, aggregator=None, vals=None ):
         vals = vals or { }
+        self.aggregator = aggregator or AggregateModifier
         self.crossdict = { }
         if isinstance( vals, dict ):
             super( ModifierDict, self ).__init__( vals )
@@ -295,7 +296,7 @@ class ModifierDict( dict ):
         except KeyError:
             for item in self[ key ]:
                 del self[ item.key ]
-            self[ key ] = AggregateModifier( )
+            self[ key ] = self.aggregator( )
 
     def __getitem__( self, key ):
         try:
@@ -309,23 +310,24 @@ class ModifierDict( dict ):
         except TypeError:
             super( ModifierDict, self ).__getitem__( val.type ).append( val )
         except KeyError:
-            if isinstance( val, AggregateModifier ):
+            if isinstance( val, self.aggregator ):
                 super( ModifierDict, self ).__setitem__( key, val )
                 for item in val.values( ):
                     self.crossdict[ item.key ] = item
                 return
             else:
-                self[ val.type ] = AggregateModifier( [ val ] )
+                self[ val.type ] = self.aggregator( [ val ] )
         self.crossdict[ key ] = val
 
 class Attribute( MyObject ):
     lastkey = 0
 
-    def __init__( self, name, number ):
+    def __init__( self, name, number, aggregator=None ):
+        aggregator = aggregator or AggregateModifier
         self.name = name
         self.number = number
         #self.modifiers = { }
-        self.modifiers = ModifierDict( )
+        self.modifiers = ModifierDict( aggregator )
         self.key = "%s %s" % ( self.__class__.__name__, self.lastkey )
         Attribute.lastkey += 1
         self.situation = True
@@ -382,8 +384,8 @@ class Attribute( MyObject ):
     number = property( fget=getNumber, fset=setNumber, doc="This Attribute's base value" )
 
 class Stat( Attribute ):
-    def __init__( self, name, number, modprovided=None ):
-        super( Stat, self ).__init__( name, number )
+    def __init__( self, name, number, modprovided=None, aggregator=None ):
+        super( Stat, self ).__init__( name, number, aggregator )
         self.mod = modprovided or self.number
 
     def applyMods( self ):
@@ -546,6 +548,7 @@ class EquippedItem( Item ):
 
 class Character( GameObject ):
     lastkey = 0
+    aggregator = None
 
     def __init__( self, name, attrs=None ):
         self.name = name

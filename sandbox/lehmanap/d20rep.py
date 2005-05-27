@@ -3,8 +3,12 @@ from rep import *
 class D20AbilityScore( Stat ):
     def __init__( self, name, number ):
         import math
-        super( D20AbilityScore, self ).__init__( name, number )
+        super( D20AbilityScore, self ).__init__( name, number, aggregator=MaxAggregateModifier )
         self.mod = lambda: int( math.floor( ( int( self ) - 10 ) / 2 ) )
+
+class D20Attribute( Attribute ):
+    def __init__( self, name, number ):
+        super( D20Attribute, self ).__init__( name, number, aggregator=MaxAggregateModifier )
 
 class D20Size( Stat ):
     def __init__( self, magnitude ):
@@ -74,6 +78,12 @@ class D20Character( Character ):
         except:
             self.attrs[ tag ] = D20AbilityScore( name, number )
 
+    def setAttribute( self, tag, name, number ):
+        try:
+            self.attrs[ tag ].number = number
+        except:
+            self.attrs[ tag ] = D20Attribute( name, number )
+
     def setSize( self, tag, name, letter, modsprovided=None ):
         try:
             self.attrs[ tag ].letter = letter
@@ -91,19 +101,19 @@ class D20Character( Character ):
                 #END Basic Attributes
 
                 #Calculated Attributes
-                'AC' : ( Character.setAttribute, 'Armor Class', 
+                'AC' : ( setAttribute, 'Armor Class', 
                     (
                         ( 'SIZE', '-1 SIZE', ( ) ),
                     ), 10 ),
-                'ATT' : ( Character.setAttribute, 'Attack Bonus', 
+                'ATT' : ( setAttribute, 'Attack Bonus', 
                     (
                         ( 'ABILITY', 'STR', ( "MELEE IN TOOL TYPES", ( "WPN_FINESSE NOT IN SUBJECT FEATS", "FINESSABLE NOT IN TOOL TYPES", "or" ), "and" ) ),
                         ( 'ABILITY', 'DEX', ( "RANGE IN TOOL TYPES", "and" ) ),
                         ( 'SIZE', 'SIZE', ( "GRAPPLE IN TOOL TYPES", "and" ) ),
                         ( 'SIZE', '-1 SIZE', ( "GRAPPLE NOT IN TOOL TYPES", "and" ) ),
                     ), -4 ),
-                'INIT' : ( Character.setAttribute, 'Initiative', ( ), 0 ),
-                'SPEED' : ( Character.setAttribute, 'Movement Speed', ( ), 30 ),
+                'INIT' : ( setAttribute, 'Initiative', ( ), 0 ),
+                'SPEED' : ( setAttribute, 'Movement Speed', ( ), 30 ),
                 'SIZE' : ( setSize, 'Size Category', ( ), 'M' )
                 }
 
@@ -130,11 +140,17 @@ if __name__ == "__main__":
     print "With Bow"
     print bob.ATT
     strstone = Item( 'Strength Stone', 0, { 'WEIGHT':5, 'HEIGHT':6, 'WIDTH':6, 'DEPTH':6 }, 'A plain round stone', { 'CARRIER' : { 'STR' : ( 2, '' ) } } )
+    strstone2 = Item( 'Strength Stone2', 0, { 'WEIGHT':5, 'HEIGHT':6, 'WIDTH':6, 'DEPTH':6 }, 'A plain round stone', { 'CARRIER' : { 'STR' : ( 5, '' ) } } )
     bob.unreadyWeapon( )
     print "Sword + Strength Stone"
     bob.attack( bob, sword )
     bob.carry( strstone )
-    print int( bob.ATT )
+    print bob.ATT
+    bob.unreadyWeapon( )
+    print "Sword + Strength Stone + Strength Stone 2"
+    bob.attack( bob, sword )
+    bob.carry( strstone2 )
+    print bob.ATT
     bob.unreadyWeapon( )
     bob.attack( bob, grapple )
     print "Grappling"
