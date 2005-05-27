@@ -53,7 +53,7 @@ class D20Character( Character ):
         self.FEATS = { }
 
     def beginCombat( self ):
-        self.DEX.mod.addTarget( self.AC, Conditions( ( ), "and" ) )
+        self.DEX.mod.addTarget( self.AC, 'ATTRIBUTE', Conditions( ( ), "and" ) )
 
     def endCombat( self ):
         self.DEX.mod.removeTarget( self.AC )
@@ -82,28 +82,29 @@ class D20Character( Character ):
 
     attTypes = { 
                 #Basic Attributes
-                'STR' : ( setAbilityScore, 'Strength', { }, 0 ),
-                'DEX' : ( setAbilityScore, 'Dexterity', { }, 0 ),
-                'CON' : ( setAbilityScore, 'Constitution', { }, 0 ),
-                'INT' : ( setAbilityScore, 'Intelligence', { }, 0 ),
-                'WIS' : ( setAbilityScore, 'Wisdom', { }, 0 ),
-                'CHA' : ( setAbilityScore, 'Charisma', { }, 0 ),
+                'STR' : ( setAbilityScore, 'Strength', ( ), 0 ),
+                'DEX' : ( setAbilityScore, 'Dexterity', ( ), 0 ),
+                'CON' : ( setAbilityScore, 'Constitution', ( ), 0 ),
+                'INT' : ( setAbilityScore, 'Intelligence', ( ), 0 ),
+                'WIS' : ( setAbilityScore, 'Wisdom', ( ), 0 ),
+                'CHA' : ( setAbilityScore, 'Charisma', ( ), 0 ),
                 #END Basic Attributes
 
                 #Calculated Attributes
-                'AC' : ( Character.setAttribute, 'Armor Class', {
-                                                                    '-1 SIZE' : ( ),
-                                                                }, 10 ),
+                'AC' : ( Character.setAttribute, 'Armor Class', 
+                    (
+                        ( 'SIZE', '-1 SIZE', ( ) ),
+                    ), 10 ),
                 'ATT' : ( Character.setAttribute, 'Attack Bonus', 
-                    {
-                        'STR': ( "MELEE IN TOOL TYPES", ( "WPN_FINESSE NOT IN SUBJECT FEATS", "FINESSABLE NOT IN TOOL TYPES", "or" ), "and" ),
-                        'DEX': ( "RANGE IN TOOL TYPES", "and" ),
-                        'SIZE': ( "GRAPPLE IN TOOL TYPES", "and" ),
-                        '-1 SIZE': ( "GRAPPLE NOT IN TOOL TYPES", "and" ),
-                    }, -4 ),
-                'INIT' : ( Character.setAttribute, 'Initiative', { }, 0 ),
-                'SPEED' : ( Character.setAttribute, 'Movement Speed', { }, 30 ),
-                'SIZE' : ( setSize, 'Size Category', { }, 'M' )
+                    (
+                        ( 'ABILITY', 'STR', ( "MELEE IN TOOL TYPES", ( "WPN_FINESSE NOT IN SUBJECT FEATS", "FINESSABLE NOT IN TOOL TYPES", "or" ), "and" ) ),
+                        ( 'ABILITY', 'DEX', ( "RANGE IN TOOL TYPES", "and" ) ),
+                        ( 'SIZE', 'SIZE', ( "GRAPPLE IN TOOL TYPES", "and" ) ),
+                        ( 'SIZE', '-1 SIZE', ( "GRAPPLE NOT IN TOOL TYPES", "and" ) ),
+                    ), -4 ),
+                'INIT' : ( Character.setAttribute, 'Initiative', ( ), 0 ),
+                'SPEED' : ( Character.setAttribute, 'Movement Speed', ( ), 30 ),
+                'SIZE' : ( setSize, 'Size Category', ( ), 'M' )
                 }
 
 if __name__ == "__main__":
@@ -111,11 +112,8 @@ if __name__ == "__main__":
     bow = Weapon( 'Bow', [ 'RANGE', 'PIERCING', 'CORPORIAL' ] )
     grapple = Weapon( 'Grapple', [ 'MELEE', 'GRAPPLE', 'CORPORIAL' ] )
     bob = D20Character( "Bob", { 'STR': 13, 'DEX':15, 'CON':12, 'INT':10, 'WIS':8, 'CHA':18, 'HEIGHT':72, 'WEIGHT':221, 'WIDTH':24, 'DEPTH':12 } )
-    dexmod = ModifierFactory( "Cause", 3 )
     print "AC before Dex mod"
     print bob.AC
-    dexmod.addTarget( bob.DEX, Conditions( ( ), "and" ) )
-    dexmod.addTarget( bob.SIZE )
     bob.beginCombat( )
     print "After"
     print bob.AC

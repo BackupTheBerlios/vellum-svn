@@ -41,10 +41,10 @@ class Condition( MyObject ):
                 return self.valToCheck not in vals
         except:
             return isinstance( circumstance, bool ) and circumstance
-        
+
     def __str__( self ):
         return "( %s %s %s's %s )" % ( self.valToCheck, self.op, self.partToCheck, self.attToCheck )
-        
+
 class Conditions( MyObject ):
     def __init__( self, conditions, op ):
         self.conditions = [ ]
@@ -58,7 +58,7 @@ class Conditions( MyObject ):
 
     def __str__( self ):
         return ( " %s " % self.op ).join( [ str( c ) for c in self.conditions ] )
-        
+
     def check( self, circumstance ):
         for c in self.conditions:
             truth = c.check( circumstance )
@@ -71,9 +71,9 @@ class Conditions( MyObject ):
         elif self.op == "or":
             return False
 
-
 class Modifier( MyObject ):
-    def __init__( self, parent, target, conditions ):
+    def __init__( self, type, parent, target, conditions ):
+        self.type = type
         self.parent = parent
         self.target = target
         self.conditions = conditions
@@ -103,7 +103,7 @@ class Modifier( MyObject ):
     def getKey( self ):
         return self.parent.key
     key = property( fget=getKey, doc="The unique key for this Modifier's ModifierFactory" )
-    
+
     def getNumber( self ):
         return self.parent.number
     number = property( fget=getNumber, doc="This Attributes base value" )
@@ -112,10 +112,11 @@ class MultipliedModifier( Modifier ):
     def __init__( self, mod, multiplier ):
         self.mod = mod
         self.multiplier = multiplier
-    
+        self.type = mod.type
+
     def __int__( self ):
         return self.multiplier * int( self.mod )
-    
+
     def __str__( self ):
         try:
             if self.multiplier != 1:
@@ -124,7 +125,7 @@ class MultipliedModifier( Modifier ):
                 return str( self.mod )
         except:
             return "\b"
-            
+
     def getNumber( self ):
         return self.multiplier * self.parent.number
     number = property( fget=getNumber, doc="This Attributes base value" )
@@ -136,10 +137,94 @@ class MultipliedModifier( Modifier ):
     def getTarget( self ):
         return self.mod.target
     target = property( fget=getTarget, doc="This modifier's target" )
-    
+
     def getConditions( self ):
         return self.mod.conditions
     conditions = property( fget=getConditions, doc="This modifier's conditions" )
+
+class AggregateModifier( Modifier ):
+    def __init__( self, mods, selector=sum ):
+        self.mods = { }
+        self.target = None
+        self.type = None
+        self.selector = selector
+        for mod in mods:
+            try:
+                self.extend( mod )
+            except TypeError:
+                self.append( mod )
+
+    def __delitem__( self, key ):
+        del self.mods[ key ]
+
+    def __getitem__( self, key ):
+        return self.mods[ key ]
+
+    def __setitem__( self, key, val ):
+        self.mods[ key ] = val
+
+    def __iter__( self ):
+        return self.iterkeys( )
+
+    def keys( self ):
+        return self.mods.keys( )
+
+    def values( self ):
+        return self.mods.values( )
+
+    def items( self ):
+        return self.mods.items( )
+
+    def iterkeys( self ):
+        return self.mods.iterkeys( )
+
+    def itervalues( self ):
+        return self.mods.itervalues( )
+
+    def iteritems( self ):
+        return self.mods.iteritems( )
+
+    def __int__( self ):
+        return self.getNumber( )
+
+    def __str__( self ):
+        return '\n'.join( [ str( mod ) for mod in self.mods.itervalues( ) ] )
+
+    def getNumber( self ):
+        vals = [ ]
+        for m in self.mods.values( ):
+            try:
+                vals.append( int( m ) )
+            except:
+                pass
+        if vals:
+            return self.selector( vals )
+        else:
+            raise "I don't modify %s under these circumstances" % self.target.name
+    number = property( fget=getNumber, doc="This Attributes base value" )
+
+    def append( self, mod ):
+        if self.type is None or self.type == mod.type:
+            self.type = mod.type
+            if self.target is None or self.target == mod.target:
+                self.target = mod.target
+                self.mods[ mod.key ] = mod
+
+    def extend( self, mods ):
+        for mod in mods:
+            self.append( mod )
+
+class MinAggregateModifier( AggregateModifier ):
+    def __init__( self, mods ):
+        super( MinAggregateModifier, self ).__init__( mods, min )
+
+class MaxAggregateModifier( AggregateModifier ):
+    def __init__( self, mods ):
+        super( MinAggregateModifier, self ).__init__( mods, max )
+
+class CappedAggregateModifier( AggregateModifier ):
+    def __init__( self, mods, cap ):
+        super( MinAggregateModifier, self ).__init__( mods, lambda: min( cap, sum( self.mods ) ) )
 
 class ModifierFactory( MyObject ):
     def __init__( self, cause, number, name="" ):
@@ -157,20 +242,23 @@ class ModifierFactory( MyObject ):
         name = self.name and " ( %s )" % self.name or self.name
         return "%s%s ( from %s%s )" % ( number > -1 and "+" or "", number, str( self.cause ), name )
 
-    def addTarget( self, target, conditions=None ):
-        self.addMultipliedTarget( target, 1, conditions )
-
-    def addMultipliedTarget( self, target, multiplier, conditions=None ):
+    def addTarget( self, target, type, conditions=None, multiplier=1 ):
         conditions = conditions or Conditions( ( ), "and" )
-        mod = MultipliedModifier( Modifier( self, target, conditions ), multiplier )
+        mod = MultipliedModifier( Modifier( type, self, target, conditions ), multiplier )
         try:
             self.targets[ target.key ].append( mod )
         except:
             self.targets[ target.key ] = [ mod ]
         try:
-            target.modifiers[ self.key ].append( mod )
-        except:
-            target.modifiers[ self.key ] = [ mod ]
+            target.modifiers[ type ].extend( mod )
+        except TypeError:
+            target.modifiers[ type ].append( mod )
+        except KeyError:
+            target.modifiers[ mod.key ] = mod
+        except AttributeError, e:
+            import pdb
+            pdb.set_trace( )
+            raise e
 
     def removeTarget( self, target ):
         del self.targets[ target.key ]
@@ -180,7 +268,7 @@ class ModifierFactory( MyObject ):
     def getKey( self ):
         return "%s: %s" % ( self.__class__.__name__, getattr( self.cause, 'key', self.cause ) )
     key = property( fget=getKey, doc="The unique key for this ModifierFactory" )
-    
+
     def getNumber( self ):
         return self._number( )
 
@@ -189,13 +277,55 @@ class ModifierFactory( MyObject ):
 
     number = property( fget=getNumber, fset=setNumber, doc="This ModifierFactory's base value" )
 
+class ModifierDict( dict ):
+    def __init__( self, vals=None ):
+        vals = vals or { }
+        self.crossdict = { }
+        if isinstance( vals, dict ):
+            super( ModifierDict, self ).__init__( vals )
+        else:
+            for key, val in vals:
+                self[ key ] = val
+
+    def __delitem__( self, key ):
+        try:
+            mod = self.crossdict[ key ]
+            del self[ mod.type ][ key ]
+            del self.crossdict[ key ]
+        except KeyError:
+            for item in self[ key ]:
+                del self[ item.key ]
+            self[ key ] = AggregateModifier( )
+
+    def __getitem__( self, key ):
+        try:
+            return self.crossdict[ key ]
+        except KeyError:
+            return super( ModifierDict, self ).__getitem__( key )
+
+    def __setitem__( self, key, val ):
+        try:
+            super( ModifierDict, self ).__getitem__( val.type ).extend( val )
+        except TypeError:
+            super( ModifierDict, self ).__getitem__( val.type ).append( val )
+        except KeyError:
+            if isinstance( val, AggregateModifier ):
+                super( ModifierDict, self ).__setitem__( key, val )
+                for item in val.values( ):
+                    self.crossdict[ item.key ] = item
+                return
+            else:
+                self[ val.type ] = AggregateModifier( [ val ] )
+        self.crossdict[ key ] = val
+
 class Attribute( MyObject ):
     lastkey = 0
-    
+
     def __init__( self, name, number ):
         self.name = name
         self.number = number
-        self.modifiers = { }
+        #self.modifiers = { }
+        self.modifiers = ModifierDict( )
         self.key = "%s %s" % ( self.__class__.__name__, self.lastkey )
         Attribute.lastkey += 1
         self.situation = True
@@ -210,14 +340,8 @@ class Attribute( MyObject ):
         return diff and diff / math.fabs( diff ) or diff
 
     def __int__( self ):
-        mods = [ ]
         vals = [ ]
         for m in self.modifiers.values( ):
-            try:
-                mods.extend( m )
-            except TypeError:
-                mods.append( m )
-        for m in mods:
             try:
                 vals.append( int( m ) )
             except:
@@ -228,17 +352,11 @@ class Attribute( MyObject ):
         return -int( self )
 
     def __str__( self ):
-        mods = [ ]
-        for m in self.modifiers.values( ):
-            try:
-                mods.extend( m )
-            except TypeError:
-                mods.append( m )
         fixings = ""
         global tabbies
         tabbies += "\t"
-        for x in [ self.number ] + [ mod for mod in mods ]:
-            s = str( x )
+        for mod in [ self.number ] + self.modifiers.values( ):
+            s = str( mod )
             if s != '\b':
                 fixings += "\n%s%s" % ( tabbies, s )
         tabbies = tabbies[ :-1 ]
@@ -261,7 +379,6 @@ class Attribute( MyObject ):
 
     def setNumber( self, number ):
         self._number = callable( number ) and number or ( lambda: number )
-
     number = property( fget=getNumber, fset=setNumber, doc="This Attribute's base value" )
 
 class Stat( Attribute ):
@@ -315,18 +432,23 @@ class GameObject( MyObject ):
 
     def setSystemAttrs( self ):
         for tag, ( attType, attName, targetStrs, baseVal ) in self.attTypes.iteritems( ):
-            for modStr, targetCondition in targetStrs.iteritems( ):
-                tags = modStr.split( )
-                target = self.attrs[ tag ]
-                mod = self.attrs[ tags[ -1 ] ].mod
-                if len( targetCondition ) > 0:
-                    condition = Conditions( targetCondition[ :-1 ], targetCondition[ -1 ] )
-                else:
-                    condition = Conditions( ( ), "and" )
-                if len( tags ) > 1:
-                    mod.addMultipliedTarget( target, int( tags[ 0 ] ), condition )
-                else:
-                    mod.addTarget( target, condition )
+            try:
+                for ( type, source, targetCondition ) in targetStrs:
+                    tags = source.split( )
+                    target = self.attrs[ tag ]
+                    mod = self.attrs[ tags[ -1 ] ].mod
+                    if len( targetCondition ) > 0:
+                        condition = Conditions( targetCondition[ :-1 ], targetCondition[ -1 ] )
+                    else:
+                        condition = Conditions( ( ), "and" )
+                    if len( tags ) > 1:
+                        mod.addTarget( target, type, condition, int( tags[ 0 ] ) )
+                    else:
+                        mod.addTarget( target, type, condition )
+            except ValueError, e:
+                import pdb
+                pdb.set_trace( )
+                raise e
 
     #Properties
     def setAttribute( self, tag, name, number ):
@@ -371,11 +493,11 @@ class Item( GameObject ):
     def addMod( self, mod, type, target ):
         self.modsprovided[ type ][ target ] = mod
         if self.typerefs[ type ]:
-            mod.addTarget( self.typerefs[ type ].attrs[ target ] )
+            mod.addTarget( self.typerefs[ type ].attrs[ target ], type )
 
     def applyMods( self, type ):
         for target, mod in self.modsprovided[ type ].items( ):
-            mod.addTarget( self.typerefs[ type ].attrs[ target ] )
+            mod.addTarget( self.typerefs[ type ].attrs[ target ], type )
 
     def revokeMods( self, type ):
         for target, mod in self.modsprovided[ type ].items( ):
