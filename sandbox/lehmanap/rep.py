@@ -1,3 +1,4 @@
+import pdb
 tabbies = ""
 
 class MyObject( object ):
@@ -71,6 +72,14 @@ class Conditions( MyObject ):
         elif self.op == "or":
             return False
 
+    def compileCondition( clss, conditionTuple ):
+        if len( conditionTuple ) > 0:
+            condition = Conditions( conditionTuple[ :-1 ], conditionTuple[ -1 ] )
+        else:
+            condition = Conditions( ( ), "and" )
+        return condition
+    compileCondition = classmethod( compileCondition )
+
 class Modifier( MyObject ):
     def __init__( self, type, parent, target, conditions ):
         self.type = type
@@ -120,7 +129,7 @@ class MultipliedModifier( Modifier ):
     def __str__( self ):
         try:
             if self.multiplier != 1:
-                return "%s = %s x %s" % ( int( self ), str( self.mod ), self.multiplier )
+                return "%s = %s x %s" % ( int( self ), self.multiplier , str( self.mod ) )
             else:
                 return str( self.mod )
         except:
@@ -143,7 +152,8 @@ class MultipliedModifier( Modifier ):
     conditions = property( fget=getConditions, doc="This modifier's conditions" )
 
 class AggregateModifier( Modifier ):
-    def __init__( self, mods, selector=sum ):
+    def __init__( self, mods=None, selector=sum, target=None, type=None ):
+        mods = mods or [ ]
         self.mods = { }
         self.target = None
         self.type = None
@@ -199,8 +209,10 @@ class AggregateModifier( Modifier ):
                 pass
         if vals:
             return self.selector( vals )
-        else:
+        elif self.mods.values( ):
             raise "I don't modify %s under these circumstances" % self.target.name
+        else:
+            return 0
     number = property( fget=getNumber, doc="This Attributes base value" )
 
     def append( self, mod ):
@@ -215,16 +227,16 @@ class AggregateModifier( Modifier ):
             self.append( mod )
 
 class MinAggregateModifier( AggregateModifier ):
-    def __init__( self, mods ):
-        super( MinAggregateModifier, self ).__init__( mods, min )
+    def __init__( self, mods=None, target=None, type=None ):
+        super( MinAggregateModifier, self ).__init__( mods, min, target, type )
 
 class MaxAggregateModifier( AggregateModifier ):
-    def __init__( self, mods ):
-        super( MaxAggregateModifier, self ).__init__( mods, max )
+    def __init__( self, mods=None, target=None, type=None ):
+        super( MaxAggregateModifier, self ).__init__( mods, max, target, type )
 
 class CappedAggregateModifier( AggregateModifier ):
-    def __init__( self, mods, cap ):
-        super( CappedAggregateModifier, self ).__init__( mods, lambda: min( cap, sum( self.mods ) ) )
+    def __init__( self, cap, mods=None, target=None, type=None ):
+        super( CappedAggregateModifier, self ).__init__( mods, lambda: min( cap, sum( self.mods ) ), target, type )
 
 class ModifierFactory( MyObject ):
     def __init__( self, cause, number, name="" ):
@@ -249,16 +261,17 @@ class ModifierFactory( MyObject ):
             self.targets[ target.key ].append( mod )
         except:
             self.targets[ target.key ] = [ mod ]
-        try:
-            target.modifiers[ type ].extend( mod )
-        except TypeError:
-            target.modifiers[ type ].append( mod )
-        except KeyError:
-            target.modifiers[ mod.key ] = mod
-        except AttributeError, e:
-            import pdb
-            pdb.set_trace( )
-            raise e
+        #try:
+        #    target.modifiers[ type ].extend( mod )
+        #except TypeError:
+        #    target.modifiers[ type ].append( mod )
+        #except KeyError:
+        #    target.modifiers[ mod.key ] = mod
+        #except AttributeError, e:
+        #    import pdb
+        #    pdb.set_trace( )
+        #    raise e
+        target.modifiers[ mod.key ] = mod
 
     def removeTarget( self, target ):
         del self.targets[ target.key ]
@@ -277,16 +290,15 @@ class ModifierFactory( MyObject ):
 
     number = property( fget=getNumber, fset=setNumber, doc="This ModifierFactory's base value" )
 
-class ModifierDict( dict ):
-    def __init__( self, aggregator=None, vals=None ):
+class CategoryDict( dict ):
+    def __init__( self, aggregator, vals=None ):
         vals = vals or { }
-        self.aggregator = aggregator or AggregateModifier
+        self.aggregator = aggregator
         self.crossdict = { }
-        if isinstance( vals, dict ):
-            super( ModifierDict, self ).__init__( vals )
-        else:
-            for key, val in vals:
-                self[ key ] = val
+        if not isinstance( vals, dict ):
+            vals = dict( [ ( v.key, v ) for v in vals ] )
+        for key, val in vals:
+            self[ key ] = val
 
     def __delitem__( self, key ):
         try:
@@ -302,22 +314,64 @@ class ModifierDict( dict ):
         try:
             return self.crossdict[ key ]
         except KeyError:
-            return super( ModifierDict, self ).__getitem__( key )
+            return super( CategoryDict, self ).__getitem__( key )
 
     def __setitem__( self, key, val ):
         try:
-            super( ModifierDict, self ).__getitem__( val.type ).extend( val )
+            super( CategoryDict, self ).__getitem__( val.type ).extend( val )
         except TypeError:
-            super( ModifierDict, self ).__getitem__( val.type ).append( val )
+            super( CategoryDict, self ).__getitem__( val.type ).append( val )
         except KeyError:
-            if isinstance( val, self.aggregator ):
-                super( ModifierDict, self ).__setitem__( key, val )
+            if isinstance( val, AggregateModifier ):
+                super( CategoryDict, self ).__setitem__( key, val )
                 for item in val.values( ):
                     self.crossdict[ item.key ] = item
                 return
             else:
-                self[ val.type ] = self.aggregator( [ val ] )
+                super( CategoryDict, self ).__setitem__( val.type, self.aggregator( [ val ] ) )
         self.crossdict[ key ] = val
+
+    def keys( self, type=None ):
+        if type:
+            return self[ type ].keys( )
+        else:
+            return super( CategoryDict, self ).keys( )
+
+    def iterkeys( self, type=None ):
+        if type:
+            return self[ type ].iterkeys( )
+        else:
+            return super( CategoryDict, self ).iterkeys( )
+
+    def values( self, type=None ):
+        if type:
+            return self[ type ].values( )
+        else:
+            return super( CategoryDict, self ).values( )
+
+    def itervalues( self, type=None ):
+        if type:
+            return self[ type ].itervalues( )
+        else:
+            return super( CategoryDict, self ).itervalues( )
+
+    def items( self, type=None ):
+        if type:
+            return self[ type ].items( )
+        else:
+            return super( CategoryDict, self ).items( )
+
+    def iteritems( self, type=None ):
+        if type:
+            return self[ type ].iteritems( )
+        else:
+            return super( CategoryDict, self ).iteritems( )
+
+class ModifierDict( CategoryDict ):
+    def __init__( self, aggregator=None, vals=None ):
+        vals = vals or { }
+        aggregator = aggregator or AggregateModifier
+        super( ModifierDict, self ).__init__( aggregator, vals )
 
 class Attribute( MyObject ):
     lastkey = 0
@@ -326,11 +380,10 @@ class Attribute( MyObject ):
         aggregator = aggregator or AggregateModifier
         self.name = name
         self.number = number
-        #self.modifiers = { }
         self.modifiers = ModifierDict( aggregator )
         self.key = "%s %s" % ( self.__class__.__name__, self.lastkey )
         Attribute.lastkey += 1
-        self.situation = True
+        self.situation = False
 
     def __add__( self, other ):
         return int( self ) + other
@@ -439,10 +492,7 @@ class GameObject( MyObject ):
                     tags = source.split( )
                     target = self.attrs[ tag ]
                     mod = self.attrs[ tags[ -1 ] ].mod
-                    if len( targetCondition ) > 0:
-                        condition = Conditions( targetCondition[ :-1 ], targetCondition[ -1 ] )
-                    else:
-                        condition = Conditions( ( ), "and" )
+                    condition = Conditions.compileCondition( targetCondition )
                     if len( tags ) > 1:
                         mod.addTarget( target, type, condition, int( tags[ 0 ] ) )
                     else:
