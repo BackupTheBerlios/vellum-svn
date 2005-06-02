@@ -81,11 +81,10 @@ class LevelBox( CategoryDict ):
         return string
 
 class D20CharacterClass( MyObject ):
-    def __init__( self, name, session, attacks, saves, feats ):
+    def __init__( self, name, session, mods, feats ):
         super( D20CharacterClass, self ).__init__( )
         self.name = name
-        self.attacks = attacks
-        self.saves = saves
+        self.mods = mods
         self.feats = feats
         self.session = session
 
@@ -100,7 +99,8 @@ class D20CharacterClass( MyObject ):
             #Needs to be a way to query to determine what feat to be added
             pass
         feats.extend( self.feats )
-        mods[ 'ATT' ] = ( 'RANKS', Conditions( ( ), "and" ), self.attacks[ number ] )
+        for key, mod in self.mods.items( ):
+            mods[ key ] = ( 'RANKS', Conditions( ( ), "and" ), mod[ number ] )
         return Level( character, number, charlevelnum, self, mods, feats )
 
     def __str__( self ):
@@ -248,7 +248,7 @@ if __name__ == "__main__":
     bow = Weapon( 'Bow', [ 'RANGE', 'PIERCING', 'CORPORIAL' ] )
     grapple = Weapon( 'Grapple', [ 'MELEE', 'GRAPPLE', 'CORPORIAL' ] )
     bob = D20Character( "Bob", { 'STR': 13, 'DEX':15, 'CON':12, 'INT':10, 'WIS':8, 'CHA':18, 'HEIGHT':72, 'WEIGHT':221, 'WIDTH':24, 'DEPTH':12 } )
-    charclass = D20CharacterClass( 'Fighter', None, [ 1 ] * 20, { }, { } )
+    charclass = D20CharacterClass( 'Fighter', None, { 'ATT': [ 1 ] * 20 }, { } )
     print int( bob.levels )
     bob.addLevel( charclass )
     print bob.levels
