@@ -5,11 +5,10 @@ class LevelAggregator( AggregateModifier ):
         self.mods[ level.key ] = level
 
 class Level( MyObject ):
-    def __init__( self, character, levelnum, charlevelnum, characterclass, mods=None, feats=None ):
+    def __init__( self, character, levelnum, charlevelnum, mods=None, feats=None ):
         self.character = character
         self.levelnum = levelnum + 1
         self.charlevelnum = charlevelnum
-        self.characterclass = characterclass
         self.enabled = True
         self.factories = { }
         mods = mods or {}
@@ -31,12 +30,6 @@ class Level( MyObject ):
             factory.removeTarget( target )
         self.enabled = False
 
-    def __str__( self ):
-        if self.enabled:
-            return self.type
-        else:
-            return "\b"
-
     def __int__( self ):
         if self.enabled:
             return 1
@@ -44,16 +37,46 @@ class Level( MyObject ):
             return 0
 
     #Properties
-    def getType( self ):
-        return self.characterclass.name
-    type = property( fget=getType, doc="The Class assosciated with this level." )
-
     def getKey( self ):
         return hash( self )
     key = property( fget=getKey, doc="Unique Key" )
 
     def __lt__( self, other ):
         return self.charlevelnum < other.charlevelnum
+
+class CharacterLevel( Level ):
+    def __init__( self, character, levelnum, charlevelnum, characterclass, mods=None, feats=None ):
+        self.characterclass = characterclass
+        super( CharacterLevel, self ).__init__( character, levelnum, charlevelnum, mods, feats )
+
+    def __str__( self ):
+        if self.enabled:
+            return  "%s %s, %s/%s" % ( self.type, self.levelnum, self.charlevelnum, int( self.character.levels ) )
+        else:
+            return "\b"
+
+    #Properties
+    def getType( self ):
+        return self.characterclass.name
+    type = property( fget=getType, doc="The Class assosciated with this level." )
+
+class RaceLevel( Level ):
+    def __init__( self, character, levelnum, charlevelnum, racename, mods=None, feats=None ):
+        self.racename = racename
+        super( RaceLevel, self ).__init__( character, levelnum, charlevelnum, mods, feats )
+    def __int__( self ):
+        return 0
+
+    def __str__( self ):
+        if self.enabled:
+            return  "%s %s, %s/%s" % ( self.racename, self.levelnum, self.charlevelnum, int( self.character.levels ) )
+        else:
+            return "\b"
+
+    #Properties
+    def getType( self ):
+        return 'RACE'
+    type = property( fget=getType )
 
 class LevelBox( CategoryDict ):
     def __init__( self, levels=None, eladjustment=0  ):
@@ -80,31 +103,43 @@ class LevelBox( CategoryDict ):
             string += "%s %s\n" % ( key, int( val ) )
         return string
 
-class D20CharacterClass( MyObject ):
-    def __init__( self, name, session, mods, feats ):
-        super( D20CharacterClass, self ).__init__( )
+class D20LevelGenerator( MyObject ):
+    def __init__( self, name, session, mods, feats, leveltype ):
+        super( D20LevelGenerator, self ).__init__( )
         self.name = name
         self.mods = mods
         self.feats = feats
         self.session = session
+        self.leveltype = leveltype
 
     def getLevel( self, character, number ):
         mods = { }
-        feats = [ ]
-        charlevelnum = ( int( character.levels ) + 1 )
-        if  charlevelnum % 4 == 0:
-            #Needs to be a way to query the user for which attribute to up.
-            pass
-        if charlevelnum % 3 == 0:
-            #Needs to be a way to query to determine what feat to be added
-            pass
-        feats.extend( self.feats )
+        try:
+            charlevelnum = 1
+            for level in character.levels[ 'RACE' ].values( ):
+                if level.enabled:
+                    charlevelnum += 1
+        except KeyError:
+            charlevelnum = 1
         for key, mod in self.mods.items( ):
             mods[ key ] = ( 'RANKS', Conditions( ( ), "and" ), mod[ number ] )
-        return Level( character, number, charlevelnum, self, mods, feats )
+        return self.leveltype( character, number, charlevelnum, self, mods, self.feats )
 
     def __str__( self ):
         return self.name
+
+class D20CharacterClass( D20LevelGenerator ):
+    def __init__( self, name, session, mods, feats ):
+        super( D20CharacterClass, self ).__init__( name, session, mods, feats, CharacterLevel )
+
+class D20Race( D20LevelGenerator ):
+    def __init__( self, name, session, mods, feats ):
+        super( D20Race, self ).__init__( name, session, mods, feats, RaceLevel )
+
+    def getLevel( self, character, number, charclass ):
+        #When we have Unknowns, this will be used to hook the races UnknownSkills
+        #to the class level being gained
+        return super( D20Race, self ).getLevel( character, number )
 
 class D20AbilityScore( Stat ):
     def __init__( self, name, number ):
@@ -168,9 +203,10 @@ class D20Size( Stat ):
     sizeNames = { 'F':"Fine", 'T':"Tiny", 'S':"Small", 'M':"Medium", 'L':"Large", 'H':"Huge", 'C':"Collosal", 'G':"Gargantuan" }
 
 class D20Character( Character ):
-    def __init__( self, name, attrs=None ):
+    def __init__( self, name, race, attrs=None ):
         super( D20Character, self ).__init__( name, attrs )
         self.levels = LevelBox( )
+        self.race = race
         self.FEATS = { }
 
     def addLevel( self, characterclass ):
@@ -178,9 +214,12 @@ class D20Character( Character ):
             numlevels = int( self.levels[ characterclass.name ] )
         except KeyError:
             numlevels = 0
-        level = characterclass.getLevel( self, numlevels )
-        self.levels.addLevel( level )
-        level.enable( )
+        classlevel = characterclass.getLevel( self, numlevels )
+        racelevel = self.race.getLevel( self, numlevels, characterclass )
+        self.levels.addLevel( classlevel )
+        self.levels.addLevel( racelevel )
+        classlevel.enable( )
+        racelevel.enable( )
 
     def beginCombat( self ):
         self.DEX.mod.addTarget( self.AC, 'ATTRIBUTE', Conditions( ( ), "and" ) )
@@ -238,6 +277,18 @@ class D20Character( Character ):
                         ( 'SIZE', 'SIZE', ( "GRAPPLE IN TOOL TYPES", "and" ) ),
                         ( 'SIZE', '-1 SIZE', ( "GRAPPLE NOT IN TOOL TYPES", "and" ) ),
                     ), -4 ),
+                'WILL' : ( setAttribute, 'Will Save', 
+                    (
+                        ( 'ABILITY', 'WIS', ( ) ),
+                    ), 0 ),
+                'FORT' : ( setAttribute, 'Fortitude Save', 
+                    (
+                        ( 'ABILITY', 'CON', ( ) ),
+                    ), 0 ),
+                'REF' : ( setAttribute, 'Reflex Save', 
+                    (
+                        ( 'ABILITY', 'DEX', ( ) ),
+                    ), 0 ),
                 'INIT' : ( setAttribute, 'Initiative', ( ), 0 ),
                 'SPEED' : ( setAttribute, 'Movement Speed', ( ), 30 ),
                 'SIZE' : ( setSize, 'Size Category', ( ), 'M' )
@@ -247,8 +298,19 @@ if __name__ == "__main__":
     sword = Weapon( 'Sword', [ 'MELEE', 'SLASHING', 'PIERCING', 'CORPORIAL' ] )
     bow = Weapon( 'Bow', [ 'RANGE', 'PIERCING', 'CORPORIAL' ] )
     grapple = Weapon( 'Grapple', [ 'MELEE', 'GRAPPLE', 'CORPORIAL' ] )
-    bob = D20Character( "Bob", { 'STR': 13, 'DEX':15, 'CON':12, 'INT':10, 'WIS':8, 'CHA':18, 'HEIGHT':72, 'WEIGHT':221, 'WIDTH':24, 'DEPTH':12 } )
-    charclass = D20CharacterClass( 'Fighter', None, { 'ATT': [ 1 ] * 20 }, { } )
+    race = D20Race( 'Elf', None, 
+                {
+                    'DEX': [ 2 ] + [ 0 ] * 19,
+                    'CON': [ -2 ] + [ 0 ] * 19
+                }, { } )
+    bob = D20Character( "Bob", race, { 'STR': 13, 'DEX':15, 'CON':12, 'INT':10, 'WIS':8, 'CHA':18, 'HEIGHT':72, 'WEIGHT':221, 'WIDTH':24, 'DEPTH':12 } )
+    charclass = D20CharacterClass( 'Fighter', None, 
+                { 
+                    'ATT': [ 1 ] * 20,
+                    'FORT': ( [ 2 ] + [ 1, 0 ] * 10 )[ :20 ],
+                    'WILL': ( [ 0, 0, 1 ] * 7 )[ :20 ],
+                    'REF': ( [ 0, 0, 1 ] * 7 )[ :20 ]
+                }, { } )
     print int( bob.levels )
     bob.addLevel( charclass )
     print bob.levels
@@ -289,3 +351,6 @@ if __name__ == "__main__":
     bob.attack( bob, grapple )
     print "Grappling"
     print int( bob.ATT )
+    print bob.WILL
+    print bob.FORT
+    print bob.REF
