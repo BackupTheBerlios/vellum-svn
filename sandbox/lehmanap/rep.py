@@ -328,6 +328,7 @@ class CategoryDict( dict ):
                     self.crossdict[ item.key ] = item
                 return
             else:
+                print val.type
                 super( CategoryDict, self ).__setitem__( val.type, self.aggregator( [ val ] ) )
         self.crossdict[ key ] = val
 
@@ -620,6 +621,147 @@ class Character( GameObject ):
         item.beDropped( )
 
     attTypes = { }
+
+class LevelGenerator( MyObject ):
+    def __init__( self, name, session, mods, feats, leveltype ):
+        super( LevelGenerator, self ).__init__( )
+        self.name = name
+        self.mods = mods
+        self.feats = feats
+        self.session = session
+        self.leveltype = leveltype
+
+    def getLevel( self, character, number ):
+        mods = { }
+        try:
+            charlevelnum = 1
+            for level in character.levels[ 'RACE' ].values( ):
+                if level.enabled:
+                    charlevelnum += 1
+        except KeyError:
+            charlevelnum = 1
+        for target, mod in self.mods.items( ):
+            mods[ target ] = ( 'RANKS', Conditions( ( ), "and" ), mod[ number ] )
+        return self.leveltype( character, number, charlevelnum, self, mods, self.feats )
+
+    def __str__( self ):
+        return self.name
+
+class CharacterClass( LevelGenerator ):
+    def __init__( self, name, session, mods, feats ):
+        super( CharacterClass, self ).__init__( name, session, mods, feats, CharacterLevel )
+
+class Race( LevelGenerator ):
+    def __init__( self, name, session, mods, feats ):
+        super( Race, self ).__init__( name, session, mods, feats, RaceLevel )
+
+    def getLevel( self, character, number, charclass ):
+        #When we have Unknowns, this will be used to hook the races UnknownSkills
+        #to the class level being gained
+        return super( Race, self ).getLevel( character, number )
+
+class LevelAggregator( AggregateModifier ):
+    def append( self, level ):
+        self.mods[ level.key ] = level
+
+class Level( MyObject ):
+    def __init__( self, character, levelnum, charlevelnum, mods=None, feats=None ):
+        self.character = character
+        self.levelnum = levelnum + 1
+        self.charlevelnum = charlevelnum
+        self.enabled = True
+        self.factories = { }
+        mods = mods or {}
+        for key, ( type, conditions, number ) in mods.items( ):
+            if isinstance( conditions, tuple ):
+                conditions = Constitution.compileCondition( conditions )
+            target = getattr( character, key )
+            factory = ModifierFactory( self, number, 'Level Modifier' )
+            self.factories[ target ] = ( factory, type, conditions )
+        self.feats = feats or { }
+
+    def enable( self ):
+        for target, ( factory, type, conditions ) in self.factories.items( ):
+            factory.addTarget( target, type, conditions )
+        self.enabled = True
+
+    def disable( self ):
+        for target, ( factory, type, conditions ) in self.factories.items( ):
+            factory.removeTarget( target )
+        self.enabled = False
+
+    def __int__( self ):
+        if self.enabled:
+            return 1
+        else:
+            return 0
+
+    #Properties
+    def getKey( self ):
+        return hash( self )
+    key = property( fget=getKey, doc="Unique Key" )
+
+    def __lt__( self, other ):
+        return self.charlevelnum < other.charlevelnum
+
+class CharacterLevel( Level ):
+    def __init__( self, character, levelnum, charlevelnum, characterclass, mods=None, feats=None ):
+        self.characterclass = characterclass
+        super( CharacterLevel, self ).__init__( character, levelnum, charlevelnum, mods, feats )
+
+    def __str__( self ):
+        if self.enabled:
+            return  "%s %s, %s/%s" % ( self.type, self.levelnum, self.charlevelnum, int( self.character.levels ) )
+        else:
+            return "\b"
+
+    #Properties
+    def getType( self ):
+        return self.characterclass.name
+    type = property( fget=getType, doc="The Class assosciated with this level." )
+
+class RaceLevel( Level ):
+    def __init__( self, character, levelnum, charlevelnum, racename, mods=None, feats=None ):
+        self.racename = racename
+        super( RaceLevel, self ).__init__( character, levelnum, charlevelnum, mods, feats )
+    def __int__( self ):
+        return 0
+
+    def __str__( self ):
+        if self.enabled:
+            return  "%s %s, %s/%s" % ( self.racename, self.levelnum, self.charlevelnum, int( self.character.levels ) )
+        else:
+            return "\b"
+
+    #Properties
+    def getType( self ):
+        return 'RACE'
+    type = property( fget=getType )
+
+class LevelBox( CategoryDict ):
+    def __init__( self, levels=None, eladjustment=0  ):
+        self.eladjustment = eladjustment
+        super( LevelBox, self ).__init__( LevelAggregator, levels )
+
+    def addLevel( self, level ):
+        self[ level.key ] = level
+
+    def levels( self ):
+        lvls = self.crossdict.values( )
+        lvls.sort( )
+        return lvls
+
+    def __iter__( self ):
+        return iter( self.levels( ) )
+
+    def __int__( self ):
+        return sum( [ int( lvls ) for lvls in self.values( ) ] )
+
+    def __str__( self ):
+        string = ""
+        for key, val in self.items( ):
+            string += "%s %s\n" % ( key, int( val ) )
+        return string
 
 if __name__ == "__main__":
     import math
