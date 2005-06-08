@@ -328,7 +328,6 @@ class CategoryDict( dict ):
                     self.crossdict[ item.key ] = item
                 return
             else:
-                print val.type
                 super( CategoryDict, self ).__setitem__( val.type, self.aggregator( [ val ] ) )
         self.crossdict[ key ] = val
 

@@ -2,12 +2,12 @@ from rep import *
 
 class D20CharacterClass( CharacterClass ):
     def __init__( self, name, session, mods, feats ):
-        #mods[ 'EL' ] = mods.get( 'EL', ( ( 'EL', ( 1, ) * 20 ) ), )
+        mods[ 'EL' ] = mods.get( 'EL', [ 1 ] * 20 )
         super( D20CharacterClass, self ).__init__( name, session, mods, feats )
 
 class D20Race( Race ):
     def __init__( self, name, session, mods, feats ):
-        #mods[ 'EL' ] = mods.get( 'EL', ( ( 'EL', ( 0, ) * 20 ), ) )
+        mods[ 'EL' ] = mods.get( 'EL', [ 0 ] * 20 )
         super( D20Race, self ).__init__( name, session, mods, feats )
 
 class D20AbilityScore( Stat ):
@@ -159,6 +159,7 @@ class D20Character( Character ):
                         ( 'ABILITY', 'DEX', ( ) ),
                     ), 0 ),
                 'INIT' : ( setAttribute, 'Initiative', ( ), 0 ),
+                'EL' : ( setAttribute, 'Effective Level', ( ), 0 ),
                 'SPEED' : ( setAttribute, 'Movement Speed', ( ), 30 ),
                 'SIZE' : ( setSize, 'Size Category', ( ), 'M' )
                 }
