@@ -31,33 +31,13 @@ except:
     def CreateFileDialog(*args, **kwargs):
         """TODO - use gtk one"""
 
-if sys.platform == 'win32':
-    os.environ['SDL_VIDEODRIVER'] = 'windib'
-
-def hwnd(window):
-    if sys.platform == 'win32':
-        return window.handle
-    else:
-        return window.xid
-
-def sdlHack(widget, *args):
-    """Slap a pygame (SDL) window inside a widget"""
-    handle = hwnd(widget.window)
-    # size = widget.size_request()
-    # print size
-    os.environ['SDL_WINDOWID'] = hex(handle)
-    global pygame
-    import pygame # do NOT do this before setting SDL_WINDOWID
-    pygame.display.init()
-    #pygame.display.set_mode(size)
-    pygame.display.set_mode((200,200))
-
-# end goddamn ugly gtk and pygame hacks
-# end goddamn ugly gtk and pygame hacks
-# end goddamn ugly gtk and pygame hacks
+# end goddamn ugly gtk hack
+# end goddamn ugly gtk hack
+# end goddamn ugly gtk hack
 
 import gtk
-from gtk import glade
+from gtk import glade, gdk
+import gnomecanvas
 
 from twisted.python import log
 from twisted.internet import task, reactor
@@ -100,54 +80,60 @@ class FrontEnd:
         self.glade = glade.XML(fs.gladefile)
         self.glade.signal_autoconnect(self)
 
-        drawing = self.gw_drawingarea1
-        drawing.connect('map-event', sdlHack)
+        # create a gnomecanvas
+        self.canvas = gnomecanvas.Canvas() # FIXME: aa=True breaks text render
+        self.canvas.show()
+        self.gw_viewport1.add(self.canvas)
+
+        # allocate the slate background
+        self.bg = gdk.pixbuf_new_from_file(fs.background)
+        self.canvas.set_size_request(self.bg.get_width(), self.bg.get_height())
+        self.canvas.set_center_scroll_region(False)
+
+        self.canvas.root().add("GnomeCanvasPixbuf", pixbuf=self.bg,
+                               )
 
         # coordinate and scale for displaying the model
         self.scale = 1.0
         self.corner = (0,0)
 
-        # start updating pygame after map-event has occurred
-        reactor.callLater(0.1, self.mainScreenTurnOn)
-
-        # force size_allocate hook to get called, and draw on the display
-        da_w = self.gw_drawingarea1.get_allocation().width
-        da_h = self.gw_drawingarea1.get_allocation().height
-        reactor.callLater(0.15, lambda : 
-                self.on_drawingarea1_size_allocate(self.gw_drawingarea1,
-                        gtk.gdk.Rectangle(0,0,da_w,da_h)
-                                                   ))
-
         self.model = None
-
-    def mainScreenTurnOn(self):
-        """Start updating PyGame, and draw the background image"""
-        self.bg = pygame.image.load(fs.background)
-        self.redraw = task.LoopingCall(pygame.display.update)
-        self.redraw.start(0.04)
+        # self.paintDefault()
 
 
     def on_Tester_destroy(self, widget):
         log.msg("Goodbye.")
         self.deferred.callback(None)
 
-    def on_drawingarea1_size_allocate(self, widget, rectangle):
-        rect = (rectangle.width, rectangle.height)
-        self.main = pygame.display.set_mode(rect, pygame.DOUBLEBUF)
-        # count how many times to repeat in each direction
+    def paintDefault(self):
+        """Draw the default background"""
         tile_w = self.bg.get_width()
         tile_h = self.bg.get_height()
-        num_x = rectangle.width / tile_w + 1
-        num_y = rectangle.height / tile_h + 1
         # tile the texture
+        root = self.canvas.root()
         if self.model is None:
+            # root.add("GnomeCanvasPixbuf", x=0, y=0,
+            #            pixbuf=self.bg)
+            #root.add("GnomeCanvasPixbuf", x=-129, y=0,
+            #            pixbuf=self.bg)
+            root.add("GnomeCanvasRect", x1=0, x2=384, y1=0, y2=384,
+                    fill_color="blue", outline_color="black")
+            root.add("GnomeCanvasText", x=0, y=0, text="0,0")
+            root.add("GnomeCanvasText", x=300, y=300, text="300,300")
+            root.add("GnomeCanvasText", x=0, y=300, text="0,300")
+            root.add("GnomeCanvasText", x=300, y=0, text="300,0")
+            return # FIXME
             for x in range(num_x):
                 for y in range(num_y):
-                    self.main.blit(self.bg, (x*tile_w, y*tile_h))
+                    root.add("GnomeCanvasPixbuf",
+                             x=x*tile_w, 
+                             y=y*tile_h,
+                             pixbuf=self.bg)
         else:
-            self.main.blit(self.model.background, (0,0))
-            for icon in self.model.icons:
-                self.main.blit(icon.image, icon.xy)
+            FIXME
+            # self.main.blit(self.model.background, (0,0))
+            # for icon in self.model.icons:
+            #    self.main.blit(icon.image, icon.xy)
 
     def on_connect_button_clicked(self, widget):
         text = self.gw_server.get_child().get_text()
