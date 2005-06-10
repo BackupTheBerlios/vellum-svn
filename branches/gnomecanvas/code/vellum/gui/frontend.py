@@ -87,53 +87,62 @@ class FrontEnd:
 
         # allocate the slate background
         self.bg = gdk.pixbuf_new_from_file(fs.background)
-        self.canvas.set_size_request(self.bg.get_width(), self.bg.get_height())
+        # canvas normally attempts to place widgets centered in the canvas,
+        # which is suck.
         self.canvas.set_center_scroll_region(False)
 
-        self.canvas.root().add("GnomeCanvasPixbuf", pixbuf=self.bg,
-                               )
+        self.tiles = [] # FIXME - there has to be a nicer way to do this
 
-        # coordinate and scale for displaying the model
+        # these used to remember the last view of the model between sessions
         self.scale = 1.0
         self.corner = (0,0)
 
         self.model = None
-        # self.paintDefault()
+
+        # FIXME - calling in size-allocate works (background is drawn)
+        # allowing expose-event to call it does nothing (no background)
+        self.canvas.connect('size-allocate', self.on_canvas_expose_event)
 
 
     def on_Tester_destroy(self, widget):
         log.msg("Goodbye.")
         self.deferred.callback(None)
 
-    def paintDefault(self):
+    def on_canvas_expose_event(self, w, ev):
         """Draw the default background"""
-        tile_w = self.bg.get_width()
-        tile_h = self.bg.get_height()
         # tile the texture
         root = self.canvas.root()
         if self.model is None:
-            # root.add("GnomeCanvasPixbuf", x=0, y=0,
-            #            pixbuf=self.bg)
-            #root.add("GnomeCanvasPixbuf", x=-129, y=0,
-            #            pixbuf=self.bg)
-            root.add("GnomeCanvasRect", x1=0, x2=384, y1=0, y2=384,
-                    fill_color="blue", outline_color="black")
-            root.add("GnomeCanvasText", x=0, y=0, text="0,0")
-            root.add("GnomeCanvasText", x=300, y=300, text="300,300")
-            root.add("GnomeCanvasText", x=0, y=300, text="0,300")
-            root.add("GnomeCanvasText", x=300, y=0, text="300,0")
-            return # FIXME
+            # FIXME - slow, hogs memory, doesn't allocate "down" when window
+            # is grown and then shrunk, so scrollbars remain
+            tile_w = self.bg.get_width()
+            tile_h = self.bg.get_height()
+
+            view_w = self.gw_scrolledwindow1.get_hadjustment().page_size
+            view_h = self.gw_scrolledwindow1.get_vadjustment().page_size
+
+
+            num_x = (view_w / tile_w) + 1
+            num_y = (view_h / tile_h) + 1
+
+            # destroy the old tiles (FIXME)
+            [w.destroy() for w in self.tiles]
+            self.tiles = []
+            
             for x in range(num_x):
                 for y in range(num_y):
-                    root.add("GnomeCanvasPixbuf",
+                    w = root.add("GnomeCanvasPixbuf",
                              x=x*tile_w, 
                              y=y*tile_h,
                              pixbuf=self.bg)
+                    self.tiles.append(w) # remember tiles for later
+                                         # destruction (FIXME)
+            # force the canvas to the size of the window
+            self.canvas.set_size_request(view_w, view_h)
         else:
-            FIXME
-            # self.main.blit(self.model.background, (0,0))
-            # for icon in self.model.icons:
-            #    self.main.blit(icon.image, icon.xy)
+            if self.tiles:
+                [w.destroy() for w in self.tiles]
+                self.tiles = []
 
     def on_connect_button_clicked(self, widget):
         text = self.gw_server.get_child().get_text()
@@ -155,15 +164,27 @@ class FrontEnd:
     def displayModel(self):
         mapinfo = self._getMapInfo()
         log.msg('displaying map %s' % (mapinfo['name'],))
-        self.model = Model(pygame.image.load(fs.downloads(mapinfo['name'])))
-        self.main.blit(self.model.background, (0,0))
+        background = gdk.pixbuf_new_from_file(fs.downloads(mapinfo['name']))
+        self.model = Model(background)
+        root = self.canvas.root()
+        root.add("GnomeCanvasPixbuf", pixbuf=background)
+        self.canvas.set_size_request(background.get_width(),
+                                     background.get_height()
+                                     )
+                 
         for n, character in enumerate(self._getCharacterInfo()):
-            icon_image = pygame.image.load(fs.downloads(character['name']))
+            icon_image = gdk.pixbuf_new_from_file(
+                                fs.downloads(character['name'])
+                                                  )
             icon = Icon()
             self.model.icons.append(icon)
             icon.image = icon_image
             icon.xy = n*80, n*80
-            self.main.blit(icon.image, icon.xy)
+            self.canvas.root().add("GnomeCanvasPixbuf", 
+                                   pixbuf=icon.image,
+                                   x=icon.xy[0],
+                                   y=icon.xy[1],
+                                   )
         # self.addCharacter
         # self.addItem
         # self.addText
