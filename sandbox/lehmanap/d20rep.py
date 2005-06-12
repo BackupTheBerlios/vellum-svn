@@ -90,7 +90,7 @@ class D20Damage( D20Stat ):
     def __init__( self, types, size=0, roll="1d8", range=None ):
         self.range = range or D20DamageRange( size, roll )
         self.types = types
-        super( D20Damage, self ).__init__( 'Damage', 0, self.range.roll )
+        super( D20Damage, self ).__init__( 'Damage', 0, self.__int__ )
         self.mod.static = True
 
     def __str__( self ):
@@ -354,7 +354,7 @@ if __name__ == "__main__":
                     'DEX': [ 2 ] + [ 0 ] * 19,
                     'CON': [ -2 ] + [ 0 ] * 19
                 }, { } )
-    bob = D20Character( "Bob", race, { 'STR': 13, 'DEX':15, 'CON':12, 'INT':10, 'WIS':8, 'CHA':18, 'HEIGHT':72, 'WEIGHT':221, 'WIDTH':24, 'DEPTH':12 } )
+    bob = D20Character( "Bob", race, { 'STR': 150, 'DEX':15, 'CON':12, 'INT':10, 'WIS':8, 'CHA':18, 'HEIGHT':72, 'WEIGHT':221, 'WIDTH':24, 'DEPTH':12 } )
     charclass = D20CharacterClass( 'Fighter', None, 20, [ "10" ] * 20,
                 { 
                     'BAB': [ 1 ] * 20,
@@ -378,7 +378,8 @@ if __name__ == "__main__":
     print int( bob.ATT )
     bob.readyWeapon( sword )
     att = bob.attack( bob )
-    dmg = att.resolve( 18 )
+    dmg = att.resolve( 19, 1 )
+    """
     bob.attack( bob, sword )
     print "After Sword"
     print int( bob.ATT )
@@ -403,3 +404,4 @@ if __name__ == "__main__":
     print bob.WILL
     print bob.FORT
     print bob.REF
+    """
