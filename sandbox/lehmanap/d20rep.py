@@ -101,6 +101,28 @@ class D20Damage( D20Stat ):
         return int( self.range.roll( ) ) + super( D20Damage, self ).number
     number = property( fget=getNumber, fset=D20Attribute.number.fset, fdel=D20Attribute.number.fdel )
 
+class D20Critical( D20Damage ):
+    def __init__( self, types, multiplierfunc, size=0, roll="1d8", range=None ):
+        super( D20Critical, self ).__init__( types, size, roll, range )
+        self.multiplierfunc = multiplierfunc
+
+    def __str__( self ):
+        return "( %s ) x %s" % ( super( D20Critical, self ).__str__( ), self.multiplierfunc( ) )
+
+    #Properties
+    def getNumber( self ):
+        sum = 0
+        for i in range( self.multiplierfunc( ) ):
+            sum += int( self.range.roll( ) ) + super( D20Damage, self ).number
+        return sum
+    number = property( fget=getNumber, fset=D20Attribute.number.fset, fdel=D20Attribute.number.fdel )
+
+    def __int__( self ):
+        sum = 0
+        for i in range( self.multiplierfunc( ) ):
+            sum += int( self.range.roll( ) ) + super( D20Damage, self ).__int__( )
+        return sum
+
 class D20CritRange( D20Attribute ):
     def __init__( self, rng ):
         super( D20Attribute, self ).__init__( 'Critical Hit Threat Range', len( range( rng[ 0 ], rng[ 1 ] + 1 ) ) )
@@ -120,6 +142,7 @@ class D20Weapon( EquippedItem ):
         self.roll = damageroll
         super( D20Weapon, self ).__init__( *args, **kwargs )
         self.DAMAGE = D20Damage( damageroll, range=self.SIZE )
+        self.CRITICAL = D20Critical( damageroll, lambda: int( self.CRIT_MULT ), range=self.SIZE )
         self.TYPES = types
 
     def __str__( self ):
@@ -129,6 +152,7 @@ class D20Weapon( EquippedItem ):
         character.BAB.mod.addTarget( self.ATT, '' )
         self.getAtt( character ).addTarget( self.ATT, 'ABILITY' )
         self.getDmg( character ).addTarget( self.DAMAGE, 'ABILITY' )
+        self.getDmg( character ).addTarget( self.CRITICAL, 'ABILITY' )
 
     def unready( self, character ):
         character.BAB.mod.removeTarget( self.ATT )
@@ -178,9 +202,10 @@ class D20Attack( EffectGenerator ):
 
     def resolve( self, roll=None, croll=None ):
         if self.isAHit( roll ): 
-            self.dmg = self.getDamage( )
             if self.rolls[ 0 ] in self.tool.CRIT_RANGE and self.isACrit( croll ):
-                self.dmg = MultipliedModifier( crit.dmg, self.subject.weapon.CRIT_MULT )
+                self.dmg = self.getCrit( )
+            else:
+                self.dmg = self.getDamage( )
             self.object.effects.append( self.dmg )
             self.dmg.enable( )
         return self.dmg
@@ -208,6 +233,11 @@ class D20Attack( EffectGenerator ):
     def getDamage( self, mods=None ):
         dmg = self.getEffect( self.object, mods )
         dmg.factories[ self.object.WOUNDS ] = ( self.subject.weapon.DAMAGE.mod, 'DAMAGE', Conditions.compileCondition( ( ) ) )
+        return dmg
+
+    def getCrit( self, mods=None ):
+        dmg = self.getEffect( self.object, mods )
+        dmg.factories[ self.object.WOUNDS ] = ( self.subject.weapon.CRITICAL.mod, 'DAMAGE', Conditions.compileCondition( ( ) ) )
         return dmg
 
     def __str__( self ):
@@ -378,7 +408,7 @@ if __name__ == "__main__":
     print int( bob.ATT )
     bob.readyWeapon( sword )
     att = bob.attack( bob )
-    dmg = att.resolve( 19, 1 )
+    dmg = att.resolve( 19, 2 )
     """
     bob.attack( bob, sword )
     print "After Sword"

@@ -292,6 +292,27 @@ class ModifierFactory( MyObject ):
 
     number = property( fget=getNumber, fset=setNumber, doc="This ModifierFactory's base value" )
 
+class MultipliedModifierFactory( MyObject ):
+    def __init__( self, factory, multiplier ):
+        self.factory = factory
+        self.multiplier = multiplier
+
+    def __getattr__( self, attr ):
+        return getattr( self.factory, attr )
+
+    def addTarget( self, target, type, conditions=None ):
+        return factory.addTarget( target, type, condition, self.multiplier )
+
+    def removeTarget( self, target ):
+        self.factory.removeTarget( target )
+
+    def getMultiplier( self ):
+        return self._multiplier( )
+    
+    def setMultiplier( self, val ):
+        self._multiplier = callable( val ) and val or ( lambda: val )
+    multiplier=property( fget=getMultiplier, fset=setMultiplier, doc="The multiplier function that will be applied to modifiers this generates" )
+
 class CategoryDict( dict ):
     def __init__( self, aggregator, vals=None ):
         vals = vals or { }
