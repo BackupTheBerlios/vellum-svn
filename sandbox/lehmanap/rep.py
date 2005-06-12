@@ -81,11 +81,13 @@ class Conditions( MyObject ):
     compileCondition = classmethod( compileCondition )
 
 class Modifier( MyObject ):
-    def __init__( self, type, parent, target, conditions ):
+    def __init__( self, type, parent, target, conditions, value=None ):
         self.type = type
         self.parent = parent
         self.target = target
         self.conditions = conditions
+        if value is not None:
+            self.value = value
 
     def __add__( self, other ):
         try:
@@ -97,7 +99,7 @@ class Modifier( MyObject ):
     def __int__( self ):
         if self.conditions.check( self.target.situation ):
         #If the circumstances are right, add me to the value
-            return int( self.parent )
+            return getattr( self, 'value', int( self.parent ) )
         else:
             raise "I don't modify %s under these circumstances" % self.target.name
 
@@ -114,7 +116,7 @@ class Modifier( MyObject ):
     key = property( fget=getKey, doc="The unique key for this Modifier's ModifierFactory" )
 
     def getNumber( self ):
-        return self.parent.number
+        return getattr( self, 'value', self.parent.number )
     number = property( fget=getNumber, doc="This Attributes base value" )
 
 class MultipliedModifier( Modifier ):
@@ -124,7 +126,11 @@ class MultipliedModifier( Modifier ):
         self.type = mod.type
 
     def __int__( self ):
-        return self.multiplier * int( self.mod )
+        sum = int( self.mod )
+        for x in range( self.multiplier - 1 ):
+            #Done this way so that I can use this for Critical hits.
+            sum += int( self.mod )
+        return sum
 
     def __str__( self ):
         try:
@@ -245,6 +251,7 @@ class ModifierFactory( MyObject ):
         self.number = number
         self.targetId = None
         self.name = name
+        self.static = False
 
     def __int__( self ):
         return self.number
@@ -256,22 +263,17 @@ class ModifierFactory( MyObject ):
 
     def addTarget( self, target, type, conditions=None, multiplier=1 ):
         conditions = conditions or Conditions( ( ), "and" )
-        mod = MultipliedModifier( Modifier( type, self, target, conditions ), multiplier )
+        if self.static:
+            basemod = Modifier( type, self, target, conditions, self.number )
+        else:
+            basemod = Modifier( type, self, target, conditions )
+        mod = MultipliedModifier( basemod, multiplier )
         try:
             self.targets[ target.key ].append( mod )
         except:
             self.targets[ target.key ] = [ mod ]
-        #try:
-        #    target.modifiers[ type ].extend( mod )
-        #except TypeError:
-        #    target.modifiers[ type ].append( mod )
-        #except KeyError:
-        #    target.modifiers[ mod.key ] = mod
-        #except AttributeError, e:
-        #    import pdb
-        #    pdb.set_trace( )
-        #    raise e
         target.modifiers[ mod.key ] = mod
+        return mod
 
     def removeTarget( self, target ):
         del self.targets[ target.key ]
@@ -367,6 +369,9 @@ class CategoryDict( dict ):
         else:
             return super( CategoryDict, self ).iteritems( )
 
+    def __str__( self ):
+        return ("\n" + tabbies ).join( [ "%s: %s," % ( key, val or 0 ) for key, val in self.items( ) ] )
+
 class ModifierDict( CategoryDict ):
     def __init__( self, aggregator=None, vals=None ):
         vals = vals or { }
@@ -439,7 +444,7 @@ class Attribute( MyObject ):
 class Stat( Attribute ):
     def __init__( self, name, number, modprovided=None, aggregator=None ):
         super( Stat, self ).__init__( name, number, aggregator )
-        self.mod = modprovided or self.number
+        self.mod = modprovided or self.__int__
 
     def applyMods( self ):
         for mod in self.modprovided:
@@ -459,6 +464,50 @@ class Stat( Attribute ):
         except:
             self.modprovided = ModifierFactory( self, value )
     mod = property( fget=getMod, fset=setMod, doc="The modifier this Stat provides" )
+
+class Continuum( Stat ):
+    def __init__( self, magnitude, name=None, ranks=None, names=None ):
+        self.ranks = ranks or Continuum.sizeRanks
+        self.names = names or Continuum.sizeNames
+        name = name or 'Continuum'
+        if isinstance( magnitude, Continuum ):
+            magnitude = magnitude.magnitude
+        elif isinstance( magnitude, str ):
+            magnitude = dict( [ ( val, key ) for key, val in self.sizeRanks.items( ) ] )[ magnitude ]
+        super( Continuum, self ).__init__( name, magnitude, self.__int__ )
+
+    def __add__( self, other ):
+        return self.__init__( self.number + other )
+    __radd__ = __add__
+
+    def __sub__( self, other ):
+        return self.__init__( self.number - other )
+    __rsub__ = __sub__
+
+    def __int__( self ):
+        try:
+            magnitude = super( Continuum, self ).__int__( )
+            absval = abs( magnitude )
+            vector = magnitude/ absval
+            return ( 2 ** ( absval - 1 ) ) * vector
+        except:
+            return 0
+
+    def __str__( self ):
+        try:
+            magnitude = super( Continuum, self ).__int__( )
+            category = "%s (%s)" % ( self.ranks[ magnitude ], self.names[ magnitude ] )
+        except:
+            category = "No category for this size"
+        return category
+
+    #Properties
+    def getLetter( self ):
+        return self.ranks[ super( Continuum, self ).__int__( ) ]
+    letter = property( fget=getLetter, doc="The letter of this size" )
+
+    sizeRanks = dict( zip( range( -4, 5 ), [ 'F', 'D', 'T', 'S', 'M', 'L', 'H', 'C', 'G', ] ) )
+    sizeNames = dict( zip( range( -4, 5 ), [ "Fine", "Diminuative", "Tiny", "Small", "Medium", "Large", "Huge", "Collosal", "Gargantuan" ] ) )
 
 class GameObjectMetaclass( type ):
     def __init__( clss, name, bases, dictionary ):
@@ -605,6 +654,7 @@ class Character( GameObject ):
         self.attrs = { }
         self.key = "%s %s" % ( self.__class__.__name__, self.lastkey )
         self.equipment = { }
+        self.effects = [ ]
         Character.lastkey += 1
         super( Character, self ).__init__( attrs )
 
@@ -621,38 +671,53 @@ class Character( GameObject ):
 
     attTypes = { }
 
-class LevelGenerator( MyObject ):
-    def __init__( self, name, session, mods, feats, leveltype ):
-        super( LevelGenerator, self ).__init__( )
+class EffectGenerator( MyObject ):
+    def __init__( self, name, session, mods=None, feats=None, effecttype=None ):
+        super( EffectGenerator, self ).__init__( )
         self.name = name
         self.mods = mods
         self.feats = feats
         self.session = session
-        self.leveltype = leveltype
+        self.effecttype = effecttype
+
+    def getEffect( self, character, newmods=None ):
+        mods = self.mods.copy( )
+        newmods = newmods or { }
+        mods.update( newmods )
+        for target, mod in mods.items( ):
+            mods[ target ] = ( 'RANKS', Conditions( ( ), "and" ), mod )
+        return self.effecttype( character, self, mods, self.feats )
+
+    def __str__( self ):
+        return self.name
+
+class LevelGenerator( MyObject ):
+    def __init__( self, name, session, levels, mods, feats, effecttype ):
+        super( LevelGenerator, self ).__init__( )
+        self.name = name
+        self.session = session
+        mods = [ dict( [ ( key, vals[ i ] ) for key, vals in mods.items( ) ] ) for i in range( levels ) ]
+        feats = [ dict( [ ( key, vals[ i ] ) for key, vals in feats.items( ) ] ) for i in range( levels ) ]
+        self.levels = [ ]
+        for number, ( mod, feat ) in enumerate( zip( mods, feats ) ):
+            genfunc = lambda character, generator, mods, feats: effecttype( character, number + 1, character.level, mods, feats )
+            self.levels.append( EffectGenerator( name, session, mod, feat, genfunc ) )
 
     def getLevel( self, character, number ):
-        mods = { }
-        try:
-            charlevelnum = 1
-            for level in character.levels[ 'RACE' ].values( ):
-                if level.enabled:
-                    charlevelnum += 1
-        except KeyError:
-            charlevelnum = 1
-        for target, mod in self.mods.items( ):
-            mods[ target ] = ( 'RANKS', Conditions( ( ), "and" ), mod[ number ] )
-        return self.leveltype( character, number, charlevelnum, self, mods, self.feats )
+        return self.levels[ number ].getEffect( character )
 
     def __str__( self ):
         return self.name
 
 class CharacterClass( LevelGenerator ):
-    def __init__( self, name, session, mods, feats ):
-        super( CharacterClass, self ).__init__( name, session, mods, feats, CharacterLevel )
+    def __init__( self, name, session, levels, mods, feats ):
+        genfunc = lambda character, classlevel, charlevel, mods, feats: CharacterLevel( character, classlevel, charlevel, self, mods, feats )
+        super( CharacterClass, self ).__init__( name, session, levels, mods, feats, genfunc )
 
 class Race( LevelGenerator ):
-    def __init__( self, name, session, mods, feats ):
-        super( Race, self ).__init__( name, session, mods, feats, RaceLevel )
+    def __init__( self, name, session, levels, mods, feats ):
+        genfunc = lambda character, classlevel, charlevel, mods, feats: RaceLevel( character, classlevel, charlevel, self, mods, feats )
+        super( Race, self ).__init__( name, session, levels, mods, feats, genfunc )
 
     def getLevel( self, character, number, charclass ):
         #When we have Unknowns, this will be used to hook the races UnknownSkills
@@ -663,25 +728,35 @@ class LevelAggregator( AggregateModifier ):
     def append( self, level ):
         self.mods[ level.key ] = level
 
-class Level( MyObject ):
-    def __init__( self, character, levelnum, charlevelnum, mods=None, feats=None ):
+class Effect( MyObject ):
+    def __init__( self, character, mods=None, feats=None ):
+        super( Effect, self ).__init__( )
         self.character = character
-        self.levelnum = levelnum + 1
-        self.charlevelnum = charlevelnum
         self.enabled = True
-        self.factories = { }
         mods = mods or {}
+        self.modifiers = { }
+        self.factories = { }
         for key, ( type, conditions, number ) in mods.items( ):
             if isinstance( conditions, tuple ):
                 conditions = Constitution.compileCondition( conditions )
             target = getattr( character, key )
-            factory = ModifierFactory( self, number, 'Level Modifier' )
+            factory = ModifierFactory( self, number, '%s Modifier' % self.__class__.__name__ )
             self.factories[ target ] = ( factory, type, conditions )
         self.feats = feats or { }
 
+    def __lt__( self, other ):
+        return self.charlevelnum < other.charlevelnum
+
+    def __str__( self ):
+        return self.__class__.__name__
+
     def enable( self ):
-        for target, ( factory, type, conditions ) in self.factories.items( ):
-            factory.addTarget( target, type, conditions )
+        if not self.modifiers:
+            for target, ( factory, type, conditions ) in self.factories.items( ):
+                self.modifiers[ target ] = factory.addTarget( target, type, conditions )
+        else:
+            for target, mod in self.modifiers.items( ):
+                target.modifiers[ mod.key ] = mod
         self.enabled = True
 
     def disable( self ):
@@ -689,19 +764,30 @@ class Level( MyObject ):
             factory.removeTarget( target )
         self.enabled = False
 
+    #Properties
+    def getKey( self ):
+        return hash( self )
+    key = property( fget=getKey, doc="Unique Key" )
+
+class Level( Effect ):
+    def __init__( self, character, levelnum, charlevelnum, mods=None, feats=None ):
+        super( Level, self ).__init__( character, mods, feats )
+        self.levelnum = levelnum + 1
+        self.charlevelnum = charlevelnum
+
     def __int__( self ):
         if self.enabled:
             return 1
         else:
             return 0
 
-    #Properties
-    def getKey( self ):
-        return hash( self )
-    key = property( fget=getKey, doc="Unique Key" )
+class DamageEffect( Effect ):
+    def __init__( self, character, attack, mods=None, effects=None ):
+        self.attack = attack
+        super( DamageEffect, self ).__init__( character, mods, effects )
 
-    def __lt__( self, other ):
-        return self.charlevelnum < other.charlevelnum
+    def __str__( self ):
+        return "%s %s" % ( super( DamageEffect, self ).__str__( ), 0 )
 
 class CharacterLevel( Level ):
     def __init__( self, character, levelnum, charlevelnum, characterclass, mods=None, feats=None ):
