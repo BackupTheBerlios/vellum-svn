@@ -1,91 +1,144 @@
 import pdb
 tabbies = ""
 
-class MyObject( object ):
+class Observer( object ):
+    def __init__( self, label ):
+        self.label = label
+
+    def observed( self, obj, function ):
+        print "%s observed %s" % ( self.label, function )
+
+class ObservedMethod( object ):
+    def __init__( self, meth ):
+        self.method = meth
+        self.observers = [ ]
+
+    def __call__( self, *args, **kwargs ):
+        for observer in self.observers:
+            observer.observed( self.method )
+        return self.method( *args, **kwargs )
+
+    def add( self, observer ):
+        self.observers.append( observer )
+
+class ConditionalMethod( object ):
+    def __init__( self, methods, conditionType ):
+        try:
+            self.method, self.altmethod = methods
+        except:
+            self.method, self.altmethod = [ methods, ( lambda *args, **kwargs: 0 ) ]
+        self.condition = conditionType( )
+
+    def __call__( self, *args, **kwargs ):
+        return self.condition and self.method( *args, **kwargs ) or self.altmethod( *args, **kwargs )
+
+    def add( self, condition ):
+        try:
+            self.condition.extend( condition )
+        except:
+            self.condition.append( condition )
+
+class AndConditionalMethod( ConditionalMethod ):
+    def __init__( self, meth ):
+        super( AndConditionalMethod, self ).__init__( meth, AndCondition )
+
+class OrConditionalMethod( ConditionalMethod ):
+    def __init__( self, meth ):
+        super( AndConditionalMethod, self ).__init__( meth, OrCondition )
+
+class Wrappable( object ):
+    def __init__( self, func, returntype=ObservedMethod ):
+        self.func = func
+        self.wrapped = { }
+        self.returntype = returntype
+
+    def __get__( self, obj, objtype=None ):
+        if obj is None:
+            return self.func
+        return self.wrapped[ obj ]
+    
+    def __set__( self, obj, newfunc ):
+        if obj is None:
+            self.func = newfunc
+        self.wrapped[ obj ] = self.returntype( newfunc )
+    
+    def __delete__( self, obj ):
+        if obj is None:
+            del self.func
+        del self.wrapped[ obj ]
+
+    def get__doc__( self ):
+        return self.func.__doc__
+    __doc__ = property( fget=get__doc__ )
+
+class Observable( Wrappable ):
+    def __init__( self, func ):
+        super( Observable, self ).__init__( func, ObservedMethod )
+
+class Conditionable( Wrappable ):
+    def __init__( self, func, conditionalType=None ):
+        conditionalType=conditionalType or AndCondition
+        wrappertype = ( lambda meth, conditionalType=conditionalType: ConditionalMethod( meth, conditionalType ) )
+        super( Conditionable, self ).__init__( func, wrappertype )
+
+class WrappableObject( object ):
+    def __new__( clss, *args, **kwargs ):
+        obj = object.__new__( clss, *args, **kwargs )
+        for methname, meth in [ ( m, getattr( clss, m ) ) for m in dir( clss ) if callable( getattr( clss, m ) ) ]:
+            import new
+            try:
+                setattr( obj, methname, new.instancemethod( meth, obj, clss ) )
+            except TypeError:
+                pass
+        return obj
+
+class MyObject( WrappableObject ):
+    def __str__( self ):
+        return "%s.%s" % ( self.__class__.__module__, self.__class__.__name__ )
+
     def __repr__( self ):
         return "%s %s" % ( str( self ), super( MyObject, self ).__repr__( ) )
 
-class Weapon( MyObject ):
-    def __init__( self, name, types ):
-        self.name = name
-        self.TYPES = types
+class Condition( MyObject, Observer ):
+    def __init__( self, func=None ):
+        self.func = func or ( lambda: True )
 
-    def __str__( self ):
-        return "%s %s" % ( self.name, self.TYPES )
+    def observed( self, func ):
+        return self.func( func )
 
-class Situation( MyObject ):
-    def __init__( self, subject, object, tool ):
-        self.subject = subject
-        self.object = object
-        self.tool = tool
+class MassCondition( Condition ):
+    def __init__( self, conditions=None ):
+        self.conditions = [ condition for condition in ( conditions or [ ] ) ]
 
-    def __str__( self ):
-        "%s is doing something with %s using a(n) %s" % ( self, subject, self.object, self.tool )
+    def __iter__( self ):
+        return iter( self.conditions )
 
-class Attack( Situation ):
-    def __str__( self ):
-        "%s attacks %s using a(n) %s" % ( self, subject, self.object, self.tool )
+    def append( self, condition ):
+        self.conditions.append( condition )
 
-class Condition( MyObject ):
-    def __init__( self, attToCheck, valToCheck, partToCheck, op ):
-        self.attToCheck = attToCheck.upper( )
-        self.partToCheck = partToCheck.lower( )
-        self.valToCheck = valToCheck.upper( )
-        self.op = op.lower( )
+    def extend( self, conditions ):
+        self.conditions.extend( conditions )
 
-    def check( self, circumstance ):
-        try:
-            vals = getattr( getattr( circumstance, self.partToCheck ), self.attToCheck, [ self.valToCheck ] )
-            if self.op == "in":
-                return self.valToCheck in vals
-            elif self.op == "not in":
-                return self.valToCheck not in vals
-        except:
-            return isinstance( circumstance, bool ) and circumstance
-
-    def __str__( self ):
-        return "( %s %s %s's %s )" % ( self.valToCheck, self.op, self.partToCheck, self.attToCheck )
-
-class Conditions( MyObject ):
-    def __init__( self, conditions, op ):
-        self.conditions = [ ]
-        for c in conditions:
-            if isinstance( c, str ):
-                c = c.split( )
-                self.conditions.append( Condition( c[ -1 ], c[ 0 ], c[ -2 ], " ".join( c[ 1:-2 ] ) ) )
-            elif isinstance( c, tuple ):
-                self.conditions.append( Conditions( c[ :-1 ], c[ -1 ] ) )
-        self.op = op.lower( )
-
-    def __str__( self ):
-        return ( " %s " % self.op ).join( [ str( c ) for c in self.conditions ] )
-
-    def check( self, circumstance ):
-        for c in self.conditions:
-            truth = c.check( circumstance )
-            if self.op == "and" and truth == False:
+class AndCondition( MassCondition ):
+    def observed( self, meth ):
+        for condition in self.conditions:
+            if not condition( meth.im_self, meth ):
                 return False
-            elif self.op == "or" and truth == True:
-                return True
-        if self.op == "and":
-            return True
-        elif self.op == "or":
-            return False
+        return True
 
-    def compileCondition( clss, conditionTuple ):
-        if len( conditionTuple ) > 0:
-            condition = Conditions( conditionTuple[ :-1 ], conditionTuple[ -1 ] )
-        else:
-            condition = Conditions( ( ), "and" )
-        return condition
-    compileCondition = classmethod( compileCondition )
+class OrCondition( MassCondition ):
+    def observed( self, meth ):
+        for condition in self.conditions:
+            if condition( meth.im_self, meth ):
+                return True
+        return False
 
 class Modifier( MyObject ):
     def __init__( self, type, parent, target, conditions, value=None ):
         self.type = type
         self.parent = parent
         self.target = target
-        self.conditions = conditions
+        self.__int__.add( conditions or Condition( conditions ) )
         if value is not None:
             self.value = value
 
@@ -97,11 +150,8 @@ class Modifier( MyObject ):
     __radd__ = __add__
 
     def __int__( self ):
-        if self.conditions.check( self.target.situation ):
-        #If the circumstances are right, add me to the value
-            return getattr( self, 'value', int( self.parent ) )
-        else:
-            raise "I don't modify %s under these circumstances" % self.target.name
+        return getattr( self, 'value', int( self.parent ) )
+    __int__ = Conditionable( __int__ )
 
     def __str__( self ):
         try:
@@ -131,6 +181,7 @@ class MultipliedModifier( Modifier ):
             #Done this way so that I can use this for Critical hits.
             sum += int( self.mod )
         return sum
+    __int__ = Conditionable( __int__ )
 
     def __str__( self ):
         try:
@@ -202,6 +253,7 @@ class AggregateModifier( Modifier ):
 
     def __int__( self ):
         return self.getNumber( )
+    __int__ = Conditionable( __int__ )
 
     def __str__( self ):
         return ( '\n' + tabbies ).join( [ str( mod ) for mod in self.mods.itervalues( ) ] )
@@ -262,7 +314,6 @@ class ModifierFactory( MyObject ):
         return "%s%s ( from %s%s )" % ( number > -1 and "+" or "", number, str( self.cause ), name )
 
     def addTarget( self, target, type, conditions=None, multiplier=1 ):
-        conditions = conditions or Conditions( ( ), "and" )
         if self.static:
             basemod = Modifier( type, self, target, conditions, self.number )
         else:
@@ -562,7 +613,7 @@ class GameObject( MyObject ):
                     tags = source.split( )
                     target = self.attrs[ tag ]
                     mod = self.attrs[ tags[ -1 ] ].mod
-                    condition = Conditions.compileCondition( targetCondition )
+                    condition = Condition( targetCondition )
                     if len( tags ) > 1:
                         mod.addTarget( target, type, condition, int( tags[ 0 ] ) )
                     else:
@@ -706,7 +757,7 @@ class EffectGenerator( MyObject ):
         newmods = newmods or { }
         mods.update( newmods )
         for target, mod in mods.items( ):
-            mods[ target ] = ( 'RANKS', Conditions( ( ), "and" ), mod )
+            mods[ target ] = ( 'RANKS', Condition( ), mod )
         return self.effecttype( character, self, mods, self.feats )
 
     def __str__( self ):
@@ -721,7 +772,7 @@ class LevelGenerator( MyObject ):
         feats = [ dict( [ ( key, vals[ i ] ) for key, vals in feats.items( ) ] ) for i in range( levels ) ]
         self.levels = [ ]
         for number, ( mod, feat ) in enumerate( zip( mods, feats ) ):
-            genfunc = lambda character, generator, mods, feats: effecttype( character, number + 1, character.level, mods, feats )
+            genfunc = lambda character, generator, mods, feats, number=number+1: effecttype( character, number, character.level, mods, feats )
             self.levels.append( EffectGenerator( name, session, mod, feat, genfunc ) )
 
     def getLevel( self, character, number ):
@@ -758,8 +809,6 @@ class Effect( MyObject ):
         self.modifiers = { }
         self.factories = { }
         for key, ( type, conditions, number ) in mods.items( ):
-            if isinstance( conditions, tuple ):
-                conditions = Constitution.compileCondition( conditions )
             target = getattr( character, key )
             factory = ModifierFactory( self, number, '%s Modifier' % self.__class__.__name__ )
             self.factories[ target ] = ( factory, type, conditions )

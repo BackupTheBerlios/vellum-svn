@@ -10,15 +10,14 @@ class D20CharacterClass( CharacterClass ):
 class D20CharacterLevel( CharacterLevel ):
     def __init__( self, character, levelnum, charlevelnum, characterclass, mods=None, feats=None ):
         super( D20CharacterLevel, self ).__init__( character, levelnum, charlevelnum, characterclass, mods, feats )
-        from dice import Roller
-        roller = Roller( )
+        from dice import parse
         if charlevelnum == 1:
             rollstring = characterclass.hitdice[ levelnum ]
         else:
             rollstring = "1d%s" % characterclass.hitdice[ levelnum ]
-        self.hp = D20HP( 'Hit Points', sum( roller.roll( rollstring ) ) )
+        self.hp = D20HP( 'Hit Points', parse( rollstring ).sum( ) )
         character.CON.modprovided.addTarget( self.hp, 'RANKS' )
-        self.factories[ character.HP ] = ( self.hp.modprovided, 'Level Modifier', Conditions.compileCondition( ( ) ) )
+        self.factories[ character.HP ] = ( self.hp.modprovided, 'Level Modifier', ( ) )
 
 class D20Stat( Stat ):
     def __init__( self, name, number, modsprovided=None, aggregator=None ):
@@ -62,22 +61,21 @@ class D20DamageRange( Continuum ):
         ranks = dict( zip( range( -4, 5 ), self.rankTable[ row ] ) )
         super( D20DamageRange, self ).__init__( magnitude, 'Size', 
                                             ranks=ranks )
-        from dice import Roller
-        self.roller = Roller( )
 
     def roll( self ):
-        return sum( self.roller.roll( self.ranks[ super( D20DamageRange, self ).__int__( ) ] ) )
+        from dice import parse
+        return parse( self.ranks[ super( D20DamageRange, self ).__int__( ) ] )[ 0 ].sum( )
 
     rankTable=[
-[ '0',        '0',    '0',    '1',    '1d2',    '1d3',    '1d4',    '1d6',    '1d8' ],
-[ '0',        '0',    '1',    '1d2',    '1d3',    '1d4',    '1d6',    '1d8',    '2d6' ],
-[ '0',        '1',    '1d2',    '1d3',    '1d4',    '1d6',    '1d8',    '2d6',    '3d6' ],
-[ '1',        '1d2',    '1d3',    '1d4',    '1d6',    '1d8',    '2d6',    '3d6',    '4d6' ],
+[ '0',      '0',      '0',      '1',      '1d2',    '1d3',    '1d4',    '1d6',    '1d8' ],
+[ '0',      '0',      '1',      '1d2',    '1d3',    '1d4',    '1d6',    '1d8',    '2d6' ],
+[ '0',      '1',      '1d2',    '1d3',    '1d4',    '1d6',    '1d8',    '2d6',    '3d6' ],
+[ '1',      '1d2',    '1d3',    '1d4',    '1d6',    '1d8',    '2d6',    '3d6',    '4d6' ],
 [ '1d2',    '1d3',    '1d4',    '1d6',    '2d4',    '2d6',    '3d6',    '4d6',    '6d6' ],
 [ '1d2',    '1d3',    '1d4',    '1d6',    '1d8',    '2d6',    '3d6',    '4d6',    '6d6' ],
-[ '1d3',    '1d4',    '1d6',    '1d8',    '1d10',    '2d8',    '3d8',    '4d8',    '6d8' ],
-[ '1d4',    '1d6',    '1d8',    '1d10',    '1d12',    '3d6',    '4d6',    '6d6',    '8d6' ],
-[ '1d4',    '1d6',    '1d8',    '1d10',    '2d6',    '3d6',    '4d6',    '6d6',    '8d6' ],
+[ '1d3',    '1d4',    '1d6',    '1d8',    '1d10',   '2d8',    '3d8',    '4d8',    '6d8' ],
+[ '1d4',    '1d6',    '1d8',    '1d10',   '1d12',   '3d6',    '4d6',    '6d6',    '8d6' ],
+[ '1d4',    '1d6',    '1d8',    '1d10',   '2d6',    '3d6',    '4d6',    '6d6',    '8d6' ],
                 ]
 
 class D20Attribute( Attribute ):
@@ -214,9 +212,8 @@ class D20Attack( EffectGenerator ):
         if roll:
             self.rolls.append( roll )
         if not self.rolls:
-            from dice import Roller
-            roller = Roller( )
-            self.rolls.extend( roller.roll( "1d20" ) )
+            from dice import parse
+            self.rolls.extend( parse( "1d20" ).sum( ) )
         #This will need to be fixed for situations where the att or AC changes based on the defender or attacker
         return ( self.rolls[ 0 ] != 1 ) and ( ( self.rolls[ 0 ] + self.tool.ATT ) > self.object.AC or ( self.rolls[ 0 ] ) == 20 )
 
@@ -224,20 +221,19 @@ class D20Attack( EffectGenerator ):
         if croll:
             self.rolls.append( croll )
         if len( self.rolls ) < 2:
-            from dice import Roller
-            roller = Roller( )
-            self.rolls.extend( roller.roll( "1d20" ) )
+            from dice import parse
+            self.rolls.extend( parse( "1d20" ).sum( ) )
         #This will need to be fixed for situations where the att or AC changes based on the defender or attacker
         return ( self.rolls[ 1 ] != 1 ) and ( ( self.rolls[ 1 ] + self.tool.ATT ) > self.object.AC or ( self.rolls[ 1 ] ) == 20 )
 
     def getDamage( self, mods=None ):
         dmg = self.getEffect( self.object, mods )
-        dmg.factories[ self.object.WOUNDS ] = ( self.subject.weapon.DAMAGE.mod, 'DAMAGE', Conditions.compileCondition( ( ) ) )
+        dmg.factories[ self.object.WOUNDS ] = ( self.subject.weapon.DAMAGE.mod, 'DAMAGE', ( ) )
         return dmg
 
     def getCrit( self, mods=None ):
         dmg = self.getEffect( self.object, mods )
-        dmg.factories[ self.object.WOUNDS ] = ( self.subject.weapon.CRITICAL.mod, 'DAMAGE', Conditions.compileCondition( ( ) ) )
+        dmg.factories[ self.object.WOUNDS ] = ( self.subject.weapon.CRITICAL.mod, 'DAMAGE', ( ) )
         return dmg
 
     def __str__( self ):
@@ -266,7 +262,7 @@ class D20Character( Character ):
         racelevel.enable( )
 
     def beginCombat( self ):
-        self.DEX.mod.addTarget( self.AC, 'ATTRIBUTE', Conditions( ( ), "and" ) )
+        self.DEX.mod.addTarget( self.AC, 'ATTRIBUTE', ( ) )
 
     def endCombat( self ):
         self.DEX.mod.removeTarget( self.AC )
@@ -409,29 +405,29 @@ if __name__ == "__main__":
     bob.readyWeapon( sword )
     att = bob.attack( bob )
     dmg = att.resolve( 19, 2 )
-    """
-    bob.attack( bob, sword )
-    print "After Sword"
-    print int( bob.ATT )
-    print "Sword Removed"
-    print int( bob.ATT )
-    bob.attack( bob, bow )
-    print "With Bow"
-    print bob.ATT
-    strstone = Item( 'Strength Stone', 0, { 'WEIGHT':5, 'HEIGHT':6, 'WIDTH':6, 'DEPTH':6 }, 'A plain round stone', { 'CARRIER' : { 'STR' : ( 2, '' ) } } )
-    strstone2 = Item( 'Strength Stone2', 0, { 'WEIGHT':5, 'HEIGHT':6, 'WIDTH':6, 'DEPTH':6 }, 'A plain round stone', { 'CARRIER' : { 'STR' : ( 5, '' ) } } )
-    print "Sword + Strength Stone"
-    bob.attack( bob, sword )
-    bob.carry( strstone )
-    print bob.ATT
-    print "Sword + Strength Stone + Strength Stone 2"
-    bob.attack( bob, sword )
-    bob.carry( strstone2 )
-    print bob.ATT
-    bob.attack( bob, bob.grapple )
-    print "Grappling"
-    print int( bob.ATT )
-    print bob.WILL
-    print bob.FORT
-    print bob.REF
-    """
+#	"""
+#	bob.attack( bob, sword )
+#	print "After Sword"
+#	print int( bob.ATT )
+#	print "Sword Removed"
+#	print int( bob.ATT )
+#	bob.attack( bob, bow )
+#	print "With Bow"
+#	print bob.ATT
+#	strstone = Item( 'Strength Stone', 0, { 'WEIGHT':5, 'HEIGHT':6, 'WIDTH':6, 'DEPTH':6 }, 'A plain round stone', { 'CARRIER' : { 'STR' : ( 2, '' ) } } )
+#	strstone2 = Item( 'Strength Stone2', 0, { 'WEIGHT':5, 'HEIGHT':6, 'WIDTH':6, 'DEPTH':6 }, 'A plain round stone', { 'CARRIER' : { 'STR' : ( 5, '' ) } } )
+#	print "Sword + Strength Stone"
+#	bob.attack( bob, sword )
+#	bob.carry( strstone )
+#	print bob.ATT
+#	print "Sword + Strength Stone + Strength Stone 2"
+#	bob.attack( bob, sword )
+#	bob.carry( strstone2 )
+#	print bob.ATT
+#	bob.attack( bob, bob.grapple )
+#	print "Grappling"
+#	print int( bob.ATT )
+#	print bob.WILL
+#	print bob.FORT
+#	print bob.REF
+#	"""
