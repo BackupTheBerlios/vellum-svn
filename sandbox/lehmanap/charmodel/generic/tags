@@ -1,0 +1,213 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.5.4	//
+AggregateModifier	modifier.py	/^class AggregateModifier( Modifier ):$/;"	c
+AndCondition	wrapper.py	/^class AndCondition( MassCondition ):$/;"	c
+AndConditionalMethod	wrapper.py	/^class AndConditionalMethod( ConditionalMethod ):$/;"	c
+Attribute	attribute.py	/^class Attribute( MyObject ):$/;"	c
+CappedAggregateModifier	modifier.py	/^class CappedAggregateModifier( AggregateModifier ):$/;"	c
+CategoryDict	dict.py	/^class CategoryDict( dict ):$/;"	c
+Character	gameobject.py	/^class Character( GameObject ):$/;"	c
+CharacterClass	generator.py	/^class CharacterClass( LevelGenerator ):$/;"	c
+CharacterLevel	effect.py	/^class CharacterLevel( Level ):$/;"	c
+Condition	wrapper.py	/^class Condition( MyObject, Observer ):$/;"	c
+Conditionable	wrapper.py	/^class Conditionable( Wrappable ):$/;"	c
+ConditionalMethod	wrapper.py	/^class ConditionalMethod( object ):$/;"	c
+Continuum	attribute.py	/^class Continuum( Stat ):$/;"	c
+DamageEffect	effect.py	/^class DamageEffect( Effect ):$/;"	c
+Effect	effect.py	/^class Effect( MyObject ):$/;"	c
+EffectGenerator	generator.py	/^class EffectGenerator( MyObject ):$/;"	c
+EquippedItem	gameobject.py	/^class EquippedItem( Item ):$/;"	c
+GameObject	gameobject.py	/^class GameObject( MyObject ):$/;"	c
+GameObjectMetaclass	gameobject.py	/^class GameObjectMetaclass( type ):$/;"	c
+Item	gameobject.py	/^class Item( GameObject ):$/;"	c
+Level	effect.py	/^class Level( Effect ):$/;"	c
+LevelAggregator	modifier.py	/^class LevelAggregator( AggregateModifier ):$/;"	c
+LevelBox	dict.py	/^class LevelBox( CategoryDict ):$/;"	c
+LevelGenerator	generator.py	/^class LevelGenerator( MyObject ):$/;"	c
+MassCondition	wrapper.py	/^class MassCondition( Condition ):$/;"	c
+MaxAggregateModifier	modifier.py	/^class MaxAggregateModifier( AggregateModifier ):$/;"	c
+MinAggregateModifier	modifier.py	/^class MinAggregateModifier( AggregateModifier ):$/;"	c
+Modifier	modifier.py	/^class Modifier( MyObject ):$/;"	c
+ModifierDict	dict.py	/^class ModifierDict( CategoryDict ):$/;"	c
+ModifierFactory	modifier.py	/^class ModifierFactory( MyObject ):$/;"	c
+MultipliedModifier	modifier.py	/^class MultipliedModifier( Modifier ):$/;"	c
+MultipliedModifierFactory	modifier.py	/^class MultipliedModifierFactory( MyObject ):$/;"	c
+MyObject	wrapper.py	/^class MyObject( WrappableObject ):$/;"	c
+Observable	wrapper.py	/^class Observable( Wrappable ):$/;"	c
+ObservedMethod	wrapper.py	/^class ObservedMethod( object ):$/;"	c
+Observer	wrapper.py	/^class Observer( object ):$/;"	c
+OrCondition	wrapper.py	/^class OrCondition( MassCondition ):$/;"	c
+OrConditionalMethod	wrapper.py	/^class OrConditionalMethod( ConditionalMethod ):$/;"	c
+Race	generator.py	/^class Race( LevelGenerator ):$/;"	c
+RaceLevel	effect.py	/^class RaceLevel( Level ):$/;"	c
+Stat	attribute.py	/^class Stat( Attribute ):$/;"	c
+Wrappable	wrapper.py	/^class Wrappable( object ):$/;"	c
+WrappableObject	wrapper.py	/^class WrappableObject( object ):$/;"	c
+__add__	attribute.py	/^	def __add__( self, other ):$/;"	m	class:Attribute	file:
+__add__	attribute.py	/^	def __add__( self, other ):$/;"	m	class:Continuum	file:
+__add__	modifier.py	/^	def __add__( self, other ):$/;"	m	class:Modifier	file:
+__call__	wrapper.py	/^	def __call__( self, *args, **kwargs ):$/;"	m	class:ConditionalMethod	file:
+__call__	wrapper.py	/^	def __call__( self, *args, **kwargs ):$/;"	m	class:ObservedMethod	file:
+__cmp__	attribute.py	/^	def __cmp__( self, other ):$/;"	m	class:Attribute	file:
+__delete__	wrapper.py	/^	def __delete__( self, obj ):$/;"	m	class:Wrappable	file:
+__delitem__	dict.py	/^	def __delitem__( self, key ):$/;"	m	class:CategoryDict	file:
+__delitem__	modifier.py	/^	def __delitem__( self, key ):$/;"	m	class:AggregateModifier	file:
+__get__	wrapper.py	/^	def __get__( self, obj, objtype=None ):$/;"	m	class:Wrappable	file:
+__getattr__	modifier.py	/^	def __getattr__( self, attr ):$/;"	m	class:MultipliedModifierFactory	file:
+__getitem__	dict.py	/^	def __getitem__( self, key ):$/;"	m	class:CategoryDict	file:
+__getitem__	modifier.py	/^	def __getitem__( self, key ):$/;"	m	class:AggregateModifier	file:
+__init__	attribute.py	/^	def __init__( self, magnitude, name=None, ranks=None, names=None ):$/;"	m	class:Continuum
+__init__	attribute.py	/^	def __init__( self, name, number, aggregator=None ):$/;"	m	class:Attribute
+__init__	attribute.py	/^	def __init__( self, name, number, modprovided=None, aggregator=None ):$/;"	m	class:Stat
+__init__	dict.py	/^	def __init__( self, aggregator, vals=None ):$/;"	m	class:CategoryDict
+__init__	dict.py	/^	def __init__( self, aggregator=None, vals=None ):$/;"	m	class:ModifierDict
+__init__	dict.py	/^	def __init__( self, levels=None, eladjustment=0  ):$/;"	m	class:LevelBox
+__init__	effect.py	/^	def __init__( self, character, attack, mods=None, effects=None ):$/;"	m	class:DamageEffect
+__init__	effect.py	/^	def __init__( self, character, levelnum, charlevelnum, characterclass, mods=None, feats=None ):$/;"	m	class:CharacterLevel
+__init__	effect.py	/^	def __init__( self, character, levelnum, charlevelnum, mods=None, feats=None ):$/;"	m	class:Level
+__init__	effect.py	/^	def __init__( self, character, levelnum, charlevelnum, racename, mods=None, feats=None ):$/;"	m	class:RaceLevel
+__init__	effect.py	/^	def __init__( self, character, mods=None, feats=None ):$/;"	m	class:Effect
+__init__	gameobject.py	/^	def __init__( clss, name, bases, dictionary ):$/;"	m	class:GameObjectMetaclass
+__init__	gameobject.py	/^	def __init__( self, *args, **kwargs ):$/;"	m	class:EquippedItem
+__init__	gameobject.py	/^	def __init__( self, attrs ):$/;"	m	class:GameObject
+__init__	gameobject.py	/^	def __init__( self, name, attrs=None ):$/;"	m	class:Character
+__init__	gameobject.py	/^	def __init__( self, name, cost, attrs, description, mods ):$/;"	m	class:Item
+__init__	generator.py	/^	def __init__( self, name, session, levels, mods, feats ):$/;"	m	class:CharacterClass
+__init__	generator.py	/^	def __init__( self, name, session, levels, mods, feats ):$/;"	m	class:Race
+__init__	generator.py	/^	def __init__( self, name, session, levels, mods, feats, effecttype ):$/;"	m	class:LevelGenerator
+__init__	generator.py	/^	def __init__( self, name, session, mods=None, feats=None, effecttype=None ):$/;"	m	class:EffectGenerator
+__init__	modifier.py	/^	def __init__( self, cap, mods=None, target=None, type=None ):$/;"	m	class:CappedAggregateModifier
+__init__	modifier.py	/^	def __init__( self, cause, number, name="" ):$/;"	m	class:ModifierFactory
+__init__	modifier.py	/^	def __init__( self, factory, multiplier ):$/;"	m	class:MultipliedModifierFactory
+__init__	modifier.py	/^	def __init__( self, mod, multiplier ):$/;"	m	class:MultipliedModifier
+__init__	modifier.py	/^	def __init__( self, mods=None, selector=sum, target=None, type=None ):$/;"	m	class:AggregateModifier
+__init__	modifier.py	/^	def __init__( self, mods=None, target=None, type=None ):$/;"	m	class:MaxAggregateModifier
+__init__	modifier.py	/^	def __init__( self, mods=None, target=None, type=None ):$/;"	m	class:MinAggregateModifier
+__init__	modifier.py	/^	def __init__( self, type, parent, target, conditions, value=None ):$/;"	m	class:Modifier
+__init__	wrapper.py	/^	def __init__( self, conditions=None ):$/;"	m	class:MassCondition
+__init__	wrapper.py	/^	def __init__( self, func ):$/;"	m	class:Observable
+__init__	wrapper.py	/^	def __init__( self, func, conditionalType=None ):$/;"	m	class:Conditionable
+__init__	wrapper.py	/^	def __init__( self, func, returntype=ObservedMethod ):$/;"	m	class:Wrappable
+__init__	wrapper.py	/^	def __init__( self, func=None ):$/;"	m	class:Condition
+__init__	wrapper.py	/^	def __init__( self, label ):$/;"	m	class:Observer
+__init__	wrapper.py	/^	def __init__( self, meth ):$/;"	m	class:AndConditionalMethod
+__init__	wrapper.py	/^	def __init__( self, meth ):$/;"	m	class:ObservedMethod
+__init__	wrapper.py	/^	def __init__( self, meth ):$/;"	m	class:OrConditionalMethod
+__init__	wrapper.py	/^	def __init__( self, methods, conditionType ):$/;"	m	class:ConditionalMethod
+__int__	attribute.py	/^	def __int__( self ):$/;"	m	class:Attribute	file:
+__int__	attribute.py	/^	def __int__( self ):$/;"	m	class:Continuum	file:
+__int__	dict.py	/^	def __int__( self ):$/;"	m	class:LevelBox	file:
+__int__	effect.py	/^	def __int__( self ):$/;"	m	class:Level	file:
+__int__	effect.py	/^	def __int__( self ):$/;"	m	class:RaceLevel	file:
+__int__	modifier.py	/^	def __int__( self ):$/;"	m	class:AggregateModifier	file:
+__int__	modifier.py	/^	def __int__( self ):$/;"	m	class:Modifier	file:
+__int__	modifier.py	/^	def __int__( self ):$/;"	m	class:ModifierFactory	file:
+__int__	modifier.py	/^	def __int__( self ):$/;"	m	class:MultipliedModifier	file:
+__iter__	dict.py	/^	def __iter__( self ):$/;"	m	class:LevelBox	file:
+__iter__	modifier.py	/^	def __iter__( self ):$/;"	m	class:AggregateModifier	file:
+__iter__	wrapper.py	/^	def __iter__( self ):$/;"	m	class:MassCondition	file:
+__lt__	effect.py	/^	def __lt__( self, other ):$/;"	m	class:Effect	file:
+__neg__	attribute.py	/^	def __neg__( self ):$/;"	m	class:Attribute	file:
+__new__	wrapper.py	/^	def __new__( clss, *args, **kwargs ):$/;"	m	class:WrappableObject	file:
+__repr__	wrapper.py	/^	def __repr__( self ):$/;"	m	class:MyObject	file:
+__set__	wrapper.py	/^	def __set__( self, obj, newfunc ):$/;"	m	class:Wrappable	file:
+__setitem__	dict.py	/^	def __setitem__( self, key, val ):$/;"	m	class:CategoryDict	file:
+__setitem__	modifier.py	/^	def __setitem__( self, key, val ):$/;"	m	class:AggregateModifier	file:
+__str__	attribute.py	/^	def __str__( self ):$/;"	m	class:Attribute	file:
+__str__	attribute.py	/^	def __str__( self ):$/;"	m	class:Continuum	file:
+__str__	dict.py	/^	def __str__( self ):$/;"	m	class:CategoryDict	file:
+__str__	dict.py	/^	def __str__( self ):$/;"	m	class:LevelBox	file:
+__str__	effect.py	/^	def __str__( self ):$/;"	m	class:CharacterLevel	file:
+__str__	effect.py	/^	def __str__( self ):$/;"	m	class:DamageEffect	file:
+__str__	effect.py	/^	def __str__( self ):$/;"	m	class:Effect	file:
+__str__	effect.py	/^	def __str__( self ):$/;"	m	class:RaceLevel	file:
+__str__	gameobject.py	/^	def __str__( self ):$/;"	m	class:Character	file:
+__str__	gameobject.py	/^	def __str__( self ):$/;"	m	class:Item	file:
+__str__	generator.py	/^	def __str__( self ):$/;"	m	class:EffectGenerator	file:
+__str__	generator.py	/^	def __str__( self ):$/;"	m	class:LevelGenerator	file:
+__str__	modifier.py	/^	def __str__( self ):$/;"	m	class:AggregateModifier	file:
+__str__	modifier.py	/^	def __str__( self ):$/;"	m	class:Modifier	file:
+__str__	modifier.py	/^	def __str__( self ):$/;"	m	class:ModifierFactory	file:
+__str__	modifier.py	/^	def __str__( self ):$/;"	m	class:MultipliedModifier	file:
+__str__	wrapper.py	/^	def __str__( self ):$/;"	m	class:MyObject	file:
+__sub__	attribute.py	/^	def __sub__( self, other ):$/;"	m	class:Attribute	file:
+__sub__	attribute.py	/^	def __sub__( self, other ):$/;"	m	class:Continuum	file:
+add	wrapper.py	/^	def add( self, condition ):$/;"	m	class:ConditionalMethod
+add	wrapper.py	/^	def add( self, observer ):$/;"	m	class:ObservedMethod
+addLevel	dict.py	/^	def addLevel( self, level ):$/;"	m	class:LevelBox
+addMod	gameobject.py	/^	def addMod( self, mod, type, target ):$/;"	m	class:Item
+addTarget	modifier.py	/^	def addTarget( self, target, type, conditions=None ):$/;"	m	class:MultipliedModifierFactory
+addTarget	modifier.py	/^	def addTarget( self, target, type, conditions=None, multiplier=1 ):$/;"	m	class:ModifierFactory
+append	modifier.py	/^	def append( self, level ):$/;"	m	class:LevelAggregator
+append	modifier.py	/^	def append( self, mod ):$/;"	m	class:AggregateModifier
+append	wrapper.py	/^	def append( self, condition ):$/;"	m	class:MassCondition
+applyMods	attribute.py	/^	def applyMods( self ):$/;"	m	class:Stat
+applyMods	gameobject.py	/^	def applyMods( self, type ):$/;"	m	class:Item
+beCarried	gameobject.py	/^	def beCarried( self, carrier ):$/;"	m	class:Item
+beDropped	gameobject.py	/^	def beDropped( self ):$/;"	m	class:Item
+carry	gameobject.py	/^	def carry( self, item ):$/;"	m	class:Character
+disable	effect.py	/^	def disable( self ):$/;"	m	class:Effect
+drop	gameobject.py	/^	def drop( self, item ):$/;"	m	class:Character
+enable	effect.py	/^	def enable( self ):$/;"	m	class:Effect
+extend	modifier.py	/^	def extend( self, mods ):$/;"	m	class:AggregateModifier
+extend	wrapper.py	/^	def extend( self, conditions ):$/;"	m	class:MassCondition
+generateProperty	gameobject.py	/^		def generateProperty( attrType, attrTag, attrName ):$/;"	m	class:GameObjectMetaclass
+getCarrier	gameobject.py	/^	def getCarrier( self ):$/;"	m	class:Item
+getConditions	modifier.py	/^	def getConditions( self ):$/;"	m	class:MultipliedModifier
+getEffect	generator.py	/^	def getEffect( self, character, newmods=None ):$/;"	m	class:EffectGenerator
+getEquipper	gameobject.py	/^	def getEquipper( self ):$/;"	m	class:EquippedItem
+getKey	effect.py	/^	def getKey( self ):$/;"	m	class:Effect
+getKey	modifier.py	/^	def getKey( self ):$/;"	m	class:Modifier
+getKey	modifier.py	/^	def getKey( self ):$/;"	m	class:ModifierFactory
+getLetter	attribute.py	/^	def getLetter( self ):$/;"	m	class:Continuum
+getLevel	generator.py	/^	def getLevel( self, character, number ):$/;"	m	class:LevelGenerator
+getLevel	generator.py	/^	def getLevel( self, character, number, charclass ):$/;"	m	class:Race
+getMod	attribute.py	/^	def getMod( self ):$/;"	m	class:Stat
+getMultiplier	modifier.py	/^	def getMultiplier( self ):$/;"	m	class:MultipliedModifierFactory
+getNumber	attribute.py	/^	def getNumber( self ):$/;"	m	class:Attribute
+getNumber	modifier.py	/^	def getNumber( self ):$/;"	m	class:AggregateModifier
+getNumber	modifier.py	/^	def getNumber( self ):$/;"	m	class:Modifier
+getNumber	modifier.py	/^	def getNumber( self ):$/;"	m	class:ModifierFactory
+getNumber	modifier.py	/^	def getNumber( self ):$/;"	m	class:MultipliedModifier
+getParent	modifier.py	/^	def getParent( self ):$/;"	m	class:MultipliedModifier
+getTarget	modifier.py	/^	def getTarget( self ):$/;"	m	class:MultipliedModifier
+getType	effect.py	/^	def getType( self ):$/;"	m	class:CharacterLevel
+getType	effect.py	/^	def getType( self ):$/;"	m	class:RaceLevel
+get__doc__	wrapper.py	/^	def get__doc__( self ):$/;"	m	class:Wrappable
+items	dict.py	/^	def items( self, type=None ):$/;"	m	class:CategoryDict
+items	modifier.py	/^	def items( self ):$/;"	m	class:AggregateModifier
+iteritems	dict.py	/^	def iteritems( self, type=None ):$/;"	m	class:CategoryDict
+iteritems	modifier.py	/^	def iteritems( self ):$/;"	m	class:AggregateModifier
+iterkeys	dict.py	/^	def iterkeys( self, type=None ):$/;"	m	class:CategoryDict
+iterkeys	modifier.py	/^	def iterkeys( self ):$/;"	m	class:AggregateModifier
+itervalues	dict.py	/^	def itervalues( self, type=None ):$/;"	m	class:CategoryDict
+itervalues	modifier.py	/^	def itervalues( self ):$/;"	m	class:AggregateModifier
+keys	dict.py	/^	def keys( self, type=None ):$/;"	m	class:CategoryDict
+keys	modifier.py	/^	def keys( self ):$/;"	m	class:AggregateModifier
+levels	dict.py	/^	def levels( self ):$/;"	m	class:LevelBox
+observed	wrapper.py	/^	def observed( self, func ):$/;"	m	class:Condition
+observed	wrapper.py	/^	def observed( self, meth ):$/;"	m	class:AndCondition
+observed	wrapper.py	/^	def observed( self, meth ):$/;"	m	class:OrCondition
+observed	wrapper.py	/^	def observed( self, obj, function ):$/;"	m	class:Observer
+removeTarget	modifier.py	/^	def removeTarget( self, target ):$/;"	m	class:ModifierFactory
+removeTarget	modifier.py	/^	def removeTarget( self, target ):$/;"	m	class:MultipliedModifierFactory
+resolveForSituation	attribute.py	/^	def resolveForSituation( self, situation ):$/;"	m	class:Attribute
+revokeMods	attribute.py	/^	def revokeMods( self ):$/;"	m	class:Stat
+revokeMods	gameobject.py	/^	def revokeMods( self, type ):$/;"	m	class:Item
+setAttribute	gameobject.py	/^	def setAttribute( self, tag, name, number ):$/;"	m	class:GameObject
+setAttrs	gameobject.py	/^	def setAttrs( self, attrs ):$/;"	m	class:GameObject
+setCarrier	gameobject.py	/^	def setCarrier( self, value ):$/;"	m	class:Item
+setEquipper	gameobject.py	/^	def setEquipper( self, value ):$/;"	m	class:EquippedItem
+setMod	attribute.py	/^	def setMod( self, value ):$/;"	m	class:Stat
+setMods	gameobject.py	/^	def setMods( self, mods ):$/;"	m	class:Item
+setMultiplier	modifier.py	/^	def setMultiplier( self, val ):$/;"	m	class:MultipliedModifierFactory
+setNumber	attribute.py	/^	def setNumber( self, number ):$/;"	m	class:Attribute
+setNumber	modifier.py	/^	def setNumber( self, number ):$/;"	m	class:ModifierFactory
+setStat	gameobject.py	/^	def setStat( self, tag, name, number, modprovided=None ):$/;"	m	class:GameObject
+setSystemAttrs	gameobject.py	/^	def setSystemAttrs( self ):$/;"	m	class:GameObject
+values	dict.py	/^	def values( self, type=None ):$/;"	m	class:CategoryDict
+values	modifier.py	/^	def values( self ):$/;"	m	class:AggregateModifier

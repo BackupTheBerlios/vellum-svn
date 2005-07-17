@@ -1,0 +1,248 @@
+# installing zipimport hook
+import zipimport # builtin
+# installed zipimport hook
+# /usr/lib/python2.3/site.pyc matches /usr/lib/python2.3/site.py
+import site # precompiled from /usr/lib/python2.3/site.pyc
+# /usr/lib/python2.3/os.pyc matches /usr/lib/python2.3/os.py
+import os # precompiled from /usr/lib/python2.3/os.pyc
+import posix # builtin
+# /usr/lib/python2.3/posixpath.pyc matches /usr/lib/python2.3/posixpath.py
+import posixpath # precompiled from /usr/lib/python2.3/posixpath.pyc
+import stat # precompiled from stat.pyc
+import charmodel # directory /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/__init__.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/__init__.py
+import charmodel # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/__init__.pyc
+import charmodel.generic # directory /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/__init__.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/__init__.py
+import charmodel.generic # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/__init__.pyc
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/attribute.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/attribute.py
+import charmodel.generic.attribute # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/attribute.pyc
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/wrapper.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/wrapper.py
+import charmodel.generic.wrapper # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/wrapper.pyc
+# /usr/lib/python2.3/pdb.pyc matches /usr/lib/python2.3/pdb.py
+import pdb # precompiled from /usr/lib/python2.3/pdb.pyc
+# /usr/lib/python2.3/linecache.pyc matches /usr/lib/python2.3/linecache.py
+import linecache # precompiled from /usr/lib/python2.3/linecache.pyc
+# /usr/lib/python2.3/cmd.pyc matches /usr/lib/python2.3/cmd.py
+import cmd # precompiled from /usr/lib/python2.3/cmd.pyc
+# /usr/lib/python2.3/string.pyc matches /usr/lib/python2.3/string.py
+import string # precompiled from /usr/lib/python2.3/string.pyc
+import strop # dynamically loaded from /usr/lib/python2.3/lib-dynload/strop.so
+# /usr/lib/python2.3/bdb.pyc matches /usr/lib/python2.3/bdb.py
+import bdb # precompiled from /usr/lib/python2.3/bdb.pyc
+# /usr/lib/python2.3/types.pyc matches /usr/lib/python2.3/types.py
+import types # precompiled from /usr/lib/python2.3/types.pyc
+# /usr/lib/python2.3/repr.pyc matches /usr/lib/python2.3/repr.py
+import repr # precompiled from /usr/lib/python2.3/repr.pyc
+# /usr/lib/python2.3/re.pyc matches /usr/lib/python2.3/re.py
+import re # precompiled from /usr/lib/python2.3/re.pyc
+# /usr/lib/python2.3/sre.pyc matches /usr/lib/python2.3/sre.py
+import sre # precompiled from /usr/lib/python2.3/sre.pyc
+# /usr/lib/python2.3/sre_compile.pyc matches /usr/lib/python2.3/sre_compile.py
+import sre_compile # precompiled from /usr/lib/python2.3/sre_compile.pyc
+import _sre # builtin
+# /usr/lib/python2.3/sre_constants.pyc matches /usr/lib/python2.3/sre_constants.py
+import sre_constants # precompiled from /usr/lib/python2.3/sre_constants.pyc
+# /usr/lib/python2.3/sre_parse.pyc matches /usr/lib/python2.3/sre_parse.py
+import sre_parse # precompiled from /usr/lib/python2.3/sre_parse.pyc
+# /usr/lib/python2.3/copy_reg.pyc matches /usr/lib/python2.3/copy_reg.py
+import copy_reg # precompiled from /usr/lib/python2.3/copy_reg.pyc
+# /usr/lib/python2.3/pprint.pyc matches /usr/lib/python2.3/pprint.py
+import pprint # precompiled from /usr/lib/python2.3/pprint.pyc
+import cStringIO # dynamically loaded from /usr/lib/python2.3/lib-dynload/cStringIO.so
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/dict.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/dict.py
+import charmodel.generic.dict # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/dict.pyc
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/modifier.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/modifier.py
+import charmodel.generic.modifier # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/modifier.pyc
+'import site' failed; traceback:
+dlopen("/usr/lib/python2.3/lib-dynload/strop.so", 2);
+dlopen("/usr/lib/python2.3/lib-dynload/cStringIO.so", 2);
+Traceback (most recent call last):
+  File "/usr/lib/python2.3/site.py", line 65, in ?
+    import sys, os
+  File "/usr/lib/python2.3/os.py", line 47, in ?
+    import posixpath as path
+  File "/usr/lib/python2.3/posixpath.py", line 15, in ?
+    import stat
+  File "/usr/lib/python2.3/stat.py", line 14, in ?
+    ST_INO   = 1
+  File "/usr/lib/python2.3/stat.py", line 27, in D20Damage
+    return mode & 07777
+NameError: name 'D20Attribute' is not defined
+# /usr/lib/python2.3/warnings.pyc matches /usr/lib/python2.3/warnings.py
+import warnings # precompiled from /usr/lib/python2.3/warnings.pyc
+import encodings # directory /usr/lib/python2.3/encodings
+# /usr/lib/python2.3/encodings/__init__.pyc matches /usr/lib/python2.3/encodings/__init__.py
+import encodings # precompiled from /usr/lib/python2.3/encodings/__init__.pyc
+# /usr/lib/python2.3/codecs.pyc matches /usr/lib/python2.3/codecs.py
+import codecs # precompiled from /usr/lib/python2.3/codecs.pyc
+import _codecs # builtin
+# /usr/lib/python2.3/encodings/aliases.pyc matches /usr/lib/python2.3/encodings/aliases.py
+import encodings.aliases # precompiled from /usr/lib/python2.3/encodings/aliases.pyc
+# /usr/lib/python2.3/encodings/latin_1.pyc matches /usr/lib/python2.3/encodings/latin_1.py
+import encodings.latin_1 # precompiled from /usr/lib/python2.3/encodings/latin_1.pyc
+Python 2.3.5 (#2, Feb  9 2005, 00:38:15) 
+[GCC 3.3.5 (Debian 1:3.3.5-8)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/gameobject.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/gameobject.py
+import charmodel.generic.gameobject # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/gameobject.pyc
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/attribute.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/attribute.py
+import attribute # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/attribute.pyc
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/generator.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/generator.py
+import generator # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/generator.pyc
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/effect.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/effect.py
+import charmodel.generic.effect # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/effect.pyc
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/generator.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/generator.py
+import charmodel.generic.generator # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/generator.pyc
+# /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/effect.pyc matches /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/effect.py
+import effect # precompiled from /home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/effect.pyc
+# /usr/lib/python2.3/new.pyc matches /usr/lib/python2.3/new.py
+import new # precompiled from /usr/lib/python2.3/new.pyc
+import math # dynamically loaded from /usr/lib/python2.3/lib-dynload/math.so
+import vellum # directory /home/lehmanap/gaming/program/vellum/code/vellum
+# /home/lehmanap/gaming/program/vellum/code/vellum/__init__.pyc matches /home/lehmanap/gaming/program/vellum/code/vellum/__init__.py
+import vellum # precompiled from /home/lehmanap/gaming/program/vellum/code/vellum/__init__.pyc
+import vellum.server # directory /home/lehmanap/gaming/program/vellum/code/vellum/server
+# /home/lehmanap/gaming/program/vellum/code/vellum/server/__init__.pyc matches /home/lehmanap/gaming/program/vellum/code/vellum/server/__init__.py
+import vellum.server # precompiled from /home/lehmanap/gaming/program/vellum/code/vellum/server/__init__.pyc
+# /home/lehmanap/gaming/program/vellum/code/vellum/server/dice.pyc matches /home/lehmanap/gaming/program/vellum/code/vellum/server/dice.py
+import vellum.server.dice # precompiled from /home/lehmanap/gaming/program/vellum/code/vellum/server/dice.pyc
+# /usr/lib/python2.3/random.pyc matches /usr/lib/python2.3/random.py
+import random # precompiled from /usr/lib/python2.3/random.pyc
+import _random # dynamically loaded from /usr/lib/python2.3/lib-dynload/_random.so
+import time # dynamically loaded from /usr/lib/python2.3/lib-dynload/time.so
+# /home/lehmanap/gaming/program/vellum/code/vellum/server/linesyntax.pyc matches /home/lehmanap/gaming/program/vellum/code/vellum/server/linesyntax.py
+import vellum.server.linesyntax # precompiled from /home/lehmanap/gaming/program/vellum/code/vellum/server/linesyntax.pyc
+dlopen("/usr/lib/python2.3/lib-dynload/math.so", 2);
+0
+RACE 0
+Fighter 1
+
+Base Attack Bonus: 1
+	0
+	+1 ( from Fighter 2, 1/1 ( CharacterLevel Modifier ) )
+	
+RACE 0
+Fighter 2
+
+Base Attack Bonus: 2
+	0
+	+1 ( from Fighter 2, 1/2 ( CharacterLevel Modifier ) )
++1 ( from Fighter 3, 2/2 ( CharacterLevel Modifier ) )
+	
+AC before Dex mod
+Armor Class: 10
+	10
+	
+	
+	0 = -1 x +0 ( from M (Medium) )
+After
+Armor Class: 13
+	10
+	
+	+3 ( from Dexterity: 17
+		15
+		+0 ( from Elf 3, 2/2 ( RaceLevel Modifier ) )
++2 ( from Elf 2, 1/2 ( RaceLevel Modifier ) )
+		 )
+	
+	0 = -1 x +0 ( from M (Medium) )
+ATT before weapon
+2
+dlopen("/usr/lib/python2.3/lib-dynload/_random.so", 2);
+dlopen("/usr/lib/python2.3/lib-dynload/time.so", 2);
+Traceback (most recent call last):
+  File "gameobject.py", line 225, in ?
+    dmg = att.resolve( 19, 2 )
+  File "/home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/generator.py", line 21, in resolve
+    self.dmg.enable( )
+  File "/home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/effect.py", line 27, in enable
+    self.modifiers[ target ] = factory.addTarget( target, type, conditions )
+  File "/home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/modifier.py", line 185, in addTarget
+    basemod = Modifier( type, self, target, conditions, self.number )
+  File "/home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/generic/modifier.py", line 206, in getNumber
+    return self._number( )
+  File "/home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/attribute.py", line 96, in __int__
+    sum += int( self.range.roll( ) ) + super( D20Damage, self ).__int__( )
+  File "/home/lehmanap/gaming/program/sandbox/lehmanap/charmodel/d20/attribute.py", line 36, in roll
+    from vellum.server.dice import parse
+  File "/home/lehmanap/gaming/program/vellum/code/vellum/server/dice.py", line 4, in ?
+    from vellum.server import linesyntax
+  File "/home/lehmanap/gaming/program/vellum/code/vellum/server/linesyntax.py", line 27, in ?
+    import pyparsing as P
+ImportError: No module named pyparsing
+# clear __builtin__._
+# clear sys.path
+# clear sys.argv
+# clear sys.ps1
+# clear sys.ps2
+# clear sys.exitfunc
+# clear sys.exc_type
+# clear sys.exc_value
+# clear sys.exc_traceback
+# clear sys.last_type
+# clear sys.last_value
+# clear sys.last_traceback
+# clear sys.path_hooks
+# clear sys.path_importer_cache
+# clear sys.meta_path
+# restore sys.stdin
+# restore sys.stdout
+# restore sys.stderr
+# cleanup __main__
+# cleanup[1] cStringIO
+# cleanup[1] encodings
+# cleanup[1] site
+# cleanup[1] posixpath
+# cleanup[1] generator
+# cleanup[1] sre_constants
+# cleanup[1] encodings.latin_1
+# cleanup[1] attribute
+# cleanup[1] new
+# cleanup[1] charmodel
+# cleanup[1] stat
+# cleanup[1] zipimport
+# cleanup[1] _codecs
+# cleanup[1] repr
+# cleanup[1] effect
+# cleanup[1] codecs
+# cleanup[1] strop
+# cleanup[1] sre
+# cleanup[1] vellum
+# cleanup[1] signal
+# cleanup[1] posix
+# cleanup[1] encodings.aliases
+# cleanup[1] warnings
+# cleanup[1] time
+# cleanup[1] exceptions
+# cleanup[1] sre_parse
+# cleanup[1] copy_reg
+# cleanup[1] sre_compile
+# cleanup[1] _sre
+# cleanup[1] charmodel.generic
+# cleanup[1] charmodel.generic.modifier
+# cleanup[1] charmodel.generic.gameobject
+# cleanup[1] vellum.server
+# cleanup[1] charmodel.generic.generator
+# cleanup[1] charmodel.generic.wrapper
+# cleanup[1] pdb
+# cleanup[1] charmodel.generic.attribute
+# cleanup[1] vellum.server.dice
+# cleanup[1] charmodel.generic.dict
+# cleanup[1] vellum.server.linesyntax
+# cleanup[1] charmodel.generic.effect
+# cleanup[1] bdb
+# cleanup[1] pprint
+# cleanup[1] re
+# cleanup[1] types
+# cleanup[1] cmd
+# cleanup[1] random
+# cleanup[1] linecache
+# cleanup[1] string
+# cleanup[1] _random
+# cleanup[1] os
+# cleanup[2] math
+# cleanup sys
+# cleanup __builtin__
+# cleanup ints: 62 unfreed ints in 2 out of 3 blocks
+# cleanup floats: 28 unfreed floats in 1 out of 1 block
