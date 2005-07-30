@@ -1,0 +1,31 @@
+diff -Naur gtkmvc/model.py gtkmvc.new/model.py
+--- gtkmvc/model.py	2005-07-30 10:29:31.671875000 -0700
++++ gtkmvc.new/model.py	2005-07-30 10:27:49.390625000 -0700
+@@ -76,17 +76,22 @@
+                     list.append(self.m_notifications[property], method)
+                     pass
+                 pass
+-            else: print "Model warning: observable property '%s' has no observers (%s)" \
+-                  % (property, method_name)
+-            pass        
++            else: 
++                import warnings
++                warnings.warn("Model warning: observable property "
++                              "'%s' has no observers (%s)" % (property, 
++                                                              method_name))
++            pass
+         return
+ 
+ 
+     def notify_property_change(self, prop_name, old, new):
+         assert(self.m_notifications.has_key(prop_name))
+         if len(self.m_notifications[prop_name]) == 0:
+-            print "Model warning: observable property '%s' changed, but there are no registered observers." \
+-                  % prop_name
++            import warnings
++            warnings.warn("Model warning: observable property "
++                          "'%s' changed, but there are no observers" % 
++                          (property, ))
+         else:
+             for method in self.m_notifications[prop_name] :
+                 method(self, old, new) # notifies the change
