@@ -17,6 +17,7 @@ from dispatch import dispatcher
 
 # vellum imports
 from fs import fs
+from model import Icon, New
 
 
 
@@ -106,18 +107,28 @@ class BigController:
             return handler(widget, event, icon)
 
     def on_icon_gdk_button_press(self, widget, event, icon):
-        icon.grabbed = True
+        # left click
+        if event.button == 1:
+            icon.grabbed = True
 
     def on_icon_gdk_button_release(self, widget, event, icon):
-        icon.selected = not icon.selected
-        icon.grabbed = False
+        if event.button == 1:
+            icon.selected = not icon.selected
+            icon.grabbed = False
+        elif event.button == 3:
+            TODO, DROP_ICON
+
+
 
     def on_icon_gdk_motion_notify(self, widget, event, icon):
         if icon.grabbed:
             iw, ih = icon.image.get_width(), icon.image.get_height()
             x, y = event.x, event.y
-            dispatcher.send(signal=icon, sender='gui', property='location',
-                    old=icon.location, value=(x - iw, y - ih))
+            dispatcher.send(signal=icon, 
+                            sender='gui', 
+                            property='location',
+                            old=icon.location, 
+                            value=(x - iw, y - ih))
 
     def on_quit_activate(self, widget):
         self.quit()
@@ -132,7 +143,19 @@ class BigController:
     def on_canvas_button_press_event(self, widget, ev):
         pass
     def on_canvas_button_release_event(self, widget, ev):
-        pass
+        """on right click make a new icon"""
+        if ev.button == 3:
+            # create a new Icon, and move it to the position of click
+            icon = Icon()
+            dispatcher.send(signal=New, 
+                            sender='gui', 
+                            model=icon)
+            dispatcher.send(signal=icon, 
+                            sender='gui', 
+                            property='location', 
+                            old=(0,0), 
+                            value=(ev.x, ev.y)
+                            )
     def on_canvas_motion_notify_event(self, widget, ev):
         pass
 

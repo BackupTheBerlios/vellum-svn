@@ -51,7 +51,6 @@ class Box:
         if sender is self:
             return
         for observer in self.observers:
-            dispatcher.send(sender=self, signal=Drop, model=model)
             dispatcher.disconnect(observer.receiveDropModel, signal=Drop)
             dispatcher.disconnect(observer.receiveNewModel, signal=New)
             dispatcher.disconnect(observer.receivePropertyChange, signal=model)
@@ -65,5 +64,4 @@ class Box:
             dispatcher.connect(observer.receivePropertyChange, signal=model)
             dispatcher.connect(observer.receiveNewModel, signal=New)
             dispatcher.connect(observer.receiveDropModel, signal=Drop)
-            dispatcher.send(sender=self, signal=New, model=model)
 

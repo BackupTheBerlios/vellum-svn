@@ -51,6 +51,9 @@ def run(argv = None):
 
     reactor.run()
 
+    box.unregisterObserver(netclient)
+    box.unregisterObserver(bigctl)
+
 if __name__ == '__main__':
     run()
 
