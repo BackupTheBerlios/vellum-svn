@@ -18,7 +18,9 @@ class Modelable(Signal):
         # TypeError: unsubscriptable object from pydispatcher when
         # the Modelable is gc'd.
         # when it's a lambda held in an instance variable, no error.
-        self.receiver = lambda property,value:setattr(self, property, value)
+        self.receiver = (
+                lambda sender,property,value: setattr(self, property, value)
+                         )
         dispatcher.connect(self.receiver, self)
 
 
