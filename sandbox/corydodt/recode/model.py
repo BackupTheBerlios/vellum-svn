@@ -14,9 +14,12 @@ class Drop(Signal):
 
 class Modelable(Signal):
     def __init__(self):
-        dispatcher.connect(self.receivePropertyChange, self)
-    def receivePropertyChange(self, property, value):
-        setattr(self, property, value)
+        # FIXME? if receiver is a regular method, I get 
+        # TypeError: unsubscriptable object from pydispatcher when
+        # the Modelable is gc'd.
+        # when it's a lambda held in an instance variable, no error.
+        self.receiver = lambda property,value:setattr(self, property, value)
+        dispatcher.connect(self.receiver, self)
 
 
 class Icon(Modelable):
