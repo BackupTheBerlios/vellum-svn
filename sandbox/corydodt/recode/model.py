@@ -33,8 +33,8 @@ class Icon(Modelable):
 
 class Box:
     def __init__(self):
-        dispatcher.connect(self.receiveNew, New) 
-        dispatcher.connect(self.receiveDrop, Drop)
+        dispatcher.connect(self.receiveNew, signal=New) 
+        dispatcher.connect(self.receiveDrop, signal=Drop)
         self.observers = []
         self.models = []
 
@@ -56,8 +56,6 @@ class Box:
         if sender is self:
             return
         for observer in self.observers:
-            dispatcher.disconnect(observer.receiveDropModel, signal=Drop)
-            dispatcher.disconnect(observer.receiveNewModel, signal=New)
             dispatcher.disconnect(observer.receivePropertyChange, signal=model)
         self.models.remove(model)
 
@@ -67,6 +65,4 @@ class Box:
         self.models.append(model)
         for observer in self.observers:
             dispatcher.connect(observer.receivePropertyChange, signal=model)
-            dispatcher.connect(observer.receiveNewModel, signal=New)
-            dispatcher.connect(observer.receiveDropModel, signal=Drop)
 
