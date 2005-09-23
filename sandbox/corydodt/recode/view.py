@@ -17,7 +17,7 @@ from dispatch import dispatcher
 
 # vellum imports
 from fs import fs
-from model import Icon, New
+from model import Icon, New, Drop
 
 
 
@@ -37,13 +37,13 @@ class BigView:
         w.add(canvas)
         canvas.show()
 
-        canvas.connect('button-press-event', 
-                       c.on_canvas_button_press_event)
-        canvas.connect('button-release-event', 
-                       c.on_canvas_button_release_event)
-        canvas.connect('motion-notify-event', 
-                       c.on_canvas_motion_notify_event)
+        self.rect = canvas.root().add(
+                "GnomeCanvasRect", x1=0, y1=0, x2=500, y2=500,
+                fill_color="#ffffff")
+        self.rect.connect('event', c.on_background_event, self.rect)
+
         w.connect('destroy', c.on_Vellum_destroy)
+
         self.canvas = canvas
 
 class BigController:
@@ -55,7 +55,6 @@ class BigController:
         receiver(model)
 
     def receiveDropModel(self, sender, model): 
-        FIXME # no drop actions yet
         receiver = getattr(self, 'drop_%s' % (model.__class__.__name__))
         receiver(model)
 
@@ -73,6 +72,13 @@ class BigController:
         if old is None: old = (0,0)
         ox, oy = old
         icon.widget.move(x-ox, y-oy)
+
+    def drop_Icon(self, icon):
+        if getattr(icon, 'widget', None) is not None:
+            icon.widget.destroy()
+            icon.widget = None
+
+
 
     def new_Icon(self, icon):
         # clean up icon if necessary
@@ -106,6 +112,12 @@ class BigController:
         if handler is not None:
             return handler(widget, event, icon)
 
+    def on_background_event(self, widget, event, background):
+        type = event.type.value_name.lower()
+        handler = getattr(self, 'on_background_%s' % (type,), None)
+        if handler is not None:
+            return handler(widget, event, background)
+
     def on_icon_gdk_button_press(self, widget, event, icon):
         # left click
         if event.button == 1:
@@ -116,7 +128,9 @@ class BigController:
             icon.selected = not icon.selected
             icon.grabbed = False
         elif event.button == 3:
-            TODO, DROP_ICON
+            dispatcher.send(signal=Drop,
+                            sender='gui',
+                            model=icon)
 
 
 
@@ -140,9 +154,7 @@ class BigController:
         log.msg("Goodbye.")
         self.deferred.callback(None)
 
-    def on_canvas_button_press_event(self, widget, ev):
-        pass
-    def on_canvas_button_release_event(self, widget, ev):
+    def on_background_gdk_button_release(self, widget, ev, background):
         """on right click make a new icon"""
         if ev.button == 3:
             # create a new Icon, and move it to the position of click
@@ -153,9 +165,7 @@ class BigController:
             dispatcher.send(signal=icon, 
                             sender='gui', 
                             property='location', 
-                            old=(0,0), 
+                            old=icon.location,
                             value=(ev.x, ev.y)
                             )
-    def on_canvas_motion_notify_event(self, widget, ev):
-        pass
 

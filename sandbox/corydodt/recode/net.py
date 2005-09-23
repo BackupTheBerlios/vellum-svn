@@ -17,7 +17,7 @@ from dispatch import dispatcher
 
 # local imports
 from fs import fs
-from model import Icon, Box, New
+from model import Icon, Box, New, Drop
 from uuid import uuid
 
 
@@ -39,6 +39,7 @@ class NetClient(pb.Referenceable):
                                      value):
         """Called by the avatar to notify that an object has moved, changed
         colors, etc.
+        Notifies the dispatch mechanism.
         """
         model = self.remote_models[object_id]
         dispatcher.send(signal=model, 
@@ -46,12 +47,14 @@ class NetClient(pb.Referenceable):
                         property=property, 
                         old=old, 
                         value=value)
+
     def remote_receiveNewModel(self,
                                object_id,
                                sender,
                                ):
         """Called by the avatar to notify that a new object 
         has appeared on the map.
+        Notifies the dispatch mechanism.
         """
         print 'received propagated model', object_id
         model = Icon()
@@ -60,7 +63,25 @@ class NetClient(pb.Referenceable):
                         sender='remote',
                         model=model)
 
+    def remote_receiveDropModel(self,
+                               object_id,
+                               sender,
+                               ):
+        """Called by the avatar to notify that an object 
+        on the map needs to go away.
+        Notifies the dispatch mechanism.
+        """
+        print 'received propagated drop of model', object_id
+        model = self.remote_models[object_id]
+        self.removeModel(uuid=object_id)
+        dispatcher.send(signal=Drop,
+                        sender='remote',
+                        model=model)
+
     def receivePropertyChange(self, signal, sender, property, old, value):
+        """Called by dispatch mechanism in response to an object property
+        changing.  Notifies the remote avatar that this has happened.
+        """
         model = signal
         if sender != 'remote':
             id = self.remote_uuids[model]
@@ -73,9 +94,20 @@ class NetClient(pb.Referenceable):
 
 
     def receiveDropModel(self, sender, model):
-        FIXME 
+        """Called by dispatch mechanism in response to an object being
+        dropped.  Notifies the remote avatar that this has happened.
+        """
+        if sender != 'remote':
+            id = self.remote_uuids[model]
+            print 'proclaiming removal of', id
+            self.avatar.callRemote('receiveDropModel',
+                                   sender=sender,
+                                   object_id=id)
 
     def receiveNewModel(self, sender, model):
+        """Called by dispatch mechanism in response to an object being
+        created.  Notifies the remote avatar that this has happened.
+        """
         if sender != 'remote':
             id = uuid()
             self.addModel(model, id)
@@ -89,6 +121,17 @@ class NetClient(pb.Referenceable):
         print 'adding model to known', id
         self.remote_models[id] = model 
         self.remote_uuids[model] = id
+
+    def removeModel(self, model=None, uuid=None):
+        assert (model, uuid) != (None, None), \
+                "Either model or uuid must be given"
+        if uuid is None:
+            uuid = self.remote_uuids[model]
+        print "removing model with id", uuid
+        if model is None:
+            model = self.remote_models[uuid]
+        del self.remote_uuids[model]
+        del self.remote_models[uuid]
 
     def _cb_connected(self, avatar):
         assert hasattr(avatar, 'callRemote'), 'Not connected: %s' % (avatar,)
@@ -129,6 +172,10 @@ class Gameboy(pb.Avatar):
         self.realm = realm
 
     def perspective_getInitialIcon(self):
+        """Called by the client to request the initial game state at the
+        point when the client connects.
+        Notifies the dispatch mechanism.
+        """
         for id, model in self.realm.models.items():
             pass # FIXME - i know this only picks up the last one
         return model.location, id
@@ -137,6 +184,9 @@ class Gameboy(pb.Avatar):
                                     sender,
                                     object_id,
                                     ):
+        """Called by the client to notify that a new object has appeared.
+        Notifies the dispatch mechanism.
+        """
         icon = Icon()
         print 'received and adding model', object_id
         self.realm.addModel(icon, object_id)
@@ -144,12 +194,29 @@ class Gameboy(pb.Avatar):
                         sender=self.username,
                         model=icon)
 
+    def perspective_receiveDropModel(self, 
+                                     sender, 
+                                     object_id,):
+        """Called by the client to notify that an object needs to go away.
+        Notifies the dispatch mechanism.
+        """
+        print 'got proclamation of model removal', object_id
+        icon = self.realm.models[object_id]
+        dispatcher.send(signal=Drop,
+                        sender=self.username,
+                        model=icon)
+        self.realm.removeModel(model=icon)
+
     def perspective_receivePropertyChange(self, 
                                           object_id, 
                                           sender, 
                                           property,
                                           old, 
                                           value):
+        """Called by the client to notify that an object property 
+        has changed.
+        Notifies the dispatch mechanism.
+        """
         model = self.realm.models[object_id]
         dispatcher.send(signal=model, 
                         sender=self.username,
@@ -160,6 +227,9 @@ class Gameboy(pb.Avatar):
 
 
     def receiveNewModel(self, sender, model):
+        """Called by the dispatch to notify that a new object exists.
+        Notifies remote clients of all other avatars but this one.
+        """
         if sender != self.username:
             id = self.realm.uuids[model]
             print 'propagating model', id
@@ -171,7 +241,16 @@ class Gameboy(pb.Avatar):
 
 
     def receiveDropModel(self, sender, model):
-        FIXME
+        """Called by the dispatch to notify that an object needs to go away.
+        Notifies remote clients of all other avatars but this one.
+        """
+        if sender != self.username:
+            id = self.realm.uuids[model]
+            print 'propagating drop of model', id
+            self.mind.callRemote('receiveDropModel',
+                    sender='avatar',
+                    object_id=id,
+                    )
 
     def receivePropertyChange(self,
                               signal,
@@ -179,7 +258,10 @@ class Gameboy(pb.Avatar):
                               property,
                               old,
                               value):
-        """Pass the change along to other clients"""
+        """Called by the dispatch to notify that an object property has
+        changed.
+        Notifies remote clients of all other avatars but this one.
+        """
         if sender != self.username:
             self.mind.callRemote('receivePropertyChange', 
                     object_id=self.realm.uuids[signal],
@@ -213,6 +295,7 @@ class GameRealm:
         self.addModel(icon, id)
 
     def addModel(self, model, uuid):
+        print "adding model with id", uuid
         self.models[uuid] = model
         self.uuids[model] = uuid
 
@@ -221,6 +304,7 @@ class GameRealm:
                 "Either model or uuid must be given"
         if uuid is None:
             uuid = self.uuids[model]
+        print "removing model with id", uuid
         if model is None:
             model = self.models[uuid]
         del self.uuids[model]
