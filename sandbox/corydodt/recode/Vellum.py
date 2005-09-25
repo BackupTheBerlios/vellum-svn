@@ -27,6 +27,7 @@ def finish(fail, ):
         reactor.stop()
 
 def run(argv = None):
+    log.startLogging(sys.stdout)
     if argv is None:
         argv = sys.argv
     if len(argv) > 1:
@@ -38,7 +39,7 @@ def run(argv = None):
 
     box = Box()
     
-    netclient = NetClient(username or 'jezebel', )
+    netclient = NetClient(d, username or 'jezebel', )
     bigctl = BigController(d, )
     bigview = BigView(bigctl)
 

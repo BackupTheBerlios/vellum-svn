@@ -26,6 +26,7 @@ fs = Filesystem(os.getcwd())
 
 fs.gladefile = fs("vellum.glade")
 fs.saved = fs("pos.txt")
+fs.passwords = fs("vpasswd")
 
 fs.crom = fs("crom.png")
 

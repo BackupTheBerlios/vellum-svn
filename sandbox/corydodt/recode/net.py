@@ -24,12 +24,17 @@ from uuid import uuid
 
 
 class NetClient(pb.Referenceable):
-    def __init__(self, username, ):
+    def __init__(self, deferred, username, ):
+        self.deferred = deferred
         self.pbfactory = pb.PBClientFactory()
-        self.remote_control = None
         self.username = username
         self.remote_models = {}
         self.remote_uuids = {}
+
+    def remote_serverDisconnect(self, message):
+        log.msg("DISCONNECTED: %s" % (message,))
+        self.pbfactory.disconnect()
+        self.deferred.callback(None)
 
     def remote_receivePropertyChange(self, 
                                      object_id, 
@@ -291,6 +296,8 @@ class GameRealm:
         self.models = {}
         self.uuids = {}
 
+        self.avatars = {}
+
         id = uuid()
         self.addModel(icon, id)
 
@@ -309,15 +316,28 @@ class GameRealm:
             model = self.models[uuid]
         del self.uuids[model]
         del self.models[uuid]
+
         
 
     def requestAvatar(self, username, mind, *interfaces):
         if pb.IPerspective not in interfaces:
             raise NotImplementedError
+        if username in self.avatars:
+            replaced = self.avatars[username]
+            d = replaced.mind.callRemote('serverDisconnect', 
+                                         'replaced by new login')
+            d.addErrback(lambda f: None)
+            del self.avatars[username]
+            del replaced
+            log.msg('Avatar %s replaced by new login' % (username,))
+
+
         avatar = Gameboy(username, mind, self)
+        self.avatars[username] = avatar
         self.box.registerObserver(avatar)
         def dc():
             log.msg('Bye-bye, %s' % (avatar.username,))
+            del self.avatars[avatar.username]
             self.box.unregisterObserver(avatar)
         return (pb.IPerspective, avatar, dc,)
 
