@@ -143,7 +143,7 @@ class NetClient(pb.Referenceable):
     def connectPB(self, server, port):
         reactor.connectTCP(server, port, self.pbfactory)
 
-        creds = credentials.UsernamePassword(self.username, 'X')
+        creds = credentials.UsernamePassword(self.username, 'password')
 
         d = self.pbfactory.login(creds, self)
 
@@ -323,10 +323,10 @@ class GameRealm:
 
 
 def createPortal():
-    c = checkers.InMemoryUsernamePasswordDatabaseDontUse(jezebel='X',
-                                                         gm='X',
-                                                         )
+    c = checkers.FilePasswordDB(fs.passwords, 
+                                caseSensitive=False, 
+                                )
     gameportal = portal.Portal(GameRealm())
-    gameportal.registerChecker(c)
+    gameportal.registerChecker(c, )
     return gameportal
 
