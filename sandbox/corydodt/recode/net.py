@@ -17,7 +17,7 @@ from dispatch import dispatcher
 
 # local imports
 from fs import fs
-from model import Icon, Box, New, Drop
+from model import Icon, Box, New, Drop, BiDict
 from uuid import uuid
 
 
@@ -28,8 +28,7 @@ class NetClient(pb.Referenceable):
         self.deferred = deferred
         self.pbfactory = pb.PBClientFactory()
         self.username = username
-        self.remote_models = {}
-        self.remote_uuids = {}
+        self.remote_models = BiDict()
 
     def remote_serverDisconnect(self, message):
         log.msg("DISCONNECTED: %s" % (message,))
@@ -63,7 +62,7 @@ class NetClient(pb.Referenceable):
         """
         print 'received propagated model', object_id
         model = Icon()
-        self.addModel(model, object_id)
+        self.remote_models[model] = object_id
         dispatcher.send(signal=New,
                         sender='remote',
                         model=model)
@@ -78,7 +77,7 @@ class NetClient(pb.Referenceable):
         """
         print 'received propagated drop of model', object_id
         model = self.remote_models[object_id]
-        self.removeModel(uuid=object_id)
+        del self.remote_models[object_id]
         dispatcher.send(signal=Drop,
                         sender='remote',
                         model=model)
@@ -89,7 +88,7 @@ class NetClient(pb.Referenceable):
         """
         model = signal
         if sender != 'remote':
-            id = self.remote_uuids[model]
+            id = self.remote_models[model]
             self.avatar.callRemote('receivePropertyChange', 
                                    object_id=id,
                                    sender=sender,
@@ -103,11 +102,13 @@ class NetClient(pb.Referenceable):
         dropped.  Notifies the remote avatar that this has happened.
         """
         if sender != 'remote':
-            id = self.remote_uuids[model]
+            id = self.remote_models[model]
             print 'proclaiming removal of', id
             self.avatar.callRemote('receiveDropModel',
                                    sender=sender,
                                    object_id=id)
+            print 'un-remembering model', id
+            del self.remote_models[id]
 
     def receiveNewModel(self, sender, model):
         """Called by dispatch mechanism in response to an object being
@@ -115,28 +116,12 @@ class NetClient(pb.Referenceable):
         """
         if sender != 'remote':
             id = uuid()
-            self.addModel(model, id)
+            print 'adding model to known', id
+            self.remote_models[model] = id
             print 'sending model', id
             self.avatar.callRemote('receiveNewModel',
                                    sender=sender,
                                    object_id=id)
-                                   
-
-    def addModel(self, model, id):
-        print 'adding model to known', id
-        self.remote_models[id] = model 
-        self.remote_uuids[model] = id
-
-    def removeModel(self, model=None, uuid=None):
-        assert (model, uuid) != (None, None), \
-                "Either model or uuid must be given"
-        if uuid is None:
-            uuid = self.remote_uuids[model]
-        print "removing model with id", uuid
-        if model is None:
-            model = self.remote_models[uuid]
-        del self.remote_uuids[model]
-        del self.remote_models[uuid]
 
     def _cb_connected(self, avatar):
         assert hasattr(avatar, 'callRemote'), 'Not connected: %s' % (avatar,)
@@ -160,7 +145,7 @@ class NetClient(pb.Referenceable):
 
     def gotIcon(self, (data, id)):
         icon = Icon()
-        self.addModel(icon, id)
+        self.remote_models[icon] = id
         dispatcher.send(signal=New, sender='remote', model=icon)
         dispatcher.send(signal=icon, 
                         sender='remote', 
@@ -170,18 +155,22 @@ class NetClient(pb.Referenceable):
 
 
 class Gameboy(pb.Avatar):
-    def __init__(self, username, mind, realm):
+    def __init__(self, username, mind, models):
+        """username - the key for this avatar, user's login id
+        mind - a reference to the client so I can push events to my client
+        models - the realm's mapping of model:uuid's, a BiDict
+        """
         self.mind = mind
         self.username = username
         # FIXME - passing in the realm here is probably very unsafe
-        self.realm = realm
+        self.models = models
 
     def perspective_getInitialIcon(self):
         """Called by the client to request the initial game state at the
         point when the client connects.
         Notifies the dispatch mechanism.
         """
-        for id, model in self.realm.models.items():
+        for id, model in self.models.items(keytype=type('')):
             pass # FIXME - i know this only picks up the last one
         return model.location, id
 
@@ -194,7 +183,7 @@ class Gameboy(pb.Avatar):
         """
         icon = Icon()
         print 'received and adding model', object_id
-        self.realm.addModel(icon, object_id)
+        self.models[icon] = object_id
         dispatcher.send(signal=New,
                         sender=self.username,
                         model=icon)
@@ -206,11 +195,11 @@ class Gameboy(pb.Avatar):
         Notifies the dispatch mechanism.
         """
         print 'got proclamation of model removal', object_id
-        icon = self.realm.models[object_id]
+        icon = self.models[object_id]
         dispatcher.send(signal=Drop,
                         sender=self.username,
                         model=icon)
-        self.realm.removeModel(model=icon)
+        del self.models[icon]
 
     def perspective_receivePropertyChange(self, 
                                           object_id, 
@@ -222,7 +211,7 @@ class Gameboy(pb.Avatar):
         has changed.
         Notifies the dispatch mechanism.
         """
-        model = self.realm.models[object_id]
+        model = self.models[object_id]
         dispatcher.send(signal=model, 
                         sender=self.username,
                         property=property,
@@ -236,7 +225,7 @@ class Gameboy(pb.Avatar):
         Notifies remote clients of all other avatars but this one.
         """
         if sender != self.username:
-            id = self.realm.uuids[model]
+            id = self.models[model]
             print 'propagating model', id
             self.mind.callRemote('receiveNewModel',
                     sender='avatar',
@@ -250,7 +239,7 @@ class Gameboy(pb.Avatar):
         Notifies remote clients of all other avatars but this one.
         """
         if sender != self.username:
-            id = self.realm.uuids[model]
+            id = self.models[model]
             print 'propagating drop of model', id
             self.mind.callRemote('receiveDropModel',
                     sender='avatar',
@@ -269,7 +258,7 @@ class Gameboy(pb.Avatar):
         """
         if sender != self.username:
             self.mind.callRemote('receivePropertyChange', 
-                    object_id=self.realm.uuids[signal],
+                    object_id=self.models[signal],
                     sender='avatar',
                     property=property,
                     old=old,
@@ -286,6 +275,11 @@ class GameRealm:
         icon = Icon()
         dispatcher.send(signal=New, sender='realm', model=icon)
 
+        self.models = BiDict()
+        id = uuid()
+        print "adding model with id", uuid
+        self.models[icon] = id
+
         data = eval(file(fs.saved, 'rU').read())
         dispatcher.send(signal=icon, 
                         sender='realm', 
@@ -293,29 +287,7 @@ class GameRealm:
                         old=None, 
                         value=data)
 
-        self.models = {}
-        self.uuids = {}
-
         self.avatars = {}
-
-        id = uuid()
-        self.addModel(icon, id)
-
-    def addModel(self, model, uuid):
-        print "adding model with id", uuid
-        self.models[uuid] = model
-        self.uuids[model] = uuid
-
-    def removeModel(self, model=None, uuid=None):
-        assert (model, uuid) != (None, None), \
-                "Either model or uuid must be given"
-        if uuid is None:
-            uuid = self.uuids[model]
-        print "removing model with id", uuid
-        if model is None:
-            model = self.models[uuid]
-        del self.uuids[model]
-        del self.models[uuid]
 
         
 
@@ -332,7 +304,7 @@ class GameRealm:
             log.msg('Avatar %s replaced by new login' % (username,))
 
 
-        avatar = Gameboy(username, mind, self)
+        avatar = Gameboy(username, mind, self.models)
         self.avatars[username] = avatar
         self.box.registerObserver(avatar)
         def dc():

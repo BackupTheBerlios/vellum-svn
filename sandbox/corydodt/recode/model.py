@@ -24,6 +24,41 @@ class Modelable(Signal):
         dispatcher.connect(self.receiver, self)
 
 
+class BiDict(dict):
+    """Simple bi-di dict.  Not exactly optimized,
+    but probably fast enough.
+    """
+    def __setitem__(self, key, value):
+        dict.__setitem__(self, key, value)
+        dict.__setitem__(self, value, key)
+
+    def __delitem__(self, key):
+        value = self[key]
+        dict.__delitem__(self, key)
+        dict.__delitem__(self, value)
+
+    def values(self):
+        assert 0, "Unsupported operation"
+    iterkeys = itervalues = keys = values
+
+    def items(self, keytype):
+        """Return items(), filtering to get only
+        tuples where the key is of type keytype.
+        """
+        return tuple([items for items in dict.items(self) 
+                        if type(items[0]) is keytype])
+
+
+    def iteritems(self, keytype):
+        """Return iteritems(), filtering to get only
+        tuples where the key is of type keytype.
+        """
+        for k,v in dict.iteritems(self):
+            if type(k) is keytype:
+                yield k,v
+
+
+
 class Icon(Modelable):
     def __init__(self):
         self.location = (40, 50)

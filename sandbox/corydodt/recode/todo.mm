@@ -56,13 +56,28 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1855730006" MODIFIED="1127425554041" TEXT="models and uuids maintained indepedently on both sides">
+<node BACKGROUND_COLOR="#99f433" COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1855730006" MODIFIED="1127841897399" TEXT="models and uuids maintained independently on both sides">
+<edge COLOR="#808080" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_688785933" MODIFIED="1127425554041" TEXT="should be one object to connect them, managed with a single call">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1718961835" MODIFIED="1127425554041" TEXT="Models object">
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1718961835" MODIFIED="1127841833383" TEXT="BiDict object implemented">
 <font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#99f433" COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1535484102" MODIFIED="1127859555652" TEXT="avatar initializer gets instance of realm">
+<edge COLOR="#808080" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_116261161" MODIFIED="1127425554057" TEXT="only uses models, uuids, addModel">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_122606526" MODIFIED="1127859537733" TEXT="see BiDict object idea above">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_88553917" MODIFIED="1127425554072" TEXT="getInitialIcon -&gt; getGameState">
@@ -104,15 +119,6 @@
 <node COLOR="#990000" CREATED="1127447009830" FOLDED="true" ID="Freemind_Link_704733548" MODIFIED="1127447028081" TEXT="easy to define a receiver with the wrong &#xa;args (it may even seem to work)">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1127447029815" ID="Freemind_Link_599156117" MODIFIED="1127447048582" TEXT="because dispatch analyzes the &#xa;receiver and omits some args"/>
-</node>
-</node>
-<node COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1535484102" MODIFIED="1127425554057" TEXT="avatar initializer gets instance of realm">
-<font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_116261161" MODIFIED="1127425554057" TEXT="only uses models, uuids, addModel">
-<font NAME="SansSerif" SIZE="14"/>
-</node>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_122606526" MODIFIED="1127425554057" TEXT="see Models object idea above">
-<font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
 </node>
