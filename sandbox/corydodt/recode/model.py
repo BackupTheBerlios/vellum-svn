@@ -24,6 +24,9 @@ class Modelable(Signal):
                          )
         dispatcher.connect(self.receiver, self)
 
+    def marshal(self):
+        return {'TYPE': self.__class__.__name__}
+
 
 class BiDict(dict):
     """Simple bi-di dict.  Not exactly optimized,
@@ -68,11 +71,9 @@ class Icon(Modelable):
         Modelable.__init__(self)
 
     def marshal(self):
-        return yaml.dump(
-                {'TYPE': self.__class__.__name__, 
-                 'location': self.location,
-                 }
-                         )
+        m = Modelable.marshal(self)
+        m.update({ 'location': self.location, })
+        return yaml.dump(m)
 
 class Loader:
     """Creator for instances of any Modelable from marshalled string"""
