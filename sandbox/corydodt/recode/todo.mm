@@ -25,12 +25,12 @@
 <node BACKGROUND_COLOR="#99f433" COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_994932207" MODIFIED="1127493606969" TEXT="add or remove icon" VSHIFT="19">
 <font NAME="SansSerif" SIZE="16"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1582524538" MODIFIED="1127425554041" TEXT="right-clicks">
+<node COLOR="#990000" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1582524538" MODIFIED="1127425554041" TEXT="right-clicks">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1127253716526" ID="_" MODIFIED="1127425554041" TEXT="add">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#111111" CREATED="1127253718167" ID="Freemind_Link_1833411601" MODIFIED="1127436463526" TEXT="delete">
+<node COLOR="#111111" CREATED="1127253718167" FOLDED="true" ID="Freemind_Link_1833411601" MODIFIED="1127436463526" TEXT="delete">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#111111" CREATED="1127425763130" ID="Freemind_Link_1284650284" MODIFIED="1127436463526" TEXT="stop canvas from grabbing mouse events">
 <icon BUILTIN="button_ok"/>
@@ -95,22 +95,29 @@
 </node>
 <node COLOR="#00b439" CREATED="1127245613704" ID="Freemind_Link_522354774" MODIFIED="1127425554072" TEXT="object hierarchy for complex schema">
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1416087954" MODIFIED="1127425554072" TEXT="e.g. Background, Icon, Note">
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1416087954" MODIFIED="1127950445834" TEXT="e.g. Background, Icon, Note">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_806787178" MODIFIED="1127950445974" TEXT="should be flat">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#990000" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_362401918" MODIFIED="1127950499521" TEXT="grouping object to facilitate flatness?">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#111111" CREATED="1127950450037" ID="Freemind_Link_768350362" MODIFIED="1127950493489" TEXT="Map"/>
+</node>
+<node COLOR="#990000" CREATED="1127950548052" ID="Freemind_Link_1061997285" MODIFIED="1127950569176" TEXT="test passing hierarchy over wire">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_806787178" MODIFIED="1127425554072" TEXT="should be flat">
-<font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_362401918" MODIFIED="1127425554072" TEXT="grouping object to facilitate flatness?">
-<font NAME="SansSerif" SIZE="14"/>
-</node>
-</node>
-<node COLOR="#00b439" CREATED="1127447067286" FOLDED="true" ID="Freemind_Link_1612497864" MODIFIED="1127447088194" TEXT="duplicate functionality in avatar and client">
+<node COLOR="#00b439" CREATED="1127447067286" ID="Freemind_Link_1612497864" MODIFIED="1127447088194" TEXT="duplicate functionality in avatar and client">
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1127447090366" ID="Freemind_Link_1604215725" MODIFIED="1127447100960" TEXT="2x remote_receiveFooSignal">
+<node COLOR="#990000" CREATED="1127447090366" ID="Freemind_Link_1604215725" MODIFIED="1127916466891" TEXT="2x3x remote_receiveFooSignal">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#990000" CREATED="1127447101382" ID="Freemind_Link_1543832867" MODIFIED="1127447108039" TEXT="2x receiveFooSignal (from dispatch)">
+<node COLOR="#990000" CREATED="1127447101382" ID="Freemind_Link_1543832867" MODIFIED="1127916472495" TEXT="2x3x receiveFooSignal (from dispatch)">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
@@ -126,7 +133,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#0033ff" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1125614771" MODIFIED="1127865680528" POSITION="right" TEXT="new netclient / avatar marshalling">
+<node COLOR="#0033ff" CREATED="1127245613704" ID="Freemind_Link_1125614771" MODIFIED="1127865680528" POSITION="right" TEXT="new netclient / avatar marshalling">
 <font NAME="SansSerif" SIZE="18"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#00b439" CREATED="1127245613704" ID="Freemind_Link_328539926" MODIFIED="1127865667329" TEXT="class Gameboy">
