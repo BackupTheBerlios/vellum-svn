@@ -80,12 +80,28 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_88553917" MODIFIED="1127425554072" TEXT="getInitialIcon -&gt; getGameState">
+<node BACKGROUND_COLOR="#99f433" COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_88553917" MODIFIED="1127865699812" TEXT="getInitialIcon -&gt; getGameState">
+<edge COLOR="#808080" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1249335940" MODIFIED="1127425554072" TEXT="return flattened hierarchy">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1249335940" MODIFIED="1127865662103" TEXT="return flattened hierarchy">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1440282367" MODIFIED="1127865684897" TEXT="Modelables should implement marshal">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#00b439" CREATED="1127245613704" ID="Freemind_Link_522354774" MODIFIED="1127425554072" TEXT="object hierarchy for complex schema">
+<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1416087954" MODIFIED="1127425554072" TEXT="e.g. Background, Icon, Note">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1440282367" MODIFIED="1127425554072" TEXT="Modelables should implement marshal">
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_806787178" MODIFIED="1127425554072" TEXT="should be flat">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_362401918" MODIFIED="1127425554072" TEXT="grouping object to facilitate flatness?">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
@@ -95,18 +111,6 @@
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 <node COLOR="#990000" CREATED="1127447101382" ID="Freemind_Link_1543832867" MODIFIED="1127447108039" TEXT="2x receiveFooSignal (from dispatch)">
-<font NAME="SansSerif" SIZE="14"/>
-</node>
-</node>
-<node COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_522354774" MODIFIED="1127425554072" TEXT="object hierarchy for complex schema">
-<font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1416087954" MODIFIED="1127425554072" TEXT="e.g. Background, Icon, Note">
-<font NAME="SansSerif" SIZE="14"/>
-</node>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_806787178" MODIFIED="1127425554072" TEXT="should be flat">
-<font NAME="SansSerif" SIZE="14"/>
-</node>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_362401918" MODIFIED="1127425554072" TEXT="grouping object to facilitate flatness?">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
@@ -122,21 +126,25 @@
 </node>
 </node>
 </node>
-<node COLOR="#0033ff" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1125614771" MODIFIED="1127426097837" POSITION="right" TEXT="new netclient / avatar marshalling">
+<node COLOR="#0033ff" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1125614771" MODIFIED="1127865680528" POSITION="right" TEXT="new netclient / avatar marshalling">
 <font NAME="SansSerif" SIZE="18"/>
-<node COLOR="#00b439" CREATED="1127245613704" ID="Freemind_Link_328539926" MODIFIED="1127426149042" TEXT="class Gameboy">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#00b439" CREATED="1127245613704" ID="Freemind_Link_328539926" MODIFIED="1127865667329" TEXT="class Gameboy">
 <font NAME="SansSerif" SIZE="16"/>
+<icon BUILTIN="button_ok"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>class GameBoy:&#xa;  def perspective_getGameState()&#xa;    ret = []&#xa;    m = self.realm.models&#xa;    for id, model in m.items():&#xa;      ret.append((id, model.marshal())&#xa;    return ret</text>
 </hook>
 </node>
-<node COLOR="#00b439" CREATED="1127426087586" ID="Freemind_Link_1035492751" MODIFIED="1127426099509" TEXT="class NetClient">
+<node COLOR="#00b439" CREATED="1127426087586" FOLDED="true" ID="Freemind_Link_1035492751" MODIFIED="1127865673539" TEXT="class NetClient">
 <font NAME="SansSerif" SIZE="16"/>
+<icon BUILTIN="button_ok"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>class NetClient:&#xa;  def gotGame(self, data):&#xa;    for id, string in data:&#xa;      dct = yaml.fromString(string)&#xa;      cls = eval(dct[&apos;class&apos;])&#xa;      self.addModel(cls.fromDict(dct), id)&#xa;      dispatcher.send(signal=New, &quot;initial&quot;, model=model)&#xa;</text>
 </hook>
-<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1789178076" MODIFIED="1127426166246" TEXT="netclient.callRemote(&quot;getGameState&quot;).addCallback(self.gotGame)">
+<node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1789178076" MODIFIED="1127865675239" TEXT="netclient.callRemote(&quot;getGameState&quot;).addCallback(self.gotGame)">
 <font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

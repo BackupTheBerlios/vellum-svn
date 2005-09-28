@@ -16,7 +16,7 @@ import sys
 from net import NetClient
 from view import BigController, BigView
 from fs import fs
-from model import Box
+from model import BoxScore
 
 def finish(fail, ):
     """This doubles as callback and errback"""
@@ -37,7 +37,7 @@ def run(argv = None):
 
     d = defer.Deferred()
 
-    box = Box()
+    box = BoxScore()
     
     netclient = NetClient(d, username or 'jezebel', )
     bigctl = BigController(d, )

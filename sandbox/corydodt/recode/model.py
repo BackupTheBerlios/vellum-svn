@@ -1,4 +1,5 @@
 """A box for holding models."""
+import yaml
 
 from dispatch import dispatcher
 
@@ -66,7 +67,47 @@ class Icon(Modelable):
         self.grabbed = self.selected = 0
         Modelable.__init__(self)
 
-class Box:
+    def marshal(self):
+        return yaml.dump(
+                {'TYPE': self.__class__.__name__, 
+                 'location': self.location,
+                 }
+                         )
+
+class Loader:
+    """Creator for instances of any Modelable from marshalled string"""
+    def __init__(self):
+        import model as _model
+        self.model = _model
+
+    def unmarshal(self, data):
+        """unmarshal(yaml_string) => instance of Modelable"""
+        print data
+        data_dict = yaml.load(data).next()
+        return self.fromDict(data_dict)
+
+    def fromDict(self, dict_data):
+        classname = dict_data.pop('TYPE')
+        klass = getattr(self.model, classname)
+        ret = klass()
+        for k, v in dict_data.items():
+            setattr(ret, k, v)
+        return ret
+
+
+loader = Loader()
+
+
+class BoxScore:
+    """Event tracker.  One must exist on either side of the connection.
+    The BoxScore keeps track of the actions of the players (observers) and
+    the balls (models).
+
+    In particular, the BoxScore will process New and Drop signals, keeping the
+    local observers up to date on what models exist, and changes to the list
+    of observers must be done through here by calling
+    register/unregisterObserver.
+    """
     def __init__(self):
         dispatcher.connect(self.receiveNew, signal=New) 
         dispatcher.connect(self.receiveDrop, signal=Drop)

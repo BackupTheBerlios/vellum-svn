@@ -13,11 +13,12 @@ from twisted.python import log
 from twisted.cred import credentials, checkers, portal
 
 from zope import interface
+import yaml
 from dispatch import dispatcher
 
 # local imports
 from fs import fs
-from model import Icon, Box, New, Drop, BiDict
+from model import Icon, BoxScore, New, Drop, BiDict, loader
 from uuid import uuid
 
 
@@ -138,20 +139,21 @@ class NetClient(pb.Referenceable):
         d = self.pbfactory.login(creds, self)
 
         d.addCallback(self._cb_connected)
-        d. addCallback(lambda _: self.avatar.callRemote('getInitialIcon'))
-        d.  addCallback(self.gotIcon)
+        d. addCallback(lambda _: self.avatar.callRemote('getGameState'))
+        d.  addCallback(self.gotGame)
         d.addErrback(lambda reason: log.err(reason))
         return d
 
-    def gotIcon(self, (data, id)):
-        icon = Icon()
-        self.remote_models[icon] = id
-        dispatcher.send(signal=New, sender='remote', model=icon)
-        dispatcher.send(signal=icon, 
-                        sender='remote', 
-                        property='location', 
-                        old=None, 
-                        value=data)
+    def gotGame(self, data):
+        for model_data, id in data:
+            model = loader.unmarshal(model_data)
+            self.remote_models[model] = id
+            dispatcher.send(signal=New, sender='remote', model=model)
+            dispatcher.send(signal=model, 
+                            sender='remote', 
+                            property='location', 
+                            old=None, 
+                            value=model.location)
 
 
 class Gameboy(pb.Avatar):
@@ -165,14 +167,15 @@ class Gameboy(pb.Avatar):
         # FIXME - passing in the realm here is probably very unsafe
         self.models = models
 
-    def perspective_getInitialIcon(self):
+    def perspective_getGameState(self):
         """Called by the client to request the initial game state at the
         point when the client connects.
         Notifies the dispatch mechanism.
         """
+        ret = []
         for id, model in self.models.items(keytype=type('')):
-            pass # FIXME - i know this only picks up the last one
-        return model.location, id
+            ret.append((model.marshal(), id))
+        return ret
 
     def perspective_receiveNewModel(self,
                                     sender,
@@ -269,25 +272,35 @@ class Gameboy(pb.Avatar):
 
 class GameRealm:
     interface.implements(portal.IRealm)
+
+    def saveGame(self):
+        # FIXME - to file
+        for id, model in self.models.items(keytype=type('')):
+            dicty_model = yaml.load(model.marshal()).next()
+            print yaml.dump({id: dicty_model})
+
+
+    def loadSavedGame(self):
+        loaded = yaml.loadFile(fs.saved).next()
+        for id, data in loaded.items():
+            model = loader.fromDict(data)
+            self.models[model] = id
+            dispatcher.send(signal=New, sender='realm', model=model)
+            for prop, value in data.items():
+                if prop == 'TYPE':
+                    continue
+                dispatcher.send(signal=model, 
+                                sender='realm', 
+                                property=prop,
+                                old=None, 
+                                value=value)
+
     def __init__(self):
-        self.box = Box()
-
-        icon = Icon()
-        dispatcher.send(signal=New, sender='realm', model=icon)
-
-        self.models = BiDict()
-        id = uuid()
-        print "adding model with id", uuid
-        self.models[icon] = id
-
-        data = eval(file(fs.saved, 'rU').read())
-        dispatcher.send(signal=icon, 
-                        sender='realm', 
-                        property='location',
-                        old=None, 
-                        value=data)
-
         self.avatars = {}
+        self.box = BoxScore()
+        self.models = BiDict()
+        self.loadSavedGame()
+        self.saveGame() # FIXME - for testing porpoises
 
         
 
