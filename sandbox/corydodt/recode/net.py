@@ -36,6 +36,34 @@ class NetClient(pb.Referenceable):
         self.pbfactory.disconnect()
         self.deferred.callback(None)
 
+    def remote_receiveNewModel(self,
+                               object_id,
+                               sender,):
+        """Called by the avatar to notify that a new object 
+        has appeared on the map.
+        Notifies the dispatch mechanism.
+        """
+        print 'received propagated model', object_id
+        model = Icon()
+        self.remote_models[model] = object_id
+        dispatcher.send(signal=New,
+                        sender='remote',
+                        model=model)
+
+    def remote_receiveDropModel(self,
+                               object_id,
+                               sender,):
+        """Called by the avatar to notify that an object 
+        on the map needs to go away.
+        Notifies the dispatch mechanism.
+        """
+        print 'received propagated drop of model', object_id
+        model = self.remote_models[object_id]
+        del self.remote_models[object_id]
+        dispatcher.send(signal=Drop,
+                        sender='remote',
+                        model=model)
+
     def remote_receivePropertyChange(self, 
                                      object_id, 
                                      sender, 
@@ -53,50 +81,19 @@ class NetClient(pb.Referenceable):
                         old=old, 
                         value=value)
 
-    def remote_receiveNewModel(self,
-                               object_id,
-                               sender,
-                               ):
-        """Called by the avatar to notify that a new object 
-        has appeared on the map.
-        Notifies the dispatch mechanism.
-        """
-        print 'received propagated model', object_id
-        model = Icon()
-        self.remote_models[model] = object_id
-        dispatcher.send(signal=New,
-                        sender='remote',
-                        model=model)
 
-    def remote_receiveDropModel(self,
-                               object_id,
-                               sender,
-                               ):
-        """Called by the avatar to notify that an object 
-        on the map needs to go away.
-        Notifies the dispatch mechanism.
+    def receiveNewModel(self, sender, model):
+        """Called by dispatch mechanism in response to an object being
+        created.  Notifies the remote avatar that this has happened.
         """
-        print 'received propagated drop of model', object_id
-        model = self.remote_models[object_id]
-        del self.remote_models[object_id]
-        dispatcher.send(signal=Drop,
-                        sender='remote',
-                        model=model)
-
-    def receivePropertyChange(self, signal, sender, property, old, value):
-        """Called by dispatch mechanism in response to an object property
-        changing.  Notifies the remote avatar that this has happened.
-        """
-        model = signal
         if sender != 'remote':
-            id = self.remote_models[model]
-            self.avatar.callRemote('receivePropertyChange', 
-                                   object_id=id,
+            id = uuid()
+            print 'adding model to known', id
+            self.remote_models[model] = id
+            print 'sending model', id
+            self.avatar.callRemote('receiveNewModel',
                                    sender=sender,
-                                   property=property, 
-                                   old=old, 
-                                   value=value)
-
+                                   object_id=id)
 
     def receiveDropModel(self, sender, model):
         """Called by dispatch mechanism in response to an object being
@@ -111,18 +108,24 @@ class NetClient(pb.Referenceable):
             print 'un-remembering model', id
             del self.remote_models[id]
 
-    def receiveNewModel(self, sender, model):
-        """Called by dispatch mechanism in response to an object being
-        created.  Notifies the remote avatar that this has happened.
+    def receivePropertyChange(self, 
+                              signal, 
+                              sender, 
+                              property, 
+                              old, 
+                              value):
+        """Called by dispatch mechanism in response to an object property
+        changing.  Notifies the remote avatar that this has happened.
         """
+        model = signal
         if sender != 'remote':
-            id = uuid()
-            print 'adding model to known', id
-            self.remote_models[model] = id
-            print 'sending model', id
-            self.avatar.callRemote('receiveNewModel',
+            id = self.remote_models[model]
+            self.avatar.callRemote('receivePropertyChange', 
+                                   object_id=id,
                                    sender=sender,
-                                   object_id=id)
+                                   property=property, 
+                                   old=old, 
+                                   value=value)
 
     def _cb_connected(self, avatar):
         assert hasattr(avatar, 'callRemote'), 'Not connected: %s' % (avatar,)
@@ -179,8 +182,7 @@ class Gameboy(pb.Avatar):
 
     def perspective_receiveNewModel(self,
                                     sender,
-                                    object_id,
-                                    ):
+                                    object_id,):
         """Called by the client to notify that a new object has appeared.
         Notifies the dispatch mechanism.
         """
