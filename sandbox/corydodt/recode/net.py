@@ -37,8 +37,8 @@ class NetClient(pb.Referenceable):
         self.deferred.callback(None)
 
     def remote_receiveNewModel(self,
-                               object_id,
-                               sender,):
+                               sender,
+                               object_id,):
         """Called by the avatar to notify that a new object 
         has appeared on the map.
         Notifies the dispatch mechanism.
@@ -51,8 +51,8 @@ class NetClient(pb.Referenceable):
                         model=model)
 
     def remote_receiveDropModel(self,
-                               object_id,
-                               sender,):
+                               sender,
+                               object_id,):
         """Called by the avatar to notify that an object 
         on the map needs to go away.
         Notifies the dispatch mechanism.
@@ -65,13 +65,13 @@ class NetClient(pb.Referenceable):
         del self.remote_models[object_id]
 
     def remote_receivePropertyChange(self, 
-                                     object_id, 
                                      sender, 
+                                     object_id, 
                                      property, 
                                      old, 
                                      value):
-        """Called by the avatar to notify that an object has moved, changed
-        colors, etc.
+        """Called by the avatar to notify that an object has moved, 
+        changed colors, etc.
         Notifies the dispatch mechanism.
         """
         model = self.remote_models[object_id]
@@ -183,7 +183,8 @@ class Gameboy(pb.Avatar):
     def perspective_receiveNewModel(self,
                                     sender,
                                     object_id,):
-        """Called by the client to notify that a new object has appeared.
+        """Called by the client to notify that a new object has 
+        appeared.
         Notifies the dispatch mechanism.
         """
         print 'received and adding model', object_id
@@ -208,8 +209,8 @@ class Gameboy(pb.Avatar):
         del self.models[object_id]
 
     def perspective_receivePropertyChange(self, 
-                                          object_id, 
                                           sender, 
+                                          object_id, 
                                           property,
                                           old, 
                                           value):
