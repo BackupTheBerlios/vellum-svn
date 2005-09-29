@@ -59,10 +59,10 @@ class NetClient(pb.Referenceable):
         """
         print 'received propagated drop of model', object_id
         model = self.remote_models[object_id]
-        del self.remote_models[object_id]
         dispatcher.send(signal=Drop,
                         sender='remote',
                         model=model)
+        del self.remote_models[object_id]
 
     def remote_receivePropertyChange(self, 
                                      object_id, 
@@ -186,25 +186,26 @@ class Gameboy(pb.Avatar):
         """Called by the client to notify that a new object has appeared.
         Notifies the dispatch mechanism.
         """
-        icon = Icon()
         print 'received and adding model', object_id
-        self.models[icon] = object_id
+        model = Icon()
+        self.models[model] = object_id
         dispatcher.send(signal=New,
                         sender=self.username,
-                        model=icon)
+                        model=model)
 
     def perspective_receiveDropModel(self, 
                                      sender, 
                                      object_id,):
-        """Called by the client to notify that an object needs to go away.
+        """Called by the client to notify that an object needs 
+        to go away.
         Notifies the dispatch mechanism.
         """
         print 'got proclamation of model removal', object_id
-        icon = self.models[object_id]
+        model = self.models[object_id]
         dispatcher.send(signal=Drop,
                         sender=self.username,
-                        model=icon)
-        del self.models[icon]
+                        model=model)
+        del self.models[object_id]
 
     def perspective_receivePropertyChange(self, 
                                           object_id, 
