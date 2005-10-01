@@ -24,3 +24,6 @@ def uuid( *args ):
     finally:
         lock.release()
 
+
+if __name__ == '__main__':
+    print uuid()
