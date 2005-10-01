@@ -153,12 +153,32 @@
 <node COLOR="#111111" CREATED="1128197508684" ID="Freemind_Link_351555280" MODIFIED="1128198821881" TEXT="on_foo_event are identical for Draggables">
 <icon BUILTIN="button_ok"/>
 </node>
+<node COLOR="#111111" CREATED="1128198875161" ID="Freemind_Link_1063386291" MODIFIED="1128204980439" TEXT="drop_Note,Icon are the same">
+<icon BUILTIN="button_ok"/>
+</node>
 <node COLOR="#111111" CREATED="1128197419872" ID="Freemind_Link_1622294215" MODIFIED="1128197442372" TEXT="new_Note,Icon both clean up widget first"/>
 <node COLOR="#111111" CREATED="1128197442778" ID="Freemind_Link_864057045" MODIFIED="1128197452872" TEXT="both assign an igroup to widget"/>
-<node COLOR="#111111" CREATED="1128198875161" ID="Freemind_Link_1063386291" MODIFIED="1128198880630" TEXT="drop_Note,Icon are the same"/>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1127245613704" ID="Freemind_Link_1076507153" MODIFIED="1127425554072" TEXT="signals should be reified?">
+<node COLOR="#00b439" CREATED="1128203876286" FOLDED="true" ID="Freemind_Link_41198604" MODIFIED="1128203970313" TEXT="connector items should observe endpoints">
+<font NAME="SansSerif" SIZE="16"/>
+<hook NAME="accessories/plugins/NodeNote.properties">
+<text>items which connect or apply to draggables should observe several properties.&#xa;* when draggable endpoints move, targetting arrow should update itself&#xa;* when either endpoint is Drop&apos;d, targetting arrow should disappear&#xa;</text>
+</hook>
+<node COLOR="#990000" CREATED="1128203907938" ID="Freemind_Link_1211805780" MODIFIED="1128203908390" TEXT="(e.g. targetting arrows) ">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1128204093093" ID="Freemind_Link_1162136077" MODIFIED="1128204098259" TEXT="keep a list of endpoints">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1128204099724" ID="Freemind_Link_50547549" MODIFIED="1128204146613" TEXT="receivePropertyChange/receiveDropModel">
+<font NAME="SansSerif" SIZE="14"/>
+<hook NAME="accessories/plugins/NodeNote.properties">
+<text>if model in self.endpoints:&#xa;  self.do_appropriate_thing()&#xa;</text>
+</hook>
+</node>
+</node>
+<node COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1076507153" MODIFIED="1127425554072" TEXT="signals should be reified?">
 <edge WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1822322171" MODIFIED="1127425554072" TEXT="easy to send a signal with wrong args">

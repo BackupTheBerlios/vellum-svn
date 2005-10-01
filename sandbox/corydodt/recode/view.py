@@ -46,6 +46,14 @@ class BigView:
 
         self.canvas = canvas
 
+def purgeCanvasItem(item):
+    """Destroy the item's children, then the item, recursively"""
+    if getattr(item, 'item_list', []) == []:
+        item.destroy()
+        return
+    for subitem in item.item_list:
+        purgeCanvasItem(subitem)
+
 class BigController:
     def __init__(self, deferred):
         self.deferred = deferred
@@ -55,8 +63,8 @@ class BigController:
         receiver(model)
 
     def receiveDropModel(self, sender, model): 
-        receiver = getattr(self, 'drop_%s' % (model.__class__.__name__))
-        receiver(model)
+        if getattr(model, 'widget', None) is not None:
+            purgeCanvasItem(model.widget)
 
     def receivePropertyChange(self, 
                               signal, 
@@ -75,23 +83,12 @@ class BigController:
         icon.widget.move(x-ox, y-oy)
     changed_Note_location = changed_Icon_location
 
-    def drop_Icon(self, icon):
-        if getattr(icon, 'widget', None) is not None:
-            icon.widget.destroy()
-            icon.widget = None
-    drop_Note = drop_Icon
-
     def changed_Note_text(self, note, sender, old, new):
         note.set_property('text', new)
 
 
 
     def new_Icon(self, icon):
-        # clean up icon if necessary
-        if getattr(icon, 'widget', None) is not None:
-            icon.widget.destroy()
-            icon.widget = None
-
         # make an image
         image = icon.image = gdk.pixbuf_new_from_file(fs.crom)
 
@@ -111,10 +108,6 @@ class BigController:
             icon.widget = igroup
 
     def new_Note(self, note):
-        if getattr(note, 'widget', None) is not None:
-            note.widget.destroy()
-            note.widget = None
-
         # place text on the canvas
         root = self.view.canvas.root()
         corner = note.location
