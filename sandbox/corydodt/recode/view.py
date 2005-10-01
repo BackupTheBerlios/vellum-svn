@@ -107,7 +107,7 @@ class BigController:
                        x=0, y=0)
 
 
-            igroup.connect('event', self.on_Icon_event, icon)
+            igroup.connect('event', self.on_draggable_event, icon)
             icon.widget = igroup
 
     def new_Note(self, note):
@@ -126,66 +126,50 @@ class BigController:
                     text=note.text,
                     x=0, y=0)
 
-            ngroup.connect('event', self.on_Note_event, note) # FIXME: *note*_event
+            ngroup.connect('event', self.on_draggable_event, note)
             note.widget = ngroup
 
 
-
-    def on_Note_event(self, widget, event, note):
+    # events on "draggable" objects
+    # events on "draggable" objects
+    def on_draggable_event(self, widget, event, model):
         type = event.type.value_name.lower()
-        handler = getattr(self, 'on_Note_%s' % (type,), None)
+        handler = getattr(self, 'on_draggable_%s' % (type,), None)
         if handler is not None:
-            return handler(widget, event, note)
-    def on_Icon_event(self, widget, event, icon):
-        type = event.type.value_name.lower()
-        handler = getattr(self, 'on_Icon_%s' % (type,), None)
-        if handler is not None:
-            return handler(widget, event, icon)
+            return handler(widget, event, model)
 
+    def on_draggable_gdk_button_press(self, widget, event, model):
+        # left click
+        if event.button == 1:
+            model.grabbed = True
+
+    def on_draggable_gdk_button_release(self, widget, event, model):
+        if event.button == 1:
+            model.selected = not model.selected
+            model.grabbed = False
+        elif event.button == 3:
+            dispatcher.send(signal=Drop,
+                            sender='gui',
+                            model=model)
+
+    def on_draggable_gdk_motion_notify(self, widget, event, model):
+        if model.grabbed:
+            ix1, iy1, ix2, iy2 = model.widget.get_bounds()
+            iw, ih = ix2 - ix1, iy2 - iy1
+            x, y = event.x, event.y
+            dispatcher.send(signal=model, 
+                            sender='gui', 
+                            property='location',
+                            old=model.location, 
+                            value=(x - iw, y - ih))
+
+    # events on the "background" object - not draggable
+    # events on the "background" object - not draggable
     def on_background_event(self, widget, event, background):
         type = event.type.value_name.lower()
         handler = getattr(self, 'on_background_%s' % (type,), None)
         if handler is not None:
             return handler(widget, event, background)
-
-    def on_Icon_gdk_button_press(self, widget, event, icon):
-        # left click
-        if event.button == 1:
-            icon.grabbed = True
-    on_Note_gdk_button_press = on_Icon_gdk_button_press
-
-    def on_Icon_gdk_button_release(self, widget, event, icon):
-        if event.button == 1:
-            icon.selected = not icon.selected
-            icon.grabbed = False
-        elif event.button == 3:
-            dispatcher.send(signal=Drop,
-                            sender='gui',
-                            model=icon)
-    on_Note_gdk_button_release = on_Icon_gdk_button_release
-
-
-    def on_Icon_gdk_motion_notify(self, widget, event, icon):
-        if icon.grabbed:
-            ix1, iy1, ix2, iy2 = icon.widget.get_bounds()
-            iw, ih = ix2 - ix1, iy2 - iy1
-            x, y = event.x, event.y
-            dispatcher.send(signal=icon, 
-                            sender='gui', 
-                            property='location',
-                            old=icon.location, 
-                            value=(x - iw, y - ih))
-    on_Note_gdk_motion_notify = on_Icon_gdk_motion_notify
-
-    def on_quit_activate(self, widget):
-        self.quit()
-
-    def on_Vellum_destroy(self, widget):
-        self.quit()
-
-    def quit(self):
-        log.msg("Goodbye.")
-        self.deferred.callback(None)
 
     def on_background_gdk_button_release(self, widget, ev, background):
         """on right click make a new icon"""
@@ -201,4 +185,16 @@ class BigController:
                             old=icon.location,
                             value=(ev.x, ev.y)
                             )
+
+    # generic program events
+    # generic program events
+    def on_quit_activate(self, widget):
+        self.quit()
+
+    def on_Vellum_destroy(self, widget):
+        self.quit()
+
+    def quit(self):
+        log.msg("Goodbye.")
+        self.deferred.callback(None)
 
