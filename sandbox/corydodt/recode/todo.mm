@@ -137,6 +137,23 @@
 </node>
 </node>
 </node>
+<node COLOR="#00b439" CREATED="1128197081309" ID="Freemind_Link_1437433781" MODIFIED="1128197127325" TEXT="less indirection/duplication in draggable event handlers">
+<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1128197128137" ID="Freemind_Link_1208360324" MODIFIED="1128197387309" TEXT="indirection">
+<font NAME="SansSerif" SIZE="14"/>
+<hook NAME="accessories/plugins/NodeNote.properties">
+<text>new_Note and new_Icon call igroup.connect(&apos;event&apos;, event_disambiguator)&#xa;then event_disambiguator calls the real event handler&#xa;should be able to attach igroups directly to real event handlers</text>
+</hook>
+</node>
+<node COLOR="#990000" CREATED="1128197138231" ID="Freemind_Link_378704758" MODIFIED="1128197415887" TEXT="duplication">
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1128197419872" ID="Freemind_Link_1622294215" MODIFIED="1128197442372" TEXT="new_Note,Icon both clean up widget first"/>
+<node COLOR="#111111" CREATED="1128197442778" ID="Freemind_Link_864057045" MODIFIED="1128197452872" TEXT="both assign an igroup to widget"/>
+<node COLOR="#111111" CREATED="1128197497262" ID="Freemind_Link_84256301" MODIFIED="1128197513106" TEXT="on_foo_button_press and _release are duplicated for Draggables"/>
+<node COLOR="#111111" CREATED="1128197508684" ID="Freemind_Link_351555280" MODIFIED="1128197537215" TEXT="on_foo_event are identical for Draggables"/>
+<node COLOR="#111111" CREATED="1128197561309" ID="Freemind_Link_108593292" MODIFIED="1128197569074" TEXT="on_foo_motion are pretty similar for Draggables"/>
+</node>
+</node>
 <node COLOR="#00b439" CREATED="1127245613704" ID="Freemind_Link_1076507153" MODIFIED="1127425554072" TEXT="signals should be reified?">
 <edge WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>

@@ -103,11 +103,11 @@ class BigController:
         if icon.widget is None:
             igroup = root.add("GnomeCanvasGroup", x=x, y=y)
             igroup.add("GnomeCanvasPixbuf",
-                     pixbuf=image,
-                     x=0, y=0)
+                       pixbuf=image,
+                       x=0, y=0)
 
 
-            igroup.connect('event', self.on_icon_event, icon)
+            igroup.connect('event', self.on_Icon_event, icon)
             icon.widget = igroup
 
     def new_Note(self, note):
@@ -121,24 +121,24 @@ class BigController:
         if corner is None: corner = (0,0)
         x, y = corner
         if note.widget is None:
-            igroup = root.add("GnomeCanvasGroup", x=x, y=y)
-            igroup.add("GnomeCanvasText",
+            ngroup = root.add("GnomeCanvasGroup", x=x, y=y)
+            ngroup.add("GnomeCanvasText",
                     text=note.text,
                     x=0, y=0)
 
-            igroup.connect('event', self.on_note_event, note) # FIXME: *note*_event
-            note.widget = igroup
+            ngroup.connect('event', self.on_Note_event, note) # FIXME: *note*_event
+            note.widget = ngroup
 
 
 
-    def on_note_event(self, widget, event, note):
+    def on_Note_event(self, widget, event, note):
         type = event.type.value_name.lower()
-        handler = getattr(self, 'on_note_%s' % (type,), None)
+        handler = getattr(self, 'on_Note_%s' % (type,), None)
         if handler is not None:
             return handler(widget, event, note)
-    def on_icon_event(self, widget, event, icon):
+    def on_Icon_event(self, widget, event, icon):
         type = event.type.value_name.lower()
-        handler = getattr(self, 'on_icon_%s' % (type,), None)
+        handler = getattr(self, 'on_Icon_%s' % (type,), None)
         if handler is not None:
             return handler(widget, event, icon)
 
@@ -148,13 +148,13 @@ class BigController:
         if handler is not None:
             return handler(widget, event, background)
 
-    def on_icon_gdk_button_press(self, widget, event, icon):
+    def on_Icon_gdk_button_press(self, widget, event, icon):
         # left click
         if event.button == 1:
             icon.grabbed = True
-    on_note_gdk_button_press = on_icon_gdk_button_press
+    on_Note_gdk_button_press = on_Icon_gdk_button_press
 
-    def on_icon_gdk_button_release(self, widget, event, icon):
+    def on_Icon_gdk_button_release(self, widget, event, icon):
         if event.button == 1:
             icon.selected = not icon.selected
             icon.grabbed = False
@@ -162,27 +162,20 @@ class BigController:
             dispatcher.send(signal=Drop,
                             sender='gui',
                             model=icon)
-    on_note_gdk_button_release = on_icon_gdk_button_release
+    on_Note_gdk_button_release = on_Icon_gdk_button_release
 
 
-
-    def on_note_gdk_motion_notify(self, widget, event, note): 
-        if note.grabbed:
-            x, y = event.x, event.y
-            dispatcher.send(signal=note,
-                            sender='gui',
-                            property='location',
-                            old=note.location,
-                            value=(x, y))
-    def on_icon_gdk_motion_notify(self, widget, event, icon):
+    def on_Icon_gdk_motion_notify(self, widget, event, icon):
         if icon.grabbed:
-            iw, ih = icon.image.get_width(), icon.image.get_height()
+            ix1, iy1, ix2, iy2 = icon.widget.get_bounds()
+            iw, ih = ix2 - ix1, iy2 - iy1
             x, y = event.x, event.y
             dispatcher.send(signal=icon, 
                             sender='gui', 
                             property='location',
                             old=icon.location, 
                             value=(x - iw, y - ih))
+    on_Note_gdk_motion_notify = on_Icon_gdk_motion_notify
 
     def on_quit_activate(self, widget):
         self.quit()
