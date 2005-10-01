@@ -166,13 +166,13 @@ class BigController:
 
 
 
-    def on_note_gdk_motion_notify(self, widget, event, icon):
-        if icon.grabbed:
+    def on_note_gdk_motion_notify(self, widget, event, note): 
+        if note.grabbed:
             x, y = event.x, event.y
-            dispatcher.send(signal = icon,
+            dispatcher.send(signal=note,
                             sender='gui',
                             property='location',
-                            old=icon.location,
+                            old=note.location,
                             value=(x, y))
     def on_icon_gdk_motion_notify(self, widget, event, icon):
         if icon.grabbed:

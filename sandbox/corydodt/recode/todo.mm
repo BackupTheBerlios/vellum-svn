@@ -137,7 +137,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1076507153" MODIFIED="1127425554072" TEXT="signals should be reified?">
+<node COLOR="#00b439" CREATED="1127245613704" ID="Freemind_Link_1076507153" MODIFIED="1127425554072" TEXT="signals should be reified?">
 <edge WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1127245613704" ID="Freemind_Link_1822322171" MODIFIED="1127425554072" TEXT="easy to send a signal with wrong args">
@@ -146,6 +146,9 @@
 <node COLOR="#990000" CREATED="1127447009830" FOLDED="true" ID="Freemind_Link_704733548" MODIFIED="1127447028081" TEXT="easy to define a receiver with the wrong &#xa;args (it may even seem to work)">
 <font NAME="SansSerif" SIZE="14"/>
 <node COLOR="#111111" CREATED="1127447029815" ID="Freemind_Link_599156117" MODIFIED="1127447048582" TEXT="because dispatch analyzes the &#xa;receiver and omits some args"/>
+</node>
+<node COLOR="#990000" CREATED="1128147944290" ID="Freemind_Link_1209346866" MODIFIED="1128185460897" TEXT="strategy?">
+<font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
 <node COLOR="#00b439" CREATED="1127447067286" FOLDED="true" ID="Freemind_Link_1612497864" MODIFIED="1128138796379" TEXT="duplicate functionality in avatar and client">
