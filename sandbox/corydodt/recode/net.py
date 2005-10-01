@@ -51,8 +51,8 @@ class NetClient(pb.Referenceable):
                         model=model)
 
     def remote_receiveDropModel(self,
-                               sender,
-                               object_id,):
+                                sender,
+                                object_id,):
         """Called by the avatar to notify that an object 
         on the map needs to go away.
         Notifies the dispatch mechanism.
@@ -88,7 +88,6 @@ class NetClient(pb.Referenceable):
         """
         if sender != 'remote':
             id = uuid()
-            print 'adding model to known', id
             self.remote_models[model] = id
             print 'sending model', id
             self.avatar.callRemote('receiveNewModel',
@@ -105,7 +104,6 @@ class NetClient(pb.Referenceable):
             self.avatar.callRemote('receiveDropModel',
                                    sender=sender,
                                    object_id=id)
-            print 'un-remembering model', id
             del self.remote_models[id]
 
     def receivePropertyChange(self, 
@@ -236,14 +234,11 @@ class Gameboy(pb.Avatar):
             print 'propagating model', id
             self.mind.callRemote('receiveNewModel',
                     sender='avatar',
-                    object_id=id,
-                    )
-                    
-
+                    object_id=id,) 
 
     def receiveDropModel(self, sender, model):
-        """Called by the dispatch to notify that an object needs to go away.
-        Notifies remote clients of all other avatars but this one.
+        """Called by the dispatch to notify that an object needs to 
+        go away. Notifies all other avatars' clients but this one.
         """
         if sender != self.username:
             id = self.models[model]
@@ -259,13 +254,15 @@ class Gameboy(pb.Avatar):
                               property,
                               old,
                               value):
-        """Called by the dispatch to notify that an object property has
-        changed.
+        """Called by the dispatch to notify that an object property 
+        has changed.
         Notifies remote clients of all other avatars but this one.
         """
+        model = signal
         if sender != self.username:
+            id = self.models[model]
             self.mind.callRemote('receivePropertyChange', 
-                    object_id=self.models[signal],
+                    object_id=id,
                     sender='avatar',
                     property=property,
                     old=old,

@@ -25,6 +25,9 @@ class Modelable(Signal):
         dispatcher.connect(self.receiver, self)
 
     def marshal(self):
+        return yaml.dump(self.dictify())
+
+    def dictify(self):
         return {'TYPE': self.__class__.__name__}
 
 
@@ -62,18 +65,31 @@ class BiDict(dict):
                 yield k,v
 
 
-
-class Icon(Modelable):
+class Draggable(Modelable):
     def __init__(self):
         self.location = (40, 50)
-        self.image = self.widget = None
+        self.widget = None
         self.grabbed = self.selected = 0
         Modelable.__init__(self)
-
-    def marshal(self):
-        m = Modelable.marshal(self)
+    def dictify(self):
+        m = Modelable.dictify(self)
         m.update({ 'location': self.location, })
-        return yaml.dump(m)
+        return m
+
+
+class Icon(Draggable):
+    def __init__(self):
+        self.image = None
+        Draggable.__init__(self)
+
+class Note(Draggable):
+    def __init__(self):
+        self.text = 'NOTE'
+        Draggable.__init__(self)
+    def dictify(self):
+        m = Modelable.dictify(self)
+        m.update({ 'text': self.text, })
+        return m
 
 class Loader:
     """Creator for instances of any Modelable from marshalled string"""

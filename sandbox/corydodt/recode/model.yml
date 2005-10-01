@@ -5,3 +5,13 @@
 edf1af0e82ca7dc2123753cfa43ca9f0:
     TYPE: Icon
     location: [15, 60]
+
+d7e4846c372a75b8456a924913f77e45:
+    TYPE: Note
+    location: [45, 45]
+    text: >
+        Woot!
+
+        This is some text.
+
+
