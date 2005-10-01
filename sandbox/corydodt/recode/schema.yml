@@ -3,52 +3,33 @@
 types:
     '*':
         properties: [TYPE]
+    Map:
+        desc: A grouping type for organizing all the models into a container
+        properties: [models, name, description]
     Background:
         desc: The background image of the map
         properties: [uri, view, scale100px]
     ObscurementMask:
         desc: an image overlay that defines the visible/masked areas of the map
         properties: [uri]
+    Drawing:
+        desc: A vector figure drawn on the map
+        properties: [uri, corner]
+    # Connectors
+    TargetArrow:
+        desc: An arrow drawn between an attacker and the target
+        properties: [attacker, target]
+    FollowArrow:
+        desc: An arrow drawn between a follower and a leader
+        properties: [follower, leader]
+    # Draggables
     Character:
         desc: A PC or NPC
         properties: [uri, corner, size, name]
     Note:
         desc: A written text blurb placed on the map
-        properties: [uri, text, corner, title]
+        properties: [uri, corner, text, title]
     Sound:
         desc: A sound effect placed on the map
         properties: [uri, corner]
-    Drawing:
-        desc: A vector figure drawn on the map
-        properties: [uri, corner]
-    Map:
-        desc: A grouping type for organizing all the models into a container
-        properties: [models, name, description]
-
----
-# schema for sending model data in vellum
-types:
-    '*':
-        properties: [TYPE]
-    Background:
-        desc: The background image of the map
-        properties: [uri, view, scale100px]
-    ObscurementMask:
-        desc: an image overlay that defines the visible/masked areas of the map
-        properties: [uri]
-    Character:
-        desc: A PC or NPC
-        properties: [uri, corner, size, name]
-    Note:
-        desc: A written text blurb placed on the map
-        properties: [uri, text, corner, title]
-    Sound:
-        desc: A sound effect placed on the map
-        properties: [uri, corner]
-    Drawing:
-        desc: A vector figure drawn on the map
-        properties: [uri, corner]
-    Map:
-        desc: A grouping type for organizing all the models into a container
-        properties: [models, name, description]
 
