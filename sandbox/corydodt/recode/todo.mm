@@ -137,16 +137,20 @@
 </node>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1128197081309" ID="Freemind_Link_1437433781" MODIFIED="1128198888943" TEXT="less indirection/duplication in Draggable event handlers in view">
+<node BACKGROUND_COLOR="#99f433" COLOR="#00b439" CREATED="1128197081309" FOLDED="true" ID="Freemind_Link_1437433781" MODIFIED="1128207643811" TEXT="less indirection/duplication in Draggable event handlers in view">
+<edge COLOR="#808080" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1128197128137" ID="Freemind_Link_1208360324" MODIFIED="1128197387309" TEXT="indirection">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#990000" CREATED="1128197128137" ID="Freemind_Link_1208360324" MODIFIED="1128207636326" TEXT="indirection">
 <font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_cancel"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>new_Note and new_Icon call igroup.connect(&apos;event&apos;, event_disambiguator)&#xa;then event_disambiguator calls the real event handler&#xa;should be able to attach igroups directly to real event handlers</text>
 </hook>
 </node>
-<node COLOR="#990000" CREATED="1128197138231" ID="Freemind_Link_378704758" MODIFIED="1128197415887" TEXT="duplication">
+<node COLOR="#990000" CREATED="1128197138231" ID="Freemind_Link_378704758" MODIFIED="1128207633232" TEXT="duplication">
 <font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#111111" CREATED="1128197497262" ID="Freemind_Link_84256301" MODIFIED="1128198821881" TEXT="on_foo_button_press, _motion, and _release are duplicated">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -156,8 +160,12 @@
 <node COLOR="#111111" CREATED="1128198875161" ID="Freemind_Link_1063386291" MODIFIED="1128204980439" TEXT="drop_Note,Icon are the same">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#111111" CREATED="1128197419872" ID="Freemind_Link_1622294215" MODIFIED="1128197442372" TEXT="new_Note,Icon both clean up widget first"/>
-<node COLOR="#111111" CREATED="1128197442778" ID="Freemind_Link_864057045" MODIFIED="1128197452872" TEXT="both assign an igroup to widget"/>
+<node COLOR="#111111" CREATED="1128197419872" ID="Freemind_Link_1622294215" MODIFIED="1128207626982" TEXT="new_Note,Icon both clean up widget first">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#111111" CREATED="1128197442778" ID="Freemind_Link_864057045" MODIFIED="1128207630795" TEXT="both assign an igroup to widget">
+<icon BUILTIN="button_cancel"/>
+</node>
 </node>
 </node>
 <node COLOR="#00b439" CREATED="1128203876286" FOLDED="true" ID="Freemind_Link_41198604" MODIFIED="1128203970313" TEXT="connector items should observe endpoints">

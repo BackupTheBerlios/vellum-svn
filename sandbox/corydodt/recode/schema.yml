@@ -18,10 +18,10 @@ types:
     # Connectors
     TargetArrow:
         desc: An arrow drawn between an attacker and the target
-        properties: [attacker, target]
+        properties: [endpoints]
     FollowArrow:
         desc: An arrow drawn between a follower and a leader
-        properties: [follower, leader]
+        properties: [endpoints]
     # Draggables
     Character:
         desc: A PC or NPC
