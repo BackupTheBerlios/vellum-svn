@@ -91,6 +91,25 @@ class Note(Draggable):
         m.update({ 'text': self.text, })
         return m
 
+class Connector(Modelable):
+    def __init__(self):
+        self.widget = None
+        self.endpoints = [None, None]
+        Modelable.__init__(self)
+    def dictify(self):
+        m = Modelable.dictify(self)
+        m.update({ 'endpoints': self.endpoints, })
+        return m
+
+
+class TargetArrow(Connector):
+    pass
+
+
+class FollowArrow(Connector):
+    pass
+
+
 class Loader:
     """Creator for instances of any Modelable from marshalled string"""
     def __init__(self):

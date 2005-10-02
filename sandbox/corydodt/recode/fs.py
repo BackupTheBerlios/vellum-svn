@@ -25,7 +25,7 @@ fs = Filesystem(os.getcwd())
 
 
 fs.gladefile = fs("vellum.glade")
-fs.saved = fs("model.yml")
+fs.saved = fs("mappy.yml")
 fs.passwords = fs("vpasswd")
 
 fs.crom = fs("crom.png")
