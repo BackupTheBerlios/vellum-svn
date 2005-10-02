@@ -171,7 +171,6 @@ class Gameboy(pb.Avatar):
         """
         self.mind = mind
         self.username = username
-        # FIXME - passing in the realm here is probably very unsafe
         self.models = models
 
     def perspective_getGameState(self):
