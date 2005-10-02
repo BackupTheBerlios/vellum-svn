@@ -26,6 +26,9 @@ types:
     Character:
         desc: A PC or NPC
         properties: [uri, corner, size, name]
+    Article:
+        desc: Thing that can be moved/interact but is not a PC, e.g. equipment
+        properties: [uri, corner, size, name]
     Note:
         desc: A written text blurb placed on the map
         properties: [uri, corner, text, title]

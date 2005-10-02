@@ -168,7 +168,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1128203876286" FOLDED="true" ID="Freemind_Link_41198604" MODIFIED="1128203970313" TEXT="connector items should observe endpoints">
+<node COLOR="#00b439" CREATED="1128203876286" ID="Freemind_Link_41198604" MODIFIED="1128237356876" TEXT="connectors">
 <font NAME="SansSerif" SIZE="16"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>items which connect or apply to draggables should observe several properties.&#xa;* when draggable endpoints move, targetting arrow should update itself&#xa;* when either endpoint is Drop&apos;d, targetting arrow should disappear&#xa;</text>
@@ -176,14 +176,102 @@
 <node COLOR="#990000" CREATED="1128203907938" ID="Freemind_Link_1211805780" MODIFIED="1128203908390" TEXT="(e.g. targetting arrows) ">
 <font NAME="SansSerif" SIZE="14"/>
 </node>
-<node COLOR="#990000" CREATED="1128204093093" ID="Freemind_Link_1162136077" MODIFIED="1128204098259" TEXT="keep a list of endpoints">
+<node COLOR="#990000" CREATED="1128237360966" ID="Freemind_Link_204437201" MODIFIED="1128237365337" TEXT="moving endpoint problem">
 <font NAME="SansSerif" SIZE="14"/>
-</node>
-<node COLOR="#990000" CREATED="1128204099724" ID="Freemind_Link_50547549" MODIFIED="1128204146613" TEXT="receivePropertyChange/receiveDropModel">
-<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1128204099724" ID="Freemind_Link_50547549" MODIFIED="1128237711998" TEXT="connectors are observers">
+<font NAME="SansSerif" SIZE="12"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>if model in self.endpoints:&#xa;  self.do_appropriate_thing()&#xa;</text>
 </hook>
+<node COLOR="#111111" CREATED="1128237255803" ID="Freemind_Link_752862997" MODIFIED="1128237280290" TEXT="registered with box by main view (gui)"/>
+<node COLOR="#111111" CREATED="1128237292627" ID="Freemind_Link_554445752" MODIFIED="1128237299808" TEXT="observer impl">
+<node COLOR="#111111" CREATED="1128237304902" ID="Freemind_Link_113589197" MODIFIED="1128237323969" TEXT="watch for location changes of endpoints"/>
+<node COLOR="#111111" CREATED="1128237324219" ID="Freemind_Link_586375096" MODIFIED="1128237330713" TEXT="when change happens, redraw arrow"/>
+</node>
+</node>
+<node COLOR="#111111" CREATED="1128237080404" ID="Freemind_Link_1865347952" MODIFIED="1128237119533" TEXT="arrows grow location1, location2 properties">
+<node COLOR="#111111" CREATED="1128237120795" ID="Freemind_Link_493162952" MODIFIED="1128237130920" TEXT="these are dispatched"/>
+<node COLOR="#111111" CREATED="1128237131185" ID="Freemind_Link_1816095871" MODIFIED="1128237137587" TEXT="but not marshalled">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#111111" CREATED="1128237213869" ID="Freemind_Link_1696058820" MODIFIED="1128237759787" TEXT="connectors still need to be observers">
+<node COLOR="#111111" CREATED="1128237224711" ID="Freemind_Link_1795355017" MODIFIED="1128237228823" TEXT="but observer impl is simpler"/>
+<node COLOR="#111111" CREATED="1128237762286" ID="Freemind_Link_948841522" MODIFIED="1128237772300" TEXT="no redrawing (View does it)"/>
+</node>
+</node>
+<node COLOR="#111111" CREATED="1128234337416" FOLDED="true" ID="Freemind_Link_1166119285" MODIFIED="1128237738384" TEXT="View handles all this explicitly.. how &#xa;many such persistent connections will there be?">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#111111" CREATED="1128234491894" ID="Freemind_Link_108718011" MODIFIED="1128234498365" TEXT="endpoints">
+<node COLOR="#111111" CREATED="1128234607221" ID="Freemind_Link_730498447" MODIFIED="1128234609957" TEXT="Character"/>
+<node COLOR="#111111" CREATED="1128234610472" ID="Freemind_Link_671022185" MODIFIED="1128234611957" TEXT="Drawing"/>
+<node COLOR="#111111" CREATED="1128234613457" ID="Freemind_Link_812860250" MODIFIED="1128235563175" TEXT="Article"/>
+</node>
+<node COLOR="#111111" CREATED="1128234498787" ID="Freemind_Link_267057371" MODIFIED="1128234506429" TEXT="connectors">
+<node COLOR="#111111" CREATED="1128235565895" ID="Freemind_Link_1702916802" MODIFIED="1128235567380" TEXT="TargetArrow"/>
+<node COLOR="#111111" CREATED="1128235567661" ID="Freemind_Link_254134498" MODIFIED="1128235570130" TEXT="FollowArrow"/>
+<node COLOR="#111111" CREATED="1128235570630" ID="Freemind_Link_1916412251" MODIFIED="1128235610500" TEXT="Drawing">
+<hook NAME="accessories/plugins/NodeNote.properties">
+<text>attached to a character or article as an effect</text>
+</hook>
+</node>
+</node>
+<node COLOR="#111111" CREATED="1128234507039" ID="Freemind_Link_1717961733" MODIFIED="1128234510274" TEXT="views">
+<node COLOR="#111111" CREATED="1128234513556" ID="Freemind_Link_1920825558" MODIFIED="1128234543064" TEXT="NetClient does *not* have to update"/>
+<node COLOR="#111111" CREATED="1128234544142" ID="Freemind_Link_322878224" MODIFIED="1128234562257" TEXT="BigView has to handle this"/>
+<node COLOR="#111111" CREATED="1128234549191" ID="Freemind_Link_1091466922" MODIFIED="1128234564710" TEXT="mini map has to handle this"/>
+<node COLOR="#111111" CREATED="1128234552488" ID="Freemind_Link_565945491" MODIFIED="1128234568289" TEXT="web map? has to handle this"/>
+<node COLOR="#111111" CREATED="1128234555755" ID="Freemind_Link_885061303" MODIFIED="1128234556349" TEXT="etc."/>
+</node>
+<node COLOR="#111111" CREATED="1128236980378" ID="Freemind_Link_374940306" MODIFIED="1128236985754" TEXT="answer: TOO MANY"/>
+</node>
+</node>
+<node COLOR="#990000" CREATED="1128237376342" ID="Freemind_Link_1036012661" MODIFIED="1128237381806" TEXT="resolving ids-to-models">
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1128237383148" ID="Freemind_Link_1368215985" MODIFIED="1128237401209" TEXT="maybe box can take over remote_models list"/>
+<node COLOR="#111111" CREATED="1128237596386" ID="Freemind_Link_1941201929" MODIFIED="1128237636854" TEXT="unmarshal() should resolve id&apos;s to models before returning model"/>
+</node>
+<node COLOR="#990000" CREATED="1128237486114" ID="Freemind_Link_334475158" MODIFIED="1128237541110" TEXT="connector-before-endpoint problem">
+<font NAME="SansSerif" SIZE="14"/>
+<hook NAME="accessories/plugins/NodeNote.properties">
+<text>if connector is Add&apos;d before endpoints, it will point to nothing&#xa;how do we make sure the endpoints are always built before connectors that refer to them?</text>
+</hook>
+</node>
+</node>
+<node COLOR="#00b439" CREATED="1128234904565" ID="Freemind_Link_1804626329" MODIFIED="1128234918756" TEXT="use inkscape to draw all visual items and effects needed">
+<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1128234922554" FOLDED="true" ID="Freemind_Link_1404182787" MODIFIED="1128234928821" TEXT="e.g.">
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1128234929572" ID="Freemind_Link_381959095" MODIFIED="1128234930416" TEXT="arrows">
+<node COLOR="#111111" CREATED="1128235187624" ID="Freemind_Link_647983405" MODIFIED="1128235195454" TEXT="endpoints moving"/>
+</node>
+<node COLOR="#111111" CREATED="1128234930697" ID="Freemind_Link_1196874548" MODIFIED="1128235529073" TEXT="characters/articles">
+<node COLOR="#111111" CREATED="1128234932338" ID="Freemind_Link_595366443" MODIFIED="1128234933401" TEXT="selected"/>
+<node COLOR="#111111" CREATED="1128234933651" ID="Freemind_Link_1480838479" MODIFIED="1128234934964" TEXT="unselected"/>
+<node COLOR="#111111" CREATED="1128235074797" ID="Freemind_Link_1372054555" MODIFIED="1128235213959" TEXT="hidden"/>
+<node COLOR="#111111" CREATED="1128235215694" ID="Freemind_Link_754174322" MODIFIED="1128235217131" TEXT="hovered"/>
+</node>
+<node COLOR="#111111" CREATED="1128234943982" ID="Freemind_Link_94196267" MODIFIED="1128234948639" TEXT="things being renamed"/>
+<node COLOR="#111111" CREATED="1128234949108" ID="Freemind_Link_1438057582" MODIFIED="1128234959251" TEXT="drawings">
+<node COLOR="#111111" CREATED="1128235095271" ID="Freemind_Link_675517978" MODIFIED="1128235097553" TEXT="visible"/>
+<node COLOR="#111111" CREATED="1128235097819" ID="Freemind_Link_1979097768" MODIFIED="1128235100023" TEXT="hidden"/>
+</node>
+<node COLOR="#111111" CREATED="1128234959533" ID="Freemind_Link_1250292606" MODIFIED="1128234962799" TEXT="sound/note icons">
+<node COLOR="#111111" CREATED="1128234983742" ID="Freemind_Link_364563733" MODIFIED="1128234985539" TEXT="selected"/>
+<node COLOR="#111111" CREATED="1128234985805" ID="Freemind_Link_645412772" MODIFIED="1128234987227" TEXT="unselected"/>
+<node COLOR="#111111" CREATED="1128235101539" ID="Freemind_Link_694480433" MODIFIED="1128235102601" TEXT="hidden"/>
+<node COLOR="#111111" CREATED="1128235215694" ID="Freemind_Link_1393703255" MODIFIED="1128235217131" TEXT="hovered"/>
+</node>
+<node COLOR="#111111" CREATED="1128234963784" ID="Freemind_Link_459484708" MODIFIED="1128234965097" TEXT="background"/>
+<node COLOR="#111111" CREATED="1128234965331" ID="Freemind_Link_433970316" MODIFIED="1128234965878" TEXT="mask"/>
+<node COLOR="#111111" CREATED="1128234967503" ID="Freemind_Link_917812682" MODIFIED="1128234969066" TEXT="drawing tools"/>
+<node COLOR="#111111" CREATED="1128234975928" ID="Freemind_Link_468307816" MODIFIED="1128234977772" TEXT="selecting tools"/>
+<node COLOR="#111111" CREATED="1128235126076" ID="Freemind_Link_1877968407" MODIFIED="1128235138626" TEXT="window layout">
+<node COLOR="#111111" CREATED="1128235139924" ID="Freemind_Link_660191209" MODIFIED="1128235143393" TEXT="where&apos;s minimap"/>
+<node COLOR="#111111" CREATED="1128235143643" ID="Freemind_Link_543198804" MODIFIED="1128235147457" TEXT="where does chat go"/>
+<node COLOR="#111111" CREATED="1128235147723" ID="Freemind_Link_1096385156" MODIFIED="1128235148848" TEXT="combat"/>
+<node COLOR="#111111" CREATED="1128235149223" ID="Freemind_Link_1027405960" MODIFIED="1128235166056" TEXT="character stat popup"/>
+</node>
+<node COLOR="#111111" CREATED="1128235170901" ID="Freemind_Link_316612973" MODIFIED="1128235173386" TEXT="context menus"/>
 </node>
 </node>
 <node COLOR="#00b439" CREATED="1127245613704" FOLDED="true" ID="Freemind_Link_1076507153" MODIFIED="1127425554072" TEXT="signals should be reified?">
