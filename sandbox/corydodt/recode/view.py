@@ -17,7 +17,7 @@ from dispatch import dispatcher
 
 # vellum imports
 from fs import fs
-from model import Note, Icon, New, Drop
+from model import Note, Character, TargetArrow, New, Drop, box
 
 
 
@@ -77,35 +77,35 @@ class BigController:
         receiver(signal, sender, old, value)
 
 
-    def changed_Icon_location(self, icon, sender, old, (x, y)):
+    def changed_Character_location(self, character, sender, old, (x, y)):
         if old is None: old = (0,0)
         ox, oy = old
-        icon.widget.move(x-ox, y-oy)
-    changed_Note_location = changed_Icon_location
+        character.widget.move(x-ox, y-oy)
+    changed_Note_location = changed_Character_location
 
     def changed_Note_text(self, note, sender, old, new):
         note.set_property('text', new)
 
 
 
-    def new_Icon(self, icon):
+    def new_Character(self, character):
         # make an image
-        image = icon.image = gdk.pixbuf_new_from_file(fs.crom)
+        image = character.image = gdk.pixbuf_new_from_file(fs.crom)
 
         # place it on the canvas
         root = self.view.canvas.root()
-        corner = icon.location
+        corner = character.location
         if corner is None: corner = (0,0)
         x, y = corner
-        if icon.widget is None:
+        if character.widget is None:
             igroup = root.add("GnomeCanvasGroup", x=x, y=y)
             igroup.add("GnomeCanvasPixbuf",
                        pixbuf=image,
                        x=0, y=0)
 
 
-            igroup.connect('event', self.on_draggable_event, icon)
-            icon.widget = igroup
+            igroup.connect('event', self.on_draggable_event, character)
+            character.widget = igroup
 
     def new_Note(self, note):
         # place text on the canvas
@@ -121,7 +121,6 @@ class BigController:
 
             ngroup.connect('event', self.on_draggable_event, note)
             note.widget = ngroup
-
 
     # events on "draggable" objects
     # events on "draggable" objects
@@ -165,17 +164,17 @@ class BigController:
             return handler(widget, event, background)
 
     def on_background_gdk_button_release(self, widget, ev, background):
-        """on right click make a new icon"""
+        """on right click make a new character"""
         if ev.button == 3:
-            # create a new Icon, and move it to the position of click
-            icon = Icon()
+            # create a new Character, and move it to the position of click
+            character = Character()
             dispatcher.send(signal=New, 
                             sender='gui', 
-                            model=icon)
-            dispatcher.send(signal=icon, 
+                            model=character)
+            dispatcher.send(signal=character, 
                             sender='gui', 
                             property='location', 
-                            old=icon.location,
+                            old=character.location,
                             value=(ev.x, ev.y)
                             )
 

@@ -18,7 +18,8 @@ from dispatch import dispatcher
 
 # local imports
 from fs import fs
-from model import Icon, BoxScore, New, Drop, BiDict, loader
+from model import box, New, Drop, BiDict, loader
+import model
 from uuid import uuid
 
 
@@ -38,13 +39,14 @@ class NetClient(pb.Referenceable):
 
     def remote_receiveNewModel(self,
                                sender,
+                               type,
                                object_id,):
         """Called by the avatar to notify that a new object 
         has appeared on the map.
         Notifies the dispatch mechanism.
         """
         print 'received propagated model', object_id
-        model = Icon()
+        model = getattr(model, type)()
         self.remote_models[model] = object_id
         dispatcher.send(signal=New,
                         sender='remote',
@@ -92,6 +94,7 @@ class NetClient(pb.Referenceable):
             print 'sending model', id
             self.avatar.callRemote('receiveNewModel',
                                    sender=sender,
+                                   type=model.__class__.__name__,
                                    object_id=id)
 
     def receiveDropModel(self, sender, model):
@@ -180,13 +183,14 @@ class Gameboy(pb.Avatar):
 
     def perspective_receiveNewModel(self,
                                     sender,
+                                    type,
                                     object_id,):
         """Called by the client to notify that a new object has 
         appeared.
         Notifies the dispatch mechanism.
         """
         print 'received and adding model', object_id
-        model = Icon()
+        model = getattr(model, type)()
         self.models[model] = object_id
         dispatcher.send(signal=New,
                         sender=self.username,
@@ -234,6 +238,7 @@ class Gameboy(pb.Avatar):
             print 'propagating model', id
             self.mind.callRemote('receiveNewModel',
                     sender='avatar',
+                    type=model.__class__.__name__,
                     object_id=id,) 
 
     def receiveDropModel(self, sender, model):
@@ -298,7 +303,6 @@ class GameRealm:
 
     def __init__(self):
         self.avatars = {}
-        self.box = BoxScore()
         self.models = BiDict()
         self.loadSavedGame()
         self.saveGame() # FIXME - for testing porpoises
@@ -320,11 +324,11 @@ class GameRealm:
 
         avatar = Gameboy(username, mind, self.models)
         self.avatars[username] = avatar
-        self.box.registerObserver(avatar)
+        box.registerObserver(avatar)
         def dc():
             log.msg('Bye-bye, %s' % (avatar.username,))
             del self.avatars[avatar.username]
-            self.box.unregisterObserver(avatar)
+            box.unregisterObserver(avatar)
         return (pb.IPerspective, avatar, dc,)
 
 

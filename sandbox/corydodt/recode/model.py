@@ -77,7 +77,7 @@ class Draggable(Modelable):
         return m
 
 
-class Icon(Draggable):
+class Character(Draggable):
     def __init__(self):
         self.image = None
         Draggable.__init__(self)
@@ -178,3 +178,4 @@ class BoxScore:
         for observer in self.observers:
             dispatcher.connect(observer.receivePropertyChange, signal=model)
 
+box = BoxScore()
