@@ -113,8 +113,8 @@ class FollowArrow(Connector):
 class Loader:
     """Creator for instances of any Modelable from marshalled string"""
     def __init__(self):
-        import model as _model
-        self.model = _model
+        import models
+        self.models = models
 
     def unmarshal(self, data):
         """unmarshal(yaml_string) => instance of Modelable"""
@@ -124,7 +124,7 @@ class Loader:
 
     def fromDict(self, dict_data):
         classname = dict_data.pop('TYPE')
-        klass = getattr(self.model, classname)
+        klass = getattr(self.models, classname)
         ret = klass()
         for k, v in dict_data.items():
             setattr(ret, k, v)

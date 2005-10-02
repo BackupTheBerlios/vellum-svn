@@ -17,7 +17,7 @@ from dispatch import dispatcher
 
 # vellum imports
 from fs import fs
-from model import Note, Character, TargetArrow, New, Drop, box
+from models import Note, Character, TargetArrow, New, Drop, box
 
 
 

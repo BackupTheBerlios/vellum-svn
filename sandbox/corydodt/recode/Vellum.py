@@ -16,7 +16,7 @@ import sys
 from net import NetClient
 from view import BigController, BigView
 from fs import fs
-from model import box
+from models import box
 
 def finish(fail, ):
     """This doubles as callback and errback"""

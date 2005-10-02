@@ -18,8 +18,8 @@ from dispatch import dispatcher
 
 # local imports
 from fs import fs
-from model import box, New, Drop, BiDict, loader
-import model
+from models import box, New, Drop, BiDict, loader
+import models
 from uuid import uuid
 
 
@@ -46,7 +46,7 @@ class NetClient(pb.Referenceable):
         Notifies the dispatch mechanism.
         """
         print 'received propagated model', object_id
-        model = getattr(model, type)()
+        model = getattr(models, type)()
         self.remote_models[model] = object_id
         dispatcher.send(signal=New,
                         sender='remote',
@@ -153,6 +153,9 @@ class NetClient(pb.Referenceable):
             model = loader.unmarshal(model_data)
             self.remote_models[model] = id
             dispatcher.send(signal=New, sender='remote', model=model)
+            assert hasattr(model, 'location'), (
+                    "FIXME: should load types that don't have locations, "
+                    "should load other properties too")
             dispatcher.send(signal=model, 
                             sender='remote', 
                             property='location', 
@@ -190,7 +193,7 @@ class Gameboy(pb.Avatar):
         Notifies the dispatch mechanism.
         """
         print 'received and adding model', object_id
-        model = getattr(model, type)()
+        model = getattr(models, type)()
         self.models[model] = object_id
         dispatcher.send(signal=New,
                         sender=self.username,
