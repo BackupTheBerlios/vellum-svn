@@ -168,7 +168,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1128203876286" ID="Freemind_Link_41198604" MODIFIED="1128237356876" TEXT="connectors">
+<node COLOR="#00b439" CREATED="1128203876286" FOLDED="true" ID="Freemind_Link_41198604" MODIFIED="1128237356876" TEXT="connectors">
 <font NAME="SansSerif" SIZE="16"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>items which connect or apply to draggables should observe several properties.&#xa;* when draggable endpoints move, targetting arrow should update itself&#xa;* when either endpoint is Drop&apos;d, targetting arrow should disappear&#xa;</text>
@@ -239,30 +239,61 @@
 </node>
 <node COLOR="#00b439" CREATED="1128234904565" ID="Freemind_Link_1804626329" MODIFIED="1128234918756" TEXT="use inkscape to draw all visual items and effects needed">
 <font NAME="SansSerif" SIZE="16"/>
-<node COLOR="#990000" CREATED="1128234922554" FOLDED="true" ID="Freemind_Link_1404182787" MODIFIED="1128234928821" TEXT="e.g.">
+<node COLOR="#990000" CREATED="1128234922554" ID="Freemind_Link_1404182787" MODIFIED="1128234928821" TEXT="e.g.">
 <font NAME="SansSerif" SIZE="14"/>
-<node COLOR="#111111" CREATED="1128234929572" ID="Freemind_Link_381959095" MODIFIED="1128234930416" TEXT="arrows">
-<node COLOR="#111111" CREATED="1128235187624" ID="Freemind_Link_647983405" MODIFIED="1128235195454" TEXT="endpoints moving"/>
+<node COLOR="#111111" CREATED="1128234930697" FOLDED="true" ID="Freemind_Link_1196874548" MODIFIED="1128313023703" TEXT="characters/articles">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#111111" CREATED="1128234933651" ID="Freemind_Link_1480838479" MODIFIED="1128311734078" TEXT="unselected">
+<icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#111111" CREATED="1128234930697" ID="Freemind_Link_1196874548" MODIFIED="1128235529073" TEXT="characters/articles">
-<node COLOR="#111111" CREATED="1128234932338" ID="Freemind_Link_595366443" MODIFIED="1128234933401" TEXT="selected"/>
-<node COLOR="#111111" CREATED="1128234933651" ID="Freemind_Link_1480838479" MODIFIED="1128234934964" TEXT="unselected"/>
-<node COLOR="#111111" CREATED="1128235074797" ID="Freemind_Link_1372054555" MODIFIED="1128235213959" TEXT="hidden"/>
-<node COLOR="#111111" CREATED="1128235215694" ID="Freemind_Link_754174322" MODIFIED="1128235217131" TEXT="hovered"/>
+<node COLOR="#111111" CREATED="1128234932338" ID="Freemind_Link_595366443" MODIFIED="1128311735828" TEXT="selected">
+<icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#111111" CREATED="1128234943982" ID="Freemind_Link_94196267" MODIFIED="1128234948639" TEXT="things being renamed"/>
+<node COLOR="#111111" CREATED="1128235074797" ID="Freemind_Link_1372054555" MODIFIED="1128311737281" TEXT="hidden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#111111" CREATED="1128235215694" ID="Freemind_Link_754174322" MODIFIED="1128312317796" TEXT="hovered">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#111111" CREATED="1128364916921" ID="Freemind_Link_263740035" MODIFIED="1128364921671" TEXT="name overflow">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#111111" CREATED="1128234959533" FOLDED="true" ID="Freemind_Link_1250292606" MODIFIED="1128314729953" TEXT="sound/note icons">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#111111" CREATED="1128234985805" ID="Freemind_Link_645412772" MODIFIED="1128314720140" TEXT="unselected">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#111111" CREATED="1128364908453" ID="Freemind_Link_1732673167" MODIFIED="1128364911296" TEXT="hovered">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#111111" CREATED="1128234929572" FOLDED="true" ID="Freemind_Link_381959095" MODIFIED="1128316434359" TEXT="arrows">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#111111" CREATED="1128235187624" ID="Freemind_Link_647983405" MODIFIED="1128364940437" TEXT="different lengths">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#111111" CREATED="1128234943982" ID="Freemind_Link_94196267" MODIFIED="1128318849953" TEXT="things being renamed">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#111111" CREATED="1128234963784" ID="Freemind_Link_459484708" MODIFIED="1128234965097" TEXT="background">
+<node COLOR="#111111" CREATED="1128365086937" ID="Freemind_Link_1248884844" MODIFIED="1128365089062" TEXT="with band select"/>
+<node COLOR="#111111" CREATED="1128365089718" ID="Freemind_Link_499572551" MODIFIED="1128365092718" TEXT="with laser pointer"/>
+<node COLOR="#111111" CREATED="1128365105593" ID="Freemind_Link_1102303489" MODIFIED="1128365266500" TEXT="icons at diff zoom levels">
+<hook NAME="accessories/plugins/NodeNote.properties">
+<text>1. Labels will be at least as wide as the icon&#xa;2. When icon is tiny, label will reach a minimum size at which it&apos;s still readable (8 pixels high?)&#xa;3. Icon will reach a minimum size of (16x16?) pixels&#xa;</text>
+</hook>
+</node>
+<node COLOR="#111111" CREATED="1128234965331" ID="Freemind_Link_433970316" MODIFIED="1128368191703" TEXT="obscurement mask"/>
 <node COLOR="#111111" CREATED="1128234949108" ID="Freemind_Link_1438057582" MODIFIED="1128234959251" TEXT="drawings">
-<node COLOR="#111111" CREATED="1128235095271" ID="Freemind_Link_675517978" MODIFIED="1128235097553" TEXT="visible"/>
+<node COLOR="#111111" CREATED="1128235095271" ID="Freemind_Link_675517978" MODIFIED="1128367802578" TEXT="visible">
+<icon BUILTIN="button_ok"/>
+</node>
 <node COLOR="#111111" CREATED="1128235097819" ID="Freemind_Link_1979097768" MODIFIED="1128235100023" TEXT="hidden"/>
+<node COLOR="#111111" CREATED="1128367803453" ID="Freemind_Link_1792268976" MODIFIED="1128367847484" TEXT="with hover label"/>
 </node>
-<node COLOR="#111111" CREATED="1128234959533" ID="Freemind_Link_1250292606" MODIFIED="1128234962799" TEXT="sound/note icons">
-<node COLOR="#111111" CREATED="1128234983742" ID="Freemind_Link_364563733" MODIFIED="1128234985539" TEXT="selected"/>
-<node COLOR="#111111" CREATED="1128234985805" ID="Freemind_Link_645412772" MODIFIED="1128234987227" TEXT="unselected"/>
-<node COLOR="#111111" CREATED="1128235101539" ID="Freemind_Link_694480433" MODIFIED="1128235102601" TEXT="hidden"/>
-<node COLOR="#111111" CREATED="1128235215694" ID="Freemind_Link_1393703255" MODIFIED="1128235217131" TEXT="hovered"/>
 </node>
-<node COLOR="#111111" CREATED="1128234963784" ID="Freemind_Link_459484708" MODIFIED="1128234965097" TEXT="background"/>
-<node COLOR="#111111" CREATED="1128234965331" ID="Freemind_Link_433970316" MODIFIED="1128234965878" TEXT="mask"/>
 <node COLOR="#111111" CREATED="1128234967503" ID="Freemind_Link_917812682" MODIFIED="1128234969066" TEXT="drawing tools"/>
 <node COLOR="#111111" CREATED="1128234975928" ID="Freemind_Link_468307816" MODIFIED="1128234977772" TEXT="selecting tools"/>
 <node COLOR="#111111" CREATED="1128235126076" ID="Freemind_Link_1877968407" MODIFIED="1128235138626" TEXT="window layout">

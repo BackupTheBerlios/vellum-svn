@@ -14,7 +14,7 @@ types:
         properties: [uri]
     Drawing:
         desc: A vector figure drawn on the map
-        properties: [uri, corner]
+        properties: [uri, corner, label]
     # Connectors
     TargetArrow:
         desc: An arrow drawn between an attacker and the target
@@ -31,7 +31,7 @@ types:
         properties: [uri, corner, size, name]
     Note:
         desc: A written text blurb placed on the map
-        properties: [uri, corner, text, title]
+        properties: [uri, corner, text, label]
     Sound:
         desc: A sound effect placed on the map
         properties: [uri, corner]
