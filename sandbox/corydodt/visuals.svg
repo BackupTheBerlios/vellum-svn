@@ -9,8 +9,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="8.2700000in"
+   height="23.000000in"
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.42.2"
@@ -779,7 +779,7 @@
        xlink:href="#linearGradient6921"
        id="radialGradient1829"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.000000,0.000000,0.000000,1.118602,-1.373434e-12,-9.008207)"
+       gradientTransform="matrix(1.000000,0.000000,0.000000,1.118602,-1.079998e-12,-9.008207)"
        cx="91.140625"
        cy="75.953125"
        fx="91.140625"
@@ -952,7 +952,7 @@
        xlink:href="#linearGradient6921"
        id="radialGradient2659"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.000000,0.000000,0.000000,1.118602,-1.703689e-12,-9.008207)"
+       gradientTransform="matrix(1.000000,0.000000,0.000000,1.118602,-1.716265e-12,-9.008207)"
        cx="91.140625"
        cy="75.953125"
        fx="91.140625"
@@ -985,7 +985,7 @@
        xlink:href="#linearGradient362"
        id="linearGradient2665"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.175962,-3.408978e-16,-4.680161e-16,0.850368,-4.150920e-13,280.0000)"
+       gradientTransform="matrix(1.175962,-4.728582e-16,-6.491837e-16,0.850368,-6.100812e-13,280.0000)"
        spreadMethod="reflect"
        x1="205.99301"
        y1="1137.6046"
@@ -996,7 +996,7 @@
        xlink:href="#linearGradient366"
        id="linearGradient2667"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.514725,-4.391023e-16,-3.633450e-16,0.660186,-4.150920e-13,280.0000)"
+       gradientTransform="matrix(1.514725,-6.090775e-16,-5.039946e-16,0.660186,-6.100812e-13,280.0000)"
        x1="131.91928"
        y1="1448.4674"
        x2="189.13556"
@@ -1006,7 +1006,7 @@
        xlink:href="#linearGradient378"
        id="linearGradient2669"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.615039,-4.681807e-16,-3.407768e-16,0.619180,-3.380406e-13,140.0000)"
+       gradientTransform="matrix(1.615039,-6.494119e-16,-4.726904e-16,0.619180,-5.032028e-13,140.0000)"
        x1="143.15617"
        y1="1700.7540"
        x2="164.79172"
@@ -1016,7 +1016,7 @@
        xlink:href="#linearGradient410"
        id="linearGradient2671"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.362229,-3.948938e-16,-4.040200e-16,0.734091,-3.380406e-13,140.0000)"
+       gradientTransform="matrix(1.362229,-5.477558e-16,-5.604148e-16,0.734091,-5.032028e-13,140.0000)"
        x1="191.07132"
        y1="1478.1887"
        x2="191.07132"
@@ -1026,7 +1026,7 @@
        xlink:href="#linearGradient366"
        id="linearGradient2673"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.514725,-4.391023e-16,-3.633450e-16,0.660186,-3.380406e-13,140.0000)"
+       gradientTransform="matrix(1.514725,-6.090775e-16,-5.039946e-16,0.660186,-5.032028e-13,140.0000)"
        x1="140.25737"
        y1="1696.1609"
        x2="157.33363"
@@ -1036,7 +1036,7 @@
        xlink:href="#linearGradient378"
        id="linearGradient2675"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.514725,-4.391023e-16,-3.633450e-16,0.660186,-3.380406e-13,140.0000)"
+       gradientTransform="matrix(1.514725,-6.090775e-16,-5.039946e-16,0.660186,-5.032028e-13,140.0000)"
        spreadMethod="pad"
        x1="175.50798"
        y1="1674.5470"
@@ -1047,7 +1047,7 @@
        xlink:href="#linearGradient378"
        id="linearGradient2677"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.514725,-4.391023e-16,-3.633450e-16,0.660186,-3.380406e-13,140.0000)"
+       gradientTransform="matrix(1.514725,-6.090775e-16,-5.039946e-16,0.660186,-5.032028e-13,140.0000)"
        spreadMethod="pad"
        x1="140.18318"
        y1="1674.4733"
@@ -1058,7 +1058,7 @@
        xlink:href="#linearGradient410"
        id="linearGradient2679"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.907281,-2.630103e-16,-6.066140e-16,1.102195,-3.380406e-13,140.0000)"
+       gradientTransform="matrix(0.907281,-3.648207e-16,-8.414324e-16,1.102195,-5.032028e-13,140.0000)"
        x1="222.24202"
        y1="1010.1295"
        x2="227.17216"
@@ -1068,7 +1068,7 @@
        xlink:href="#linearGradient378"
        id="linearGradient2681"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.965146,-2.797845e-16,-5.702447e-16,1.036113,-3.380406e-13,140.0000)"
+       gradientTransform="matrix(0.965146,-3.880881e-16,-7.909847e-16,1.036113,-5.032028e-13,140.0000)"
        x1="211.96373"
        y1="1048.0908"
        x2="212.00743"
@@ -1078,7 +1078,7 @@
        xlink:href="#linearGradient378"
        id="linearGradient2683"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.362229,-3.948938e-16,-4.040200e-16,0.734091,-3.380406e-13,140.0000)"
+       gradientTransform="matrix(1.362229,-5.477558e-16,-5.604148e-16,0.734091,-5.032028e-13,140.0000)"
        x1="196.64761"
        y1="1437.2679"
        x2="182.96735"
@@ -1123,20 +1123,21 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.85852958"
-     inkscape:cx="372.50678"
-     inkscape:cy="763.86573"
+     inkscape:zoom="1.4684938"
+     inkscape:cx="372.15002"
+     inkscape:cy="1341.8759"
      inkscape:document-units="px"
      inkscape:current-layer="g4486"
-     inkscape:window-width="840"
-     inkscape:window-height="642"
-     inkscape:window-x="87"
-     inkscape:window-y="71"
+     inkscape:window-width="1184"
+     inkscape:window-height="781"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      showguides="true"
-     inkscape:guide-bbox="true">
+     inkscape:guide-bbox="true"
+     fill="#20b2aa">
     <sodipodi:guide
        orientation="vertical"
-       position="52.903428"
+       position="36.000000"
        id="guide2620" />
   </sodipodi:namedview>
   <metadata
@@ -1156,10 +1157,10 @@
      id="layer1">
     <g
        id="g4486"
-       transform="translate(0.000000,68.00000)">
+       transform="translate(-16.00000,72.00000)">
       <text
          xml:space="preserve"
-         style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
+         style="font-size:16.500000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
          x="52.549042"
          y="-9.7010708"
          id="text6943"
@@ -1552,7 +1553,7 @@
       </g>
       <text
          xml:space="preserve"
-         style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
+         style="font-size:16.500000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
          x="51.907429"
          y="134.26773"
          id="text7402"
@@ -1563,7 +1564,7 @@
            y="134.26773">Sound:</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
+         style="font-size:16.500000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
          x="164.53613"
          y="133.83582"
          id="text7751"
@@ -1676,7 +1677,7 @@
       </g>
       <text
          xml:space="preserve"
-         style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
+         style="font-size:16.500000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
          x="52.536133"
          y="295.83582"
          id="text7945"
@@ -1687,15 +1688,140 @@
            y="295.83582">Targetting</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
-         x="71.186607"
-         y="482.72824"
-         id="text9475"
+         style="font-size:12.000000px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
+         x="401.5162"
+         y="510.11035"
+         id="text3211"
          sodipodi:linespacing="125.00000%"><tspan
            sodipodi:role="line"
-           x="71.186607"
-           y="482.72824"
-           id="tspan1730">Drawing (with texture)</tspan></text>
+           x="401.51620"
+           y="510.11035"
+           id="tspan3213">Band Select</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:12.000000px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
+         x="566.09631"
+         y="505.30209"
+         id="text3215"
+         sodipodi:linespacing="125.00000%"><tspan
+           sodipodi:role="line"
+           x="566.09631"
+           y="505.30209"
+           id="tspan3219">Laser Pointer</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:12.000000px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
+         x="447.50717"
+         y="488.58069"
+         id="text3221"
+         sodipodi:linespacing="125.00000%"><tspan
+           sodipodi:role="line"
+           x="447.50717"
+           y="488.58069"
+           id="tspan3223">Character at distant zoom</tspan></text>
+      <image
+         id="image3235"
+         height="403.32306"
+         width="322.65848"
+         sodipodi:absref="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\gnoll-distant.jpg"
+         xlink:href="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\gnoll-distant.jpg"
+         x="408.95755"
+         y="547.58551" />
+      <g
+         id="g1669"
+         transform="translate(4.765472,-13.61564)">
+        <path
+           id="path8426"
+           d="M 499.18401,753.77236 L 499.18401,716.55272 L 520.74784,729.00260 L 527.66998,740.99210 L 550.77416,740.99210 L 558.96535,753.77236 L 499.18401,753.77236 z "
+           style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.21108843px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000" />
+        <path
+           id="path8428"
+           d="M 499.15742,716.35735 C 500.57641,717.51767 502.63249,716.45482 504.12396,717.38699 C 505.00878,717.94000 505.28822,718.11786 505.94099,718.90118 C 507.24314,720.46376 510.10348,719.80969 511.87661,719.80969 C 512.10760,719.80969 514.78273,725.22376 516.35860,726.16928 C 519.24889,727.90345 522.41133,729.04423 525.38316,730.53014 C 528.19285,731.93499 529.93173,732.94865 533.13581,733.19512 C 536.40434,733.44654 536.34661,733.40873 539.31369,735.49668 C 539.85323,735.87635 542.49916,734.11858 539.97994,736.88974 C 539.83304,737.05132 540.39631,737.22298 540.34334,737.43484 C 539.87736,739.29876 543.38355,738.82789 544.15910,738.82789 C 545.66277,738.82789 546.73324,738.87334 548.09598,739.55471 C 548.99472,740.00407 550.07727,739.90939 551.06379,740.40265 C 553.06356,741.40253 555.23419,742.06387 557.24168,743.06762 C 557.29878,743.09618 557.36282,743.10800 557.42338,743.12819 C 557.77966,743.24695 558.02906,743.57235 558.33190,743.79444 C 558.35206,743.80922 558.15470,745.31650 558.39246,745.73260 C 558.81063,746.46439 560.43670,747.61052 560.51233,747.91303 C 560.80899,749.09965 560.82360,748.88843 561.78424,749.60891 C 562.02003,749.78577 562.09543,750.47355 562.20822,750.69912 C 562.53244,751.34757 562.04968,751.74150 561.54198,752.03162 C 559.38973,753.26146 551.05570,754.01131 548.03542,753.36410 C 543.86729,752.47094 540.09082,750.63578 535.86135,749.97233 C 530.07830,749.06518 524.08505,747.58127 518.53903,745.73260 C 513.98622,744.21499 511.65302,738.15842 509.81731,734.22476 C 508.45347,731.30223 506.75724,728.27670 505.09304,725.50304 C 504.14951,723.93049 502.82522,723.39806 501.51956,722.35353 C 500.38031,721.44213 500.07644,720.31173 499.33913,719.08288 C 499.06640,718.62834 498.99860,717.97915 498.99860,717.44756 C 498.99860,717.03754 498.96286,716.72834 499.15742,716.35735 z "
+           style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.21108843px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000" />
+        <path
+           id="path8430"
+           d="M 560.27006,747.61019 C 560.27006,747.11155 561.09598,748.17457 561.54198,748.39757 C 562.32504,748.78910 563.50533,748.76472 564.14638,749.24551 C 564.75250,749.70010 565.24389,750.16131 565.84227,750.75970 C 566.33703,751.25445 566.70322,751.15562 566.93248,751.72877 C 567.10842,752.16862 566.98756,752.62632 567.17476,753.00070 C 567.39836,753.44790 567.00873,753.72750 566.62965,753.72750 C 565.81224,753.72750 564.94493,753.65497 564.14638,753.78807 C 563.25789,753.93616 562.53625,754.03035 561.60254,754.03035 C 560.96914,754.03035 560.20025,754.05908 559.66438,753.96977 C 559.20141,753.89262 558.69053,753.48429 558.08963,753.36410 C 556.77222,753.10062 556.63600,752.42827 556.63600,751.06253 C 556.63600,749.66002 557.99070,748.88059 558.87700,748.21586 C 559.22903,747.95185 559.55001,747.75653 559.90665,747.48906 C 560.00880,747.41244 560.14893,747.56981 560.27006,747.61019 z "
+           style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.21108843px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000" />
+      </g>
+      <path
+         style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+         d="M 408.46906,748.05273 L 408.46906,1019.0039 L 686.22802,1019.0039 L 649.24913,880.99677 L 571.17590,807.96153 L 501.73616,771.88009 L 446.59284,720.82146 L 408.46906,748.05273 z "
+         id="path1674"
+         transform="translate(0.000000,-68.00000)" />
+      <image
+         id="image2403"
+         height="42.500000"
+         width="39.000000"
+         sodipodi:absref="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\ice-shape.png"
+         xlink:href="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\ice-shape.png"
+         x="529.46313"
+         y="680.04211"
+         style="fill:#20b2aa" />
+      <g
+         id="g3870">
+        <image
+           id="image2407"
+           height="11.844140"
+           width="11.999988"
+           sodipodi:absref="C:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\recode\crom.png"
+           xlink:href="C:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\recode\crom.png"
+           x="546.14844"
+           y="688.45441" />
+        <g
+           transform="matrix(0.156260,0.000000,0.000000,0.408960,528.8492,655.6892)"
+           id="g2409">
+          <g
+             id="g2436"
+             transform="matrix(2.619293,0.000000,0.000000,1.000000,-87.11095,5.495604e-14)">
+            <rect
+               style="opacity:0.80000001;fill:#111111;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:0.62500000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000"
+               id="rect2411"
+               width="72.691101"
+               height="11.507826"
+               x="54.196709"
+               y="108.22178"
+               ry="14.069670"
+               rx="5.4722900" />
+            <text
+               xml:space="preserve"
+               style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
+               x="72.969994"
+               y="118.34386"
+               id="text2413"
+               sodipodi:linespacing="125.00000%"><tspan
+                 sodipodi:role="line"
+                 id="tspan2415"
+                 x="72.969994"
+                 y="118.34386">Crom</tspan></text>
+          </g>
+        </g>
+      </g>
+      <rect
+         style="opacity:1.0000000;fill:none;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#b4b4b4;stroke-width:1.0000000;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:1.0000000 3.0000000 ;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000"
+         id="rect2445"
+         width="110.96743"
+         height="91.905540"
+         x="509.90555"
+         y="696.31329"
+         transform="translate(0.000000,-68.00000)"
+         rx="0.00000000"
+         ry="0.00000000" />
+      <path
+         sodipodi:type="star"
+         style="opacity:1.0000000;fill:#ff0d0d;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#f8ff02;stroke-width:1.0000000;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000"
+         id="path3878"
+         sodipodi:sides="4"
+         sodipodi:cx="65.355049"
+         sodipodi:cy="547.22211"
+         sodipodi:r1="14.296536"
+         sodipodi:r2="4.1339192"
+         sodipodi:arg1="1.5748723"
+         sodipodi:arg2="2.3934200"
+         inkscape:flatsided="false"
+         inkscape:rounded="0.13000000"
+         inkscape:randomized="0.00000000"
+         d="M 65.296777,561.51852 C 63.755741,561.46112 63.411143,551.12928 62.325162,550.03441 C 61.260775,548.96132 51.002373,548.67423 51.058631,547.16383 C 51.116031,545.62280 61.447875,545.27820 62.542742,544.19222 C 63.615838,543.12783 63.902927,532.86943 65.413321,532.92569 C 66.954358,532.98309 67.298955,543.31493 68.384936,544.40980 C 69.449323,545.48290 79.707725,545.76998 79.651467,547.28038 C 79.594067,548.82142 69.262224,549.16601 68.167357,550.25199 C 67.094260,551.31638 66.807172,561.57478 65.296777,561.51852 z "
+         transform="matrix(0.378876,0.000000,0.000000,0.378876,539.9470,465.5752)" />
       <g
          transform="translate(31.84281,1.921410)"
          id="g10950">
@@ -1789,8 +1915,8 @@
            rx="0.00000000"
            ry="0.00000000" />
         <path
-           style="fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
-           d="M 517.23531,701.44210 L 508.32527,684.27442 L 505.67895,687.79105 L 505.44156,674.25492 L 516.24920,682.40836 L 511.84869,682.48019 L 520.75873,699.64787 L 517.23531,701.44210 z "
+           style="fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.58266670;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+           d="M 594.98322,731.57879 L 591.17357,723.86126 L 589.20643,726.30891 L 589.06811,718.42186 L 595.36537,723.17260 L 592.58872,723.10815 L 596.39838,730.82568 L 594.98322,731.57879 z "
            id="path1748"
            sodipodi:nodetypes="cccccccc" />
       </g>
@@ -1981,92 +2107,209 @@
         <text
            sodipodi:linespacing="125.00000%"
            id="text1706"
-           y="265.27631"
-           x="416.3782"
-           style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
+           y="267.27631"
+           x="388.3782"
+           style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
            xml:space="preserve"><tspan
-             y="265.27631"
-             x="416.37820"
+             y="267.27631"
+             x="388.37820"
              id="tspan1708"
              sodipodi:role="line">Target moves...</tspan></text>
       </g>
       <text
          xml:space="preserve"
-         style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
-         x="90.115364"
-         y="497.25253"
-         id="text1736"
-         sodipodi:linespacing="125.00000%"><tspan
-           sodipodi:role="line"
-           x="90.115364"
-           y="497.25253"
-           id="tspan1738">Drawing anchored to Character</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
-         x="57.501446"
-         y="515.8891"
+         style="font-size:12.000000px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
+         x="54.77832"
+         y="529.50476"
          id="text1740"
          sodipodi:linespacing="125.00000%"><tspan
            sodipodi:role="line"
-           x="57.501446"
-           y="515.88910"
+           x="54.778320"
+           y="529.50476"
            id="tspan1742">Obscurement</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
-         x="171.65013"
-         y="522.87781"
+         style="font-size:12.000000px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
+         x="229.51659"
+         y="531.04718"
          id="text1744"
          sodipodi:linespacing="125.00000%"><tspan
            sodipodi:role="line"
-           x="171.65013"
-           y="522.87781"
+           x="229.51659"
+           y="531.04718"
            id="tspan3205">Drawing's Hover label</tspan></text>
+      <image
+         id="image3192"
+         height="403.32309"
+         width="322.65845"
+         sodipodi:absref="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\gnoll-close.jpg"
+         xlink:href="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\gnoll-close.jpg"
+         x="52.231007"
+         y="547.99707" />
+      <image
+         id="image3278"
+         height="169.39569"
+         width="156.48935"
+         sodipodi:absref="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\ice-shape.png"
+         xlink:href="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\ice-shape.png"
+         x="145.01274"
+         y="687.51038" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.000000px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
+         x="115.41972"
+         y="503.12442"
+         id="text9475"
+         sodipodi:linespacing="125.00000%"><tspan
+           sodipodi:role="line"
+           x="115.41972"
+           y="503.12442"
+           id="tspan1730">Drawing (with texture)</tspan></text>
+      <rect
+         style="opacity:1.0000000;fill:#d9e59c;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.0635580;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000"
+         id="rect3285"
+         width="54.990776"
+         height="13.017142"
+         x="270.57626"
+         y="726.12402" />
       <text
          xml:space="preserve"
          style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
-         x="401.5162"
-         y="510.11035"
-         id="text3211"
+         x="272.79102"
+         y="736.70569"
+         id="text4013"
          sodipodi:linespacing="125.00000%"><tspan
            sodipodi:role="line"
-           x="401.51620"
-           y="510.11035"
-           id="tspan3213">Band Select</tspan></text>
+           id="tspan4015"
+           x="272.79102"
+           y="736.70569"
+           style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans">ice spell</tspan></text>
+      <path
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.5000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+         d="M 314.52118,534.36544 L 290.69382,722.26120"
+         id="path4017"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.5000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+         d="M 173.26041,511.46185 L 210.01975,736.31460"
+         id="path4745"
+         sodipodi:nodetypes="cc" />
+      <g
+         id="g5481"
+         transform="matrix(0.610982,0.000000,0.000000,0.610982,231.2548,781.7844)">
+        <image
+           id="image5483"
+           height="77.000000"
+           width="77.000000"
+           sodipodi:absref="C:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\recode\crom.png"
+           xlink:href="C:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\recode\crom.png"
+           x="52.099075"
+           y="29.168093" />
+        <g
+           transform="translate(5.681610e-2,-2.609712)"
+           id="g5485">
+          <rect
+             rx="9.4174862"
+             ry="9.4174862"
+             y="108.22178"
+             x="54.196709"
+             height="11.507826"
+             width="72.691101"
+             id="rect5487"
+             style="opacity:0.80000001;fill:#111111;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:0.62500000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000" />
+          <text
+             sodipodi:linespacing="125.00000%"
+             id="text5489"
+             y="118.34386"
+             x="72.969994"
+             style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
+             xml:space="preserve"><tspan
+               y="118.34386"
+               x="72.969994"
+               id="tspan5491"
+               sodipodi:role="line">Crom</tspan></text>
+        </g>
+      </g>
+      <path
+         style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+         d="M 53.781760,1019.0039 L 53.781760,842.68140 L 155.93720,901.66087 L 188.72982,958.45934 L 298.18242,958.45934 L 336.98698,1019.0039 L 53.781760,1019.0039 z "
+         id="path5493"
+         transform="translate(0.000000,-68.00000)" />
+      <path
+         style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+         d="M 53.655837,841.75585 C 60.378042,847.25270 70.118430,842.21763 77.184066,846.63365 C 81.375724,849.25344 82.699560,850.09602 85.791954,853.80689 C 91.960690,861.20937 105.51117,858.11084 113.91106,858.11084 C 115.00535,858.11084 127.67837,883.75916 135.14385,888.23844 C 148.83613,896.45381 163.81774,901.85807 177.89636,908.89738 C 191.20683,915.55261 199.44448,920.35467 214.62335,921.52228 C 230.10754,922.71337 229.83405,922.53426 243.89017,932.42560 C 246.44613,934.22424 258.98087,925.89706 247.04640,939.02499 C 246.35049,939.79048 249.01889,940.60370 248.76797,941.60735 C 246.56046,950.43739 263.17049,948.20673 266.84454,948.20673 C 273.96795,948.20673 279.03918,948.42200 285.49496,951.64989 C 289.75259,953.77870 294.88102,953.33016 299.55451,955.66690 C 309.02811,960.40370 319.31111,963.53669 328.82133,968.29181 C 329.09185,968.42707 329.39519,968.48309 329.68212,968.57874 C 331.36989,969.14133 332.55142,970.68289 333.98607,971.73496 C 334.08158,971.80500 333.14660,978.94552 334.27300,980.91671 C 336.25402,984.38350 343.95726,989.81308 344.31553,991.24618 C 345.72091,996.86766 345.79014,995.86701 350.34106,999.28020 C 351.45807,1000.1180 351.81523,1003.3763 352.34956,1004.4449 C 353.88551,1007.5168 351.59851,1009.3830 349.19334,1010.7574 C 338.99740,1016.5836 299.51616,1020.1359 285.20803,1017.0698 C 265.46213,1012.8386 247.57168,1004.1448 227.53518,1001.0018 C 200.13885,996.70432 171.74675,989.67452 145.47331,980.91671 C 123.90503,973.72728 112.85183,945.03519 104.15545,926.40008 C 97.694427,912.55503 89.658795,898.22198 81.774939,885.08222 C 77.305100,877.63249 71.031465,875.11018 64.846092,870.16188 C 59.449054,865.84425 58.009504,860.48914 54.516626,854.66768 C 53.224637,852.51437 52.903428,849.43888 52.903428,846.92058 C 52.903428,844.97817 52.734108,843.51335 53.655837,841.75585 z "
+         id="path7696"
+         transform="translate(0.000000,-68.00000)" />
+      <path
+         style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+         d="M 343.16782,989.81153 C 343.16782,987.44931 347.08051,992.48520 349.19334,993.54161 C 352.90298,995.39643 358.49442,995.28096 361.53131,997.55863 C 364.40271,999.71217 366.73062,1001.8971 369.56534,1004.7319 C 371.90917,1007.0757 373.64396,1006.6075 374.73007,1009.3227 C 375.56352,1011.4064 374.99099,1013.5747 375.87779,1015.3483 C 376.93705,1017.4668 375.09127,1018.7914 373.29542,1018.7914 C 369.42309,1018.7914 365.31434,1018.4478 361.53131,1019.0783 C 357.32224,1019.7799 353.90357,1020.2261 349.48027,1020.2261 C 346.47963,1020.2261 342.83709,1020.3622 340.29852,1019.9391 C 338.10525,1019.5736 335.68501,1017.6392 332.83835,1017.0698 C 326.59734,1015.8216 325.95204,1012.6365 325.95204,1006.1665 C 325.95204,999.52233 332.36971,995.82986 336.56843,992.68082 C 338.23609,991.43008 339.75671,990.50482 341.44624,989.23767 C 341.93016,988.87473 342.59396,989.62024 343.16782,989.81153 z "
+         id="path7698"
+         transform="translate(0.000000,-68.00000)" />
+      <image
+         id="image5336"
+         height="45.625355"
+         width="104.08821"
+         sodipodi:absref="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\ice-shape.png"
+         xlink:href="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\ice-shape.png"
+         x="1522.4899"
+         y="-1040.1416"
+         transform="matrix(7.334030e-2,0.997307,-0.523555,0.851992,0.000000,0.000000)"
+         style="opacity:0.60000002;fill-opacity:1.0000000;stroke:#686868;stroke-width:3.2696352;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000" />
+      <rect
+         style="opacity:1.0000000;fill:none;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#686868;stroke-width:1.0000000;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000"
+         id="rect8969"
+         width="30.937160"
+         height="142.44946"
+         x="632.36481"
+         y="700.74060"
+         transform="translate(0.000000,-68.00000)" />
+      <path
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.5000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+         d="M 502.86522,492.33449 L 547.58108,686.00222"
+         id="path2441"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.5000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+         d="M 74.521742,532.74085 L 106.56621,785.83693"
+         id="path2443"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.5000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+         d="M 676.35538,534.02768 L 648.44465,628.65370"
+         id="path11155"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.5000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+         d="M 428.31961,512.75795 L 506.39378,653.32470"
+         id="path3899"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.5000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+         d="M 589.21663,511.21886 L 568.11240,665.75631"
+         id="path3882"
+         sodipodi:nodetypes="cc" />
       <text
          xml:space="preserve"
-         style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
-         x="587.88135"
-         y="482.15552"
-         id="text3215"
+         style="font-size:12.000000px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
+         x="618.07123"
+         y="528.07092"
+         id="text11151"
          sodipodi:linespacing="125.00000%"><tspan
            sodipodi:role="line"
-           x="587.88135"
-           y="482.15552"
-           id="tspan3219">Laser Pointer</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-size:12.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
-         x="556.43225"
-         y="528.74683"
-         id="text3221"
-         sodipodi:linespacing="125.00000%"><tspan
-           sodipodi:role="line"
-           x="556.43225"
-           y="528.74683"
-           id="tspan3223">Character at distant zoom</tspan></text>
+           x="618.07123"
+           y="528.07092"
+           id="tspan11153">Drawing, Hidden</tspan></text>
     </g>
     <text
        xml:space="preserve"
-       style="font-size:30.000000;font-style:normal;font-weight:bold;fill:#274dd2;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Verdana;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
-       x="68.885735"
-       y="32.470566"
+       style="font-size:30.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#274dd2;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
+       x="35.609612"
+       y="36.470566"
        id="text1887"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125.00000%"><tspan
          sodipodi:role="line"
          id="tspan1889"
-         x="68.885735"
-         y="32.470566">Design of Visual Effects in Vellum</tspan></text>
+         x="35.609612"
+         y="36.470566">Design of Visual Effects in Vellum</tspan></text>
   </g>
 </svg>
