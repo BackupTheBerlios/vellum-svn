@@ -168,7 +168,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1128203876286" FOLDED="true" ID="Freemind_Link_41198604" MODIFIED="1128237356876" TEXT="connectors">
+<node COLOR="#00b439" CREATED="1128203876286" ID="Freemind_Link_41198604" MODIFIED="1128463169708" TEXT="connectors">
 <font NAME="SansSerif" SIZE="16"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>items which connect or apply to draggables should observe several properties.&#xa;* when draggable endpoints move, targetting arrow should update itself&#xa;* when either endpoint is Drop&apos;d, targetting arrow should disappear&#xa;</text>
@@ -178,8 +178,9 @@
 </node>
 <node COLOR="#990000" CREATED="1128237360966" ID="Freemind_Link_204437201" MODIFIED="1128237365337" TEXT="moving endpoint problem">
 <font NAME="SansSerif" SIZE="14"/>
-<node COLOR="#111111" CREATED="1128204099724" ID="Freemind_Link_50547549" MODIFIED="1128237711998" TEXT="connectors are observers">
+<node COLOR="#111111" CREATED="1128204099724" ID="Freemind_Link_50547549" MODIFIED="1128463327652" TEXT="connectors are observers">
 <font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-1"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>if model in self.endpoints:&#xa;  self.do_appropriate_thing()&#xa;</text>
 </hook>
@@ -189,18 +190,25 @@
 <node COLOR="#111111" CREATED="1128237324219" ID="Freemind_Link_586375096" MODIFIED="1128237330713" TEXT="when change happens, redraw arrow"/>
 </node>
 </node>
-<node COLOR="#111111" CREATED="1128237080404" ID="Freemind_Link_1865347952" MODIFIED="1128237119533" TEXT="arrows grow location1, location2 properties">
+<node COLOR="#111111" CREATED="1128237080404" ID="Freemind_Link_1865347952" MODIFIED="1128463332543" TEXT="arrows grow location1, location2 properties">
+<icon BUILTIN="full-2"/>
 <node COLOR="#111111" CREATED="1128237120795" ID="Freemind_Link_493162952" MODIFIED="1128237130920" TEXT="these are dispatched"/>
-<node COLOR="#111111" CREATED="1128237131185" ID="Freemind_Link_1816095871" MODIFIED="1128237137587" TEXT="but not marshalled">
+<node COLOR="#111111" CREATED="1128237131185" ID="Freemind_Link_1816095871" MODIFIED="1128463375856" TEXT="but not sent on the wire">
 <icon BUILTIN="messagebox_warning"/>
+<node COLOR="#111111" CREATED="1128463403013" ID="Freemind_Link_1580374356" MODIFIED="1128463418420" TEXT="or serialized when realm is saving"/>
+<node COLOR="#111111" CREATED="1128463465077" ID="Freemind_Link_1865021823" MODIFIED="1128468041506" TEXT="dictify should filter">
+<icon BUILTIN="help"/>
+</node>
+<node COLOR="#111111" CREATED="1128463468218" ID="Freemind_Link_1450062831" MODIFIED="1128463490703" TEXT="NetClient&apos;s receivePropertyChange &#xa;should filter"/>
 </node>
 <node COLOR="#111111" CREATED="1128237213869" ID="Freemind_Link_1696058820" MODIFIED="1128237759787" TEXT="connectors still need to be observers">
 <node COLOR="#111111" CREATED="1128237224711" ID="Freemind_Link_1795355017" MODIFIED="1128237228823" TEXT="but observer impl is simpler"/>
 <node COLOR="#111111" CREATED="1128237762286" ID="Freemind_Link_948841522" MODIFIED="1128237772300" TEXT="no redrawing (View does it)"/>
 </node>
 </node>
-<node COLOR="#111111" CREATED="1128234337416" FOLDED="true" ID="Freemind_Link_1166119285" MODIFIED="1128237738384" TEXT="View handles all this explicitly.. how &#xa;many such persistent connections will there be?">
+<node COLOR="#111111" CREATED="1128234337416" FOLDED="true" ID="Freemind_Link_1166119285" MODIFIED="1128463334230" TEXT="View handles all this explicitly.. how &#xa;many such persistent connections will there be?">
 <icon BUILTIN="button_cancel"/>
+<icon BUILTIN="full-3"/>
 <node COLOR="#111111" CREATED="1128234491894" ID="Freemind_Link_108718011" MODIFIED="1128234498365" TEXT="endpoints">
 <node COLOR="#111111" CREATED="1128234607221" ID="Freemind_Link_730498447" MODIFIED="1128234609957" TEXT="Character"/>
 <node COLOR="#111111" CREATED="1128234610472" ID="Freemind_Link_671022185" MODIFIED="1128234611957" TEXT="Drawing"/>
@@ -237,7 +245,13 @@
 </hook>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1128234904565" ID="Freemind_Link_1804626329" MODIFIED="1128234918756" TEXT="use inkscape to draw all visual items and effects needed">
+<node COLOR="#00b439" CREATED="1128463170771" ID="Freemind_Link_720219263" MODIFIED="1128463220758" TEXT="why do objects stay &quot;grabbed&quot;?">
+<font NAME="SansSerif" SIZE="16"/>
+<hook NAME="accessories/plugins/NodeNote.properties">
+<text>newly added objects, or existing objects after an object &#xa;is right-click deleted, stay &quot;grabbed&quot; and move whenever&#xa;the mouse moves over them, even if the left button is not &#xa;down.  Why?&#xa;</text>
+</hook>
+</node>
+<node COLOR="#00b439" CREATED="1128234904565" FOLDED="true" ID="Freemind_Link_1804626329" MODIFIED="1128234918756" TEXT="use inkscape to draw all visual items and effects needed">
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1128234922554" ID="Freemind_Link_1404182787" MODIFIED="1128234928821" TEXT="e.g.">
 <font NAME="SansSerif" SIZE="14"/>
@@ -277,25 +291,44 @@
 <node COLOR="#111111" CREATED="1128234943982" ID="Freemind_Link_94196267" MODIFIED="1128318849953" TEXT="things being renamed">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#111111" CREATED="1128234963784" ID="Freemind_Link_459484708" MODIFIED="1128234965097" TEXT="background">
-<node COLOR="#111111" CREATED="1128365086937" ID="Freemind_Link_1248884844" MODIFIED="1128365089062" TEXT="with band select"/>
-<node COLOR="#111111" CREATED="1128365089718" ID="Freemind_Link_499572551" MODIFIED="1128365092718" TEXT="with laser pointer"/>
-<node COLOR="#111111" CREATED="1128365105593" ID="Freemind_Link_1102303489" MODIFIED="1128365266500" TEXT="icons at diff zoom levels">
+<node COLOR="#111111" CREATED="1128234963784" FOLDED="true" ID="Freemind_Link_459484708" MODIFIED="1128452336447" TEXT="background">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#111111" CREATED="1128365086937" ID="Freemind_Link_1248884844" MODIFIED="1128451974730" TEXT="with band select">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#111111" CREATED="1128365089718" ID="Freemind_Link_499572551" MODIFIED="1128451974730" TEXT="with laser pointer">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#111111" CREATED="1128365105593" ID="Freemind_Link_1102303489" MODIFIED="1128451974715" TEXT="icons at diff zoom levels">
+<icon BUILTIN="button_ok"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>1. Labels will be at least as wide as the icon&#xa;2. When icon is tiny, label will reach a minimum size at which it&apos;s still readable (8 pixels high?)&#xa;3. Icon will reach a minimum size of (16x16?) pixels&#xa;</text>
 </hook>
 </node>
-<node COLOR="#111111" CREATED="1128234965331" ID="Freemind_Link_433970316" MODIFIED="1128368191703" TEXT="obscurement mask"/>
-<node COLOR="#111111" CREATED="1128234949108" ID="Freemind_Link_1438057582" MODIFIED="1128234959251" TEXT="drawings">
+<node COLOR="#111111" CREATED="1128234965331" ID="Freemind_Link_433970316" MODIFIED="1128451974715" TEXT="obscurement mask">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#111111" CREATED="1128234949108" ID="Freemind_Link_1438057582" MODIFIED="1128452336447" TEXT="drawings">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#111111" CREATED="1128235095271" ID="Freemind_Link_675517978" MODIFIED="1128367802578" TEXT="visible">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#111111" CREATED="1128235097819" ID="Freemind_Link_1979097768" MODIFIED="1128235100023" TEXT="hidden"/>
-<node COLOR="#111111" CREATED="1128367803453" ID="Freemind_Link_1792268976" MODIFIED="1128367847484" TEXT="with hover label"/>
+<node COLOR="#111111" CREATED="1128235097819" ID="Freemind_Link_1979097768" MODIFIED="1128452336447" TEXT="hidden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#111111" CREATED="1128367803453" ID="Freemind_Link_1792268976" MODIFIED="1128451974715" TEXT="with hover label">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#111111" CREATED="1128235097819" ID="Freemind_Link_501790211" MODIFIED="1128235100023" TEXT="hidden"/>
+</node>
+</node>
+<node COLOR="#111111" CREATED="1128234975928" FOLDED="true" ID="Freemind_Link_468307816" MODIFIED="1128452361228" TEXT="selecting tools">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#111111" CREATED="1128452356119" ID="Freemind_Link_1692009519" MODIFIED="1128452362228" TEXT="band select">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#111111" CREATED="1128234967503" ID="Freemind_Link_917812682" MODIFIED="1128234969066" TEXT="drawing tools"/>
-<node COLOR="#111111" CREATED="1128234975928" ID="Freemind_Link_468307816" MODIFIED="1128234977772" TEXT="selecting tools"/>
 <node COLOR="#111111" CREATED="1128235126076" ID="Freemind_Link_1877968407" MODIFIED="1128235138626" TEXT="window layout">
 <node COLOR="#111111" CREATED="1128235139924" ID="Freemind_Link_660191209" MODIFIED="1128235143393" TEXT="where&apos;s minimap"/>
 <node COLOR="#111111" CREATED="1128235143643" ID="Freemind_Link_543198804" MODIFIED="1128235147457" TEXT="where does chat go"/>

@@ -150,7 +150,7 @@ class NetClient(pb.Referenceable):
 
     def gotGame(self, data):
         for model_data, id in data:
-            model = loader.unmarshal(model_data)
+            model = loader.fromDict(model_data)
             self.remote_models[model] = id
             dispatcher.send(signal=New, sender='remote', model=model)
             assert hasattr(model, 'location'), (
@@ -180,7 +180,7 @@ class Gameboy(pb.Avatar):
         """
         ret = []
         for id, model in self.models.items(keytype=type('')):
-            ret.append((model.marshal(), id))
+            ret.append((model.dictify(), id))
         return ret
 
     def perspective_receiveNewModel(self,
@@ -284,8 +284,7 @@ class GameRealm:
     def saveGame(self):
         # FIXME - to file
         for id, model in self.models.items(keytype=type('')):
-            dicty_model = yaml.load(model.marshal()).next()
-            print yaml.dump({id: dicty_model})
+            print yaml.dump({id: model.dictify()})
 
 
     def loadSavedGame(self):

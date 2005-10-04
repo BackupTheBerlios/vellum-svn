@@ -24,9 +24,6 @@ class Modelable(Signal):
                          )
         dispatcher.connect(self.receiver, self)
 
-    def marshal(self):
-        return yaml.dump(self.dictify())
-
     def dictify(self):
         return {'TYPE': self.__class__.__name__}
 
@@ -111,16 +108,10 @@ class FollowArrow(Connector):
 
 
 class Loader:
-    """Creator for instances of any Modelable from marshalled string"""
+    """Creator for instances of any Modelable from flat dict"""
     def __init__(self):
         import models
         self.models = models
-
-    def unmarshal(self, data):
-        """unmarshal(yaml_string) => instance of Modelable"""
-        print data
-        data_dict = yaml.load(data).next()
-        return self.fromDict(data_dict)
 
     def fromDict(self, dict_data):
         classname = dict_data.pop('TYPE')
