@@ -253,12 +253,11 @@
 <text>newly added objects, or existing objects after an object &#xa;is right-click deleted, stay &quot;grabbed&quot; and move whenever&#xa;the mouse moves over them, even if the left button is not &#xa;down.  Why?&#xa;</text>
 </hook>
 </node>
-<node COLOR="#00b439" CREATED="1128234904565" FOLDED="true" ID="Freemind_Link_1804626329" MODIFIED="1128234918756" TEXT="use inkscape to draw all visual items and effects needed">
+<node COLOR="#00b439" CREATED="1128234904565" ID="Freemind_Link_1804626329" MODIFIED="1128234918756" TEXT="use inkscape to draw all visual items and effects needed">
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1128234922554" ID="Freemind_Link_1404182787" MODIFIED="1128234928821" TEXT="e.g.">
 <font NAME="SansSerif" SIZE="14"/>
-<node COLOR="#111111" CREATED="1128234930697" FOLDED="true" ID="Freemind_Link_1196874548" MODIFIED="1128313023703" TEXT="characters/articles">
-<icon BUILTIN="button_ok"/>
+<node COLOR="#111111" CREATED="1128234930697" ID="Freemind_Link_1196874548" MODIFIED="1128628638722" TEXT="characters/articles">
 <node COLOR="#111111" CREATED="1128234933651" ID="Freemind_Link_1480838479" MODIFIED="1128311734078" TEXT="unselected">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -274,6 +273,8 @@
 <node COLOR="#111111" CREATED="1128364916921" ID="Freemind_Link_263740035" MODIFIED="1128364921671" TEXT="name overflow">
 <icon BUILTIN="button_ok"/>
 </node>
+<node COLOR="#111111" CREATED="1128628334911" ID="Freemind_Link_1192609125" MODIFIED="1128628351036" TEXT="damage bar"/>
+<node COLOR="#111111" CREATED="1128628353911" ID="Freemind_Link_161201153" MODIFIED="1128628357411" TEXT="incapacitated state"/>
 </node>
 <node COLOR="#111111" CREATED="1128234959533" FOLDED="true" ID="Freemind_Link_1250292606" MODIFIED="1128314729953" TEXT="sound/note icons">
 <icon BUILTIN="button_ok"/>
@@ -331,6 +332,10 @@
 </node>
 </node>
 <node COLOR="#111111" CREATED="1128234967503" ID="Freemind_Link_917812682" MODIFIED="1128234969066" TEXT="drawing tools"/>
+<node COLOR="#111111" CREATED="1128628662331" ID="Freemind_Link_1316182577" MODIFIED="1128628664612" TEXT="waypoints">
+<node COLOR="#111111" CREATED="1128628665097" ID="Freemind_Link_627157237" MODIFIED="1128628670628" TEXT="normal (with distance marks)"/>
+<node COLOR="#111111" CREATED="1128628671018" ID="Freemind_Link_559224877" MODIFIED="1128628675331" TEXT="planning mode"/>
+</node>
 <node COLOR="#111111" CREATED="1128235126076" ID="Freemind_Link_1877968407" MODIFIED="1128235138626" TEXT="window layout">
 <node COLOR="#111111" CREATED="1128235139924" ID="Freemind_Link_660191209" MODIFIED="1128235143393" TEXT="where&apos;s minimap"/>
 <node COLOR="#111111" CREATED="1128235143643" ID="Freemind_Link_543198804" MODIFIED="1128235147457" TEXT="where does chat go"/>
