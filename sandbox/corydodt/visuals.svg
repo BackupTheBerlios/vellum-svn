@@ -15,7 +15,10 @@
    sodipodi:version="0.32"
    inkscape:version="0.42.2"
    sodipodi:docbase="c:\DOCUME~1\cory\svn\SANDBO~3\corydodt"
-   sodipodi:docname="visuals.svg">
+   sodipodi:docname="visuals.svg"
+   inkscape:export-filename="c:\DOCUME~1\cory\svn\SANDBO~3\corydodt\visuals.png"
+   inkscape:export-xdpi="90.000000"
+   inkscape:export-ydpi="90.000000">
   <defs
      id="defs4">
     <pattern
@@ -1125,13 +1128,13 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1.4684938"
      inkscape:cx="372.15002"
-     inkscape:cy="1341.8759"
+     inkscape:cy="1276.2847"
      inkscape:document-units="px"
-     inkscape:current-layer="g4486"
+     inkscape:current-layer="layer1"
      inkscape:window-width="1184"
      inkscape:window-height="781"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-x="31"
+     inkscape:window-y="334"
      showguides="true"
      inkscape:guide-bbox="true"
      fill="#20b2aa">
@@ -1156,8 +1159,9 @@
      inkscape:groupmode="layer"
      id="layer1">
     <g
-       id="g4486"
-       transform="translate(-16.00000,72.00000)">
+       id="group1234"
+       transform="translate(-16.00000,72.00000)"
+       inkscape:label="#zoom-close">
       <text
          xml:space="preserve"
          style="font-size:16.500000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Georgia"
@@ -1720,11 +1724,11 @@
            y="488.58069"
            id="tspan3223">Character at distant zoom</tspan></text>
       <image
-         id="image3235"
+         id="zoom-distant"
          height="403.32306"
          width="322.65848"
-         sodipodi:absref="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\gnoll-distant.jpg"
-         xlink:href="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\gnoll-distant.jpg"
+         sodipodi:absref="gnoll-distant.jpg"
+         xlink:href="gnoll-distant.jpg"
          x="408.95755"
          y="547.58551" />
       <g
@@ -2139,13 +2143,14 @@
            y="531.04718"
            id="tspan3205">Drawing's Hover label</tspan></text>
       <image
-         id="image3192"
+         id="zoom-close1"
          height="403.32309"
          width="322.65845"
-         sodipodi:absref="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\gnoll-close.jpg"
-         xlink:href="c:\Documents and Settings\cory\svn\sandbox-vellum\corydodt\gnoll-close.jpg"
+         sodipodi:absref="gnoll-close.jpg"
+         xlink:href="gnoll-close.jpg"
          x="52.231007"
-         y="547.99707" />
+         y="547.99707"
+         inkscape:label="#zoom-close" />
       <image
          id="image3278"
          height="169.39569"

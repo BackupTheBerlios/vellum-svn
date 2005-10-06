@@ -136,8 +136,11 @@ class BoxScore:
     register/unregisterObserver.
     """
     def __init__(self):
-        dispatcher.connect(self.receiveNew, signal=New) 
-        dispatcher.connect(self.receiveDrop, signal=Drop)
+        # these use strong references to avoid a warning when they are
+        # garbage collected.
+        dispatcher.connect(self.receiveNew, signal=New, weak=False)
+        dispatcher.connect(self.receiveDrop, signal=Drop, weak=False)
+
         self.observers = []
         self.models = []
 

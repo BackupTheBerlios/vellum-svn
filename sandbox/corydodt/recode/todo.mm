@@ -192,7 +192,9 @@
 </node>
 <node COLOR="#111111" CREATED="1128237080404" ID="Freemind_Link_1865347952" MODIFIED="1128463332543" TEXT="arrows grow location1, location2 properties">
 <icon BUILTIN="full-2"/>
-<node COLOR="#111111" CREATED="1128237120795" ID="Freemind_Link_493162952" MODIFIED="1128237130920" TEXT="these are dispatched"/>
+<node COLOR="#111111" CREATED="1128237120795" FOLDED="true" ID="Freemind_Link_493162952" MODIFIED="1128237130920" TEXT="these are dispatched">
+<node COLOR="#111111" CREATED="1128556881546" ID="Freemind_Link_1694457481" MODIFIED="1128556894828" TEXT="BigController should handle and draw"/>
+</node>
 <node COLOR="#111111" CREATED="1128237131185" ID="Freemind_Link_1816095871" MODIFIED="1128463375856" TEXT="but not sent on the wire">
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#111111" CREATED="1128463403013" ID="Freemind_Link_1580374356" MODIFIED="1128463418420" TEXT="or serialized when realm is saving"/>
