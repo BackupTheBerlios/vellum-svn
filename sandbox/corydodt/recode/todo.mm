@@ -178,7 +178,7 @@
 </node>
 <node COLOR="#990000" CREATED="1128237360966" ID="Freemind_Link_204437201" MODIFIED="1128237365337" TEXT="moving endpoint problem">
 <font NAME="SansSerif" SIZE="14"/>
-<node COLOR="#111111" CREATED="1128204099724" ID="Freemind_Link_50547549" MODIFIED="1128463327652" TEXT="connectors are observers">
+<node COLOR="#111111" CREATED="1128204099724" FOLDED="true" ID="Freemind_Link_50547549" MODIFIED="1128463327652" TEXT="connectors are observers">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
@@ -206,6 +206,9 @@
 <node COLOR="#111111" CREATED="1128237213869" ID="Freemind_Link_1696058820" MODIFIED="1128237759787" TEXT="connectors still need to be observers">
 <node COLOR="#111111" CREATED="1128237224711" ID="Freemind_Link_1795355017" MODIFIED="1128237228823" TEXT="but observer impl is simpler"/>
 <node COLOR="#111111" CREATED="1128237762286" ID="Freemind_Link_948841522" MODIFIED="1128237772300" TEXT="no redrawing (View does it)"/>
+</node>
+<node COLOR="#111111" CREATED="1129000367467" ID="Freemind_Link_1703388560" MODIFIED="1129005171651" TEXT="Implementation">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node COLOR="#111111" CREATED="1128234337416" FOLDED="true" ID="Freemind_Link_1166119285" MODIFIED="1128463334230" TEXT="View handles all this explicitly.. how &#xa;many such persistent connections will there be?">
@@ -253,7 +256,7 @@
 <text>newly added objects, or existing objects after an object &#xa;is right-click deleted, stay &quot;grabbed&quot; and move whenever&#xa;the mouse moves over them, even if the left button is not &#xa;down.  Why?&#xa;</text>
 </hook>
 </node>
-<node COLOR="#00b439" CREATED="1128234904565" ID="Freemind_Link_1804626329" MODIFIED="1128234918756" TEXT="use inkscape to draw all visual items and effects needed">
+<node COLOR="#00b439" CREATED="1128234904565" FOLDED="true" ID="Freemind_Link_1804626329" MODIFIED="1128234918756" TEXT="use inkscape to draw all visual items and effects needed">
 <font NAME="SansSerif" SIZE="16"/>
 <node COLOR="#990000" CREATED="1128234922554" ID="Freemind_Link_1404182787" MODIFIED="1128234928821" TEXT="e.g.">
 <font NAME="SansSerif" SIZE="14"/>
