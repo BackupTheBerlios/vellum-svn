@@ -103,10 +103,11 @@ class BigController:
                        pixbuf=image,
                        x=0, y=0)
 
-
             igroup.connect('event', self.on_draggable_event, character)
             character.widget = igroup
 
+    def new_TargetArrow(self, arrow):
+        pass
     def new_Note(self, note):
         # place text on the canvas
         root = self.view.canvas.root()

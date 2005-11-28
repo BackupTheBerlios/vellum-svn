@@ -14,8 +14,9 @@ d7e4846c372a75b8456a924913f77e45:
 
         This is some text.
 
-#acd005eed93279b6091857d598e82113:
-#    TYPE: TargetArrow
-#    attacker: edf1af0e82ca7dc2123753cfa43ca9f0
-#    target: 74a44937bb7c54b4a5d5a474484c0512
+acd005eed93279b6091857d598e82113:
+    TYPE: TargetArrow
+    endpoints:
+            - MODEL$$edf1af0e82ca7dc2123753cfa43ca9f0
+            - MODEL$$74a44937bb7c54b4a5d5a474484c0512
 

@@ -106,23 +106,40 @@ class TargetArrow(Connector):
 class FollowArrow(Connector):
     pass
 
-
 class Loader:
     """Creator for instances of any Modelable from flat dict"""
     def __init__(self):
-        import models
-        self.models = models
+        self.models = {}
+
+    def registerModelType(self, klass, key=None):
+        if key is None:
+            key = klass.__name__
+        self.models[key] = klass
 
     def fromDict(self, dict_data):
         classname = dict_data.pop('TYPE')
-        klass = getattr(self.models, classname)
+        klass = self.models[classname]
         ret = klass()
         for k, v in dict_data.items():
             setattr(ret, k, v)
         return ret
 
+    _default = {}
+    def typeByName(self, name, default=_default):
+        # _default is a klooge so typeByName can obey dict.get's semantics
+        # without having to catch any exceptions
+        if default is Loader._default:
+            return self.models.get(name)
+        return self.models.get(name, default)
+
 
 loader = Loader()
+# set up all Type names that appear in .yml files here
+for klass in [ Character, 
+               Note, 
+               TargetArrow, 
+               FollowArrow ]:
+    loader.registerModelType(klass)
 
 
 class BoxScore:

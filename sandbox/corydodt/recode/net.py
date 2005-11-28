@@ -19,7 +19,6 @@ from dispatch import dispatcher
 # local imports
 from fs import fs
 from models import box, New, Drop, BiDict, loader
-import models
 from uuid import uuid
 
 
@@ -46,7 +45,7 @@ class NetClient(pb.Referenceable):
         Notifies the dispatch mechanism.
         """
         print 'received propagated model', object_id
-        model = getattr(models, type)()
+        model = loader.typeByName(type)()
         self.remote_models[model] = object_id
         dispatcher.send(signal=New,
                         sender='remote',
@@ -192,7 +191,7 @@ class Gameboy(pb.Avatar):
         Notifies the dispatch mechanism.
         """
         print 'received and adding model', object_id
-        model = getattr(models, type)()
+        model = loader.typeByName(type)()
         self.models[model] = object_id
         dispatcher.send(signal=New,
                         sender=self.username,
