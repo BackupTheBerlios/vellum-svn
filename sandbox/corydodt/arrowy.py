@@ -5,7 +5,7 @@ import gnomecanvas
 from gnomecanvas import MOVETO_OPEN as MO, MOVETO as M, LINETO as L
 
 
-from math import sin, cos, pi, sqrt, atan
+from math import sin, cos, pi, atan
 
 def affineRotationForAngle(radians, x, y):
     """Pass in radians.  Returns a 6-tuple"""
@@ -110,7 +110,6 @@ class Arrow:
 
         self.head.affine_relative(affines)
         self.head.move(-tx, -ty)
-
 
     def move(self, origin=None, target=None):
         self.shaft.destroy()
