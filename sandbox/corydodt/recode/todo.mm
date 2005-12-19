@@ -198,10 +198,14 @@
 <node COLOR="#111111" CREATED="1128237131185" ID="Freemind_Link_1816095871" MODIFIED="1128463375856" TEXT="but not sent on the wire">
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#111111" CREATED="1128463403013" ID="Freemind_Link_1580374356" MODIFIED="1128463418420" TEXT="or serialized when realm is saving"/>
-<node COLOR="#111111" CREATED="1128463465077" ID="Freemind_Link_1865021823" MODIFIED="1128468041506" TEXT="dictify should filter">
-<icon BUILTIN="help"/>
+<node COLOR="#111111" CREATED="1128463465077" ID="Freemind_Link_1865021823" MODIFIED="1133736557912" TEXT="dictify for Connectors can be stub">
+<hook NAME="accessories/plugins/NodeNote.properties">
+<text>Connectors are created to connect one model to another.  Once created&#xa;a New signal gets sent to the network, but you cannot &quot;reconnect&quot;&#xa;a connector, nor move its endpoints away from the models it connects.&#xa;Therefore, it never needs property change signals, and dictify&#xa;only needs to get the IDs from the FakeModels</text>
+</hook>
 </node>
-<node COLOR="#111111" CREATED="1128463468218" ID="Freemind_Link_1450062831" MODIFIED="1128463490703" TEXT="NetClient&apos;s receivePropertyChange &#xa;should filter"/>
+<node COLOR="#111111" CREATED="1128463468218" ID="Freemind_Link_1450062831" MODIFIED="1133736429100" TEXT="NetClient&apos;s receivePropertyChange &#xa;should filter">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node COLOR="#111111" CREATED="1128237213869" ID="Freemind_Link_1696058820" MODIFIED="1128237759787" TEXT="connectors still need to be observers">
 <node COLOR="#111111" CREATED="1128237224711" ID="Freemind_Link_1795355017" MODIFIED="1128237228823" TEXT="but observer impl is simpler"/>
@@ -209,6 +213,13 @@
 </node>
 <node COLOR="#111111" CREATED="1129000367467" ID="Freemind_Link_1703388560" MODIFIED="1129005171651" TEXT="Implementation">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#111111" CREATED="1133736576007" FOLDED="true" ID="Freemind_Link_1558856121" MODIFIED="1133736609949" TEXT="FakeModel class to receive IDs of endpoints &#xa;when object for endpoint might still be in the queue">
+<node COLOR="#111111" CREATED="1133736560599" ID="Freemind_Link_1759865948" MODIFIED="1133736573976" TEXT="move the model_registry BiDict to a global var"/>
+<node COLOR="#111111" CREATED="1133736614762" ID="Freemind_Link_1021625261" MODIFIED="1133736632045" TEXT="IModel adapter uses model_registry &#xa;to get object from id"/>
+</node>
+<node COLOR="#111111" CREATED="1133736647719" ID="Freemind_Link_1716678549" MODIFIED="1133736677115" TEXT="registerObserver on the Connector"/>
+<node COLOR="#111111" CREATED="1133736678959" ID="Freemind_Link_890196586" MODIFIED="1133736692540" TEXT="Connector uses receivePropertyChange to &#xa;watch for changes to endpoints&apos; locations"/>
+<node COLOR="#111111" CREATED="1133736970431" ID="Freemind_Link_1747405100" MODIFIED="1133736997249" TEXT="then uses dispatch to notify gui that its own endpoints changed"/>
 </node>
 </node>
 <node COLOR="#111111" CREATED="1128234337416" FOLDED="true" ID="Freemind_Link_1166119285" MODIFIED="1128463334230" TEXT="View handles all this explicitly.. how &#xa;many such persistent connections will there be?">
