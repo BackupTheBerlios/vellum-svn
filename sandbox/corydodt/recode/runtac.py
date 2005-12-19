@@ -7,6 +7,6 @@ else:
 
 import sys
 real_argv = sys.argv
-sys.argv = ['twistd', '-noy', 'vr.tac']
+sys.argv = ['twistd', '-l', '-', '-ny', 'vr.tac', ]
 
 run()
