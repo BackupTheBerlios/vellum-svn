@@ -169,11 +169,12 @@ class Connector(Modelable):
 
     def receiveDropModel(self, sender, model):
         """If model is one of the endpoints, I should be destroyed too"""
-    #    models = map(IModel, self.endpoints)
-    #    if model in models:
-    #        dispatcher.send(signal=Drop,
-    #                        sender='connector',
-    #                        model=self)
+        if sender == 'gui':
+            print 'connector committing suicide. sender was', sender
+            if model in self.endpoints:
+                dispatcher.send(signal=Drop,
+                                sender='connector',
+                                model=self)
 
     def receivePropertyChange(self, 
                               signal, 
