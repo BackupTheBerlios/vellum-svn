@@ -22,6 +22,8 @@ from models import box, New, Drop, BiDict, loader
 from uuid import uuid
 
 
+model_registry = BiDict()
+
 
 
 class NetClient(pb.Referenceable):
@@ -29,7 +31,7 @@ class NetClient(pb.Referenceable):
         self.deferred = deferred
         self.pbfactory = pb.PBClientFactory()
         self.username = username
-        self.remote_models = BiDict()
+        self.remote_models = model_registry
 
     def remote_serverDisconnect(self, message):
         log.msg("DISCONNECTED: %s" % (message,))
@@ -50,6 +52,7 @@ class NetClient(pb.Referenceable):
         dispatcher.send(signal=New,
                         sender='remote',
                         model=model)
+        model.present()
 
     def remote_receiveDropModel(self,
                                 sender,
@@ -118,7 +121,11 @@ class NetClient(pb.Referenceable):
         changing.  Notifies the remote avatar that this has happened.
         """
         model = signal
-        if sender != 'remote':
+        # this is only meant to handle explicit property changes in the gui.
+        # It does not re-dispatch changes coming from the network, nor does
+        # it dispatch implicit changes made by moving the endpoint of a
+        # connector.
+        if sender not in ['remote', 'connector', 'presenting']:
             id = self.remote_models[model]
             self.avatar.callRemote('receivePropertyChange', 
                                    object_id=id,
@@ -149,17 +156,16 @@ class NetClient(pb.Referenceable):
 
     def gotGame(self, data):
         for model_data, id in data:
+            # create model objects from the yaml received
             model = loader.fromDict(model_data)
             self.remote_models[model] = id
+
+            # and alert the gui and other listeners that models are 
+            # alive and kicking.
             dispatcher.send(signal=New, sender='remote', model=model)
-            assert hasattr(model, 'location'), (
-                    "FIXME: should load types that don't have locations, "
-                    "should load other properties too")
-            dispatcher.send(signal=model, 
-                            sender='remote', 
-                            property='location', 
-                            old=None, 
-                            value=model.location)
+
+            # start telling the gui about the received object
+            model.present()
 
 
 class Gameboy(pb.Avatar):
@@ -303,7 +309,7 @@ class GameRealm:
 
     def __init__(self):
         self.avatars = {}
-        self.models = BiDict()
+        self.models = model_registry
         self.loadSavedGame()
         self.saveGame() # FIXME - for testing porpoises
 

@@ -1,5 +1,7 @@
 from __future__ import division
 
+from math import atan, pi, cos, sin
+
 import gtk
 from gtk import gdk
 
@@ -12,6 +14,7 @@ try:
     from gnome import canvas as gnomecanvas
 except ImportError:
     import gnomecanvas
+from gnomecanvas import MOVETO_OPEN as MO, MOVETO as M, LINETO as L
 
 from dispatch import dispatcher
 
@@ -19,12 +22,70 @@ from dispatch import dispatcher
 from fs import fs
 from models import Note, Character, New, Drop, box
 
+def affineRotationForAngle(radians, x, y):
+    """Pass in radians.  Returns a 6-tuple"""
+    scalex = cos(radians)
+    sheary = sin(-radians)
+    shearx = sin(radians)
+    scaley = scalex
+    return (scalex, sheary, shearx, scaley, x, y)
+
+def arrow(canvas, origin, target, color):
+    pd = gnomecanvas.path_def_new([(MO, origin[0], origin[1]), 
+                                   (L, target[0], target[1])])
+
+    group = canvas.root().add("GnomeCanvasGroup") # FIXME - need x,y?
+    
+    # draw the shaft
+    shaft = group.add("GnomeCanvasBpath",
+                      width_pixels=5,
+                      cap_style=gtk.gdk.CAP_ROUND,
+                      outline_color=color)
+    shaft.set_bpath(pd)
+
+    # draw the head
+    tx, ty = map(float, target)
+    sx, sy = tx-20, ty
+    ex, ey = tx, ty+20
+
+    ox, oy = map(float, origin)
+
+    _p = gnomecanvas.path_def_new([(MO, sx, sy),
+                                   (L, tx, ty),
+                                   (L, ex, ey),
+                                   ])
+    head = group.add("GnomeCanvasBpath",
+                     width_pixels=5,
+                     cap_style=gtk.gdk.CAP_ROUND,
+                     outline_color=color,
+                     )
+    head.set_bpath(_p)
+    if oy != ty:
+        # negate the y axis due to stupid display coordinates
+        leg_ratio = (tx-ox)/(oy-ty)
+        tip_angle = atan(leg_ratio)
+    else:
+        # avoid zerodivisionerror...
+        if tx > ox:
+            tip_angle = pi/2
+        else:
+            tip_angle = 3*pi/2
+    correction_angle = pi/4 - tip_angle
+    # flip 180 degrees if arrow is pointing down
+    if ty > oy: correction_angle = correction_angle + pi
+    affines = affineRotationForAngle(correction_angle, tx, ty)
+
+    head.affine_relative(affines)
+    head.move(-tx, -ty)
+
+    return group
 
 
 class BigView:
     """All the widgets down to the main window"""
     def __init__(self, controller):
         w = gtk.Window()
+        w.set_default_size(300,300)
         w.show()
 
         c = self.controller = controller
@@ -37,10 +98,20 @@ class BigView:
         w.add(canvas)
         canvas.show()
 
-        self.rect = canvas.root().add(
-                "GnomeCanvasRect", x1=0, y1=0, x2=500, y2=500,
-                fill_color="#ffffff")
+        # background square
+        self.rect = canvas.root().add("GnomeCanvasRect", 
+                                      x1=0, y1=0, x2=500, y2=500,
+                                      fill_color="#ffffff")
         self.rect.connect('event', c.on_background_event, self.rect)
+
+        # grid
+        dot = lambda x,y: canvas.root().add("GnomeCanvasRect", x1=x, y1=y,
+                                            x2=x+2, y2=y+2,
+                                            fill_color="#000000",
+                                            )
+        for x in range(0, 500, 20):
+            for y in range(0, 500, 20):
+                dot(x,y)
 
         w.connect('destroy', c.on_Vellum_destroy)
 
@@ -86,6 +157,18 @@ class BigController:
     def changed_Note_text(self, note, sender, old, new):
         note.set_property('text', new)
 
+    def changed_TargetArrow_locations(self, connector, sender, old, locations):
+        widget = getattr(connector, 'widget', None)
+        if widget is not None:
+            widget.destroy()
+        x1, y1, x2, y2 = locations
+        ar = arrow(self.view.canvas, 
+                   origin=(x1+38,y1+38), # TODO - z-order underneath origin
+                   target=(x2+38,y2+38), # TODO - point to edges of target
+                   color="#ff0000")
+        connector.widget = ar
+
+        
 
 
     def new_Character(self, character):
@@ -99,12 +182,13 @@ class BigController:
         x, y = corner
         if character.widget is None:
             igroup = root.add("GnomeCanvasGroup", x=x, y=y)
-            igroup.add("GnomeCanvasPixbuf",
-                       pixbuf=image,
-                       x=0, y=0)
+            pb = igroup.add("GnomeCanvasPixbuf",
+                            pixbuf=image,
+                            x=-x, y=-y)
 
             igroup.connect('event', self.on_draggable_event, character)
             character.widget = igroup
+
 
     def new_TargetArrow(self, arrow):
         pass

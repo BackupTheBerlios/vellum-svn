@@ -3,7 +3,7 @@ import yaml
 
 from dispatch import dispatcher
 
-class Signal:
+class Signal(object):
     pass
 
 
@@ -13,6 +13,7 @@ class New(Signal):
 class Drop(Signal):
     """A modelable object is no longer interesting"""
 
+
 class Modelable(Signal):
     def __init__(self):
         # FIXME? if receiver is a regular method, I get 
@@ -20,12 +21,24 @@ class Modelable(Signal):
         # the Modelable is gc'd.
         # when it's a lambda held in an instance variable, no error.
         self.receiver = (
-                lambda sender,property,value: setattr(self, property, value)
+                lambda sender,property,value: self.reify(property, value)
                          )
         dispatcher.connect(self.receiver, self)
 
     def dictify(self):
         return {'TYPE': self.__class__.__name__}
+
+    def reify(self, attr, value):
+        reifier = getattr(self, 'reify_%s' % (attr,), self.reifyDefault)
+        reifier(attr, value)
+
+    def reifyDefault(self, attr, value):
+        setattr(self, attr, value)
+
+    def present(self):
+        """Called to notify the gui that the object is ready to be displayed.
+        Might do nothing.  Implement in subclasses.
+        """
 
 
 class BiDict(dict):
@@ -62,6 +75,7 @@ class BiDict(dict):
                 yield k,v
 
 
+
 class Draggable(Modelable):
     def __init__(self):
         self.location = (40, 50)
@@ -72,6 +86,13 @@ class Draggable(Modelable):
         m = Modelable.dictify(self)
         m.update({ 'location': self.location, })
         return m
+    def present(self):
+        # FIXME - assumes the model has a location i.e. is actually on the map
+        dispatcher.send(signal=self, 
+                        sender='presenting', 
+                        property='location', 
+                        old=None, 
+                        value=self.location)
 
 
 class Character(Draggable):
@@ -88,15 +109,92 @@ class Note(Draggable):
         m.update({ 'text': self.text, })
         return m
 
+def lazyModel(id):
+    from net import model_registry
+    def _():
+        return model_registry[id]
+    return _
+
 class Connector(Modelable):
     def __init__(self):
         self.widget = None
-        self.endpoints = [None, None]
+        self._endpoints = [None, None]
+        # connectors listen for changes to the locations of their endpoints:
+        box.registerObserver(self)
+
         Modelable.__init__(self)
+
     def dictify(self):
         m = Modelable.dictify(self)
-        m.update({ 'endpoints': self.endpoints, })
+        from net import model_registry
+        
+        assert type(self.endpoints[0]) is not str
+        assert type(self.endpoints[1]) is not str
+        m.update({ 'endpoints': map(model_registry.get, self.endpoints),
+                  })
         return m
+
+    def reify_endpoints(self, attr, endpoints):
+        from net import model_registry
+        self.endpoints = map(lazyModel, endpoints)
+    def set_endpoints(self, endpoints):
+        assert None not in endpoints
+        self._endpoints = endpoints
+        if hasattr(self, '_realized_endpoints'):
+            del self._realized_endpoints
+    def get_endpoints(self):
+        # finally do evaluation of an endpoint to a model.
+        # cache it in _realized_endpoints.
+        if getattr(self, '_realized_endpoints', None) is None:
+            self._realized_endpoints = []
+            for ep in self._endpoints:
+                try:
+                    model = ep()
+                    self._realized_endpoints.append(model)
+                except KeyError:
+                    # tried to evalute the endpoint before it
+                    # was reified.  Don't set _realized_endpoints in this
+                    # case!
+                    del self._realized_endpoints
+                    return [None, None]
+
+        assert not callable(self._realized_endpoints[0])
+        assert not callable(self._realized_endpoints[1])
+        return self._realized_endpoints
+    endpoints = property(get_endpoints, set_endpoints)
+
+    def receiveNewModel(self, sender, model):
+        """Not interesting."""
+        
+
+    def receiveDropModel(self, sender, model):
+        """If model is one of the endpoints, I should be destroyed too"""
+    #    models = map(IModel, self.endpoints)
+    #    if model in models:
+    #        dispatcher.send(signal=Drop,
+    #                        sender='connector',
+    #                        model=self)
+
+    def receivePropertyChange(self, 
+                              signal, 
+                              sender, 
+                              property, 
+                              old, 
+                              value):
+        if signal in self.endpoints:
+            locations = self.locations
+            dispatcher.send(signal=self,
+                            sender='connector',
+                            property='locations',
+                            old=None,
+                            value=locations)
+
+    def get_locations(self):
+        eps = self.endpoints
+        return list(eps[0].location) + list(eps[1].location)
+    def set_locations(self, val): 
+        pass
+    locations = property(get_locations, set_locations)
 
 
 class TargetArrow(Connector):
@@ -106,31 +204,33 @@ class TargetArrow(Connector):
 class FollowArrow(Connector):
     pass
 
+
+
+
 class Loader:
     """Creator for instances of any Modelable from flat dict"""
     def __init__(self):
-        self.models = {}
+        self.model_classes = {}
 
     def registerModelType(self, klass, key=None):
         if key is None:
             key = klass.__name__
-        self.models[key] = klass
+        self.model_classes[key] = klass
 
     def fromDict(self, dict_data):
         classname = dict_data.pop('TYPE')
-        klass = self.models[classname]
-        ret = klass()
+        obj = self.model_classes[classname]()
         for k, v in dict_data.items():
-            setattr(ret, k, v)
-        return ret
+            obj.reify(k, v)
+        return obj
 
     _default = {}
     def typeByName(self, name, default=_default):
         # _default is a klooge so typeByName can obey dict.get's semantics
         # without having to catch any exceptions
         if default is Loader._default:
-            return self.models.get(name)
-        return self.models.get(name, default)
+            return self.model_classes.get(name)
+        return self.model_classes.get(name, default)
 
 
 loader = Loader()
