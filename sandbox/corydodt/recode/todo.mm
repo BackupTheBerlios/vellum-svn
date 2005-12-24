@@ -168,8 +168,10 @@
 </node>
 </node>
 </node>
-<node COLOR="#00b439" CREATED="1128203876286" ID="Freemind_Link_41198604" MODIFIED="1128463169708" TEXT="connectors">
+<node BACKGROUND_COLOR="#99f433" COLOR="#00b439" CREATED="1128203876286" FOLDED="true" ID="Freemind_Link_41198604" MODIFIED="1135424430762" TEXT="connectors">
+<edge COLOR="#808080" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
+<icon BUILTIN="button_ok"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>items which connect or apply to draggables should observe several properties.&#xa;* when draggable endpoints move, targetting arrow should update itself&#xa;* when either endpoint is Drop&apos;d, targetting arrow should disappear&#xa;</text>
 </hook>
@@ -179,27 +181,16 @@
 <node COLOR="#990000" CREATED="1128237360966" FOLDED="true" ID="Freemind_Link_204437201" MODIFIED="1135033573029" TEXT="moving endpoint problem">
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#111111" CREATED="1128204099724" FOLDED="true" ID="Freemind_Link_50547549" MODIFIED="1135032575964" TEXT="connectors are observers">
+<node BACKGROUND_COLOR="#99f433" COLOR="#111111" CREATED="1128237080404" FOLDED="true" ID="Freemind_Link_1865347952" MODIFIED="1135424551902" TEXT="arrows grow locations property">
+<edge COLOR="#808080" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="full-1"/>
-<icon BUILTIN="button_cancel"/>
-<hook NAME="accessories/plugins/NodeNote.properties">
-<text>if model in self.endpoints:&#xa;  self.do_appropriate_thing()&#xa;</text>
-</hook>
-<node COLOR="#111111" CREATED="1128237255803" ID="Freemind_Link_752862997" MODIFIED="1128237280290" TEXT="registered with box by main view (gui)"/>
-<node COLOR="#111111" CREATED="1128237292627" ID="Freemind_Link_554445752" MODIFIED="1128237299808" TEXT="observer impl">
-<node COLOR="#111111" CREATED="1128237304902" ID="Freemind_Link_113589197" MODIFIED="1128237323969" TEXT="watch for location changes of endpoints"/>
-<node COLOR="#111111" CREATED="1128237324219" ID="Freemind_Link_586375096" MODIFIED="1128237330713" TEXT="when change happens, redraw arrow"/>
-</node>
-</node>
-<node COLOR="#111111" CREATED="1128237080404" FOLDED="true" ID="Freemind_Link_1865347952" MODIFIED="1135033557638" TEXT="arrows grow location1, location2 properties">
 <icon BUILTIN="full-2"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#111111" CREATED="1128237120795" FOLDED="true" ID="Freemind_Link_493162952" MODIFIED="1135033568232" TEXT="these are dispatched">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#111111" CREATED="1128556881546" ID="Freemind_Link_1694457481" MODIFIED="1128556894828" TEXT="BigController should handle and draw"/>
+<node COLOR="#111111" CREATED="1128556881546" ID="Freemind_Link_1694457481" MODIFIED="1135424559214" TEXT="BigController handles and draws"/>
 </node>
-<node COLOR="#111111" CREATED="1128237131185" ID="Freemind_Link_1816095871" MODIFIED="1128463375856" TEXT="but not sent on the wire">
+<node COLOR="#111111" CREATED="1128237131185" FOLDED="true" ID="Freemind_Link_1816095871" MODIFIED="1128463375856" TEXT="but not sent on the wire">
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#111111" CREATED="1128463403013" ID="Freemind_Link_1580374356" MODIFIED="1128463418420" TEXT="or serialized when realm is saving"/>
 <node COLOR="#111111" CREATED="1128463465077" ID="Freemind_Link_1865021823" MODIFIED="1133736557912" TEXT="dictify for Connectors can be stub">
@@ -220,16 +211,29 @@
 <node COLOR="#111111" CREATED="1129000367467" FOLDED="true" ID="Freemind_Link_1703388560" MODIFIED="1135033554998" TEXT="Implementation">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#111111" CREATED="1133736576007" FOLDED="true" ID="Freemind_Link_1558856121" MODIFIED="1133736609949" TEXT="FakeModel class to receive IDs of endpoints &#xa;when object for endpoint might still be in the queue">
-<node COLOR="#111111" CREATED="1133736560599" ID="Freemind_Link_1759865948" MODIFIED="1133736573976" TEXT="move the model_registry BiDict to a global var"/>
-<node COLOR="#111111" CREATED="1133736614762" ID="Freemind_Link_1021625261" MODIFIED="1133736632045" TEXT="IModel adapter uses model_registry &#xa;to get object from id"/>
+<node COLOR="#111111" CREATED="1133736576007" ID="Freemind_Link_1558856121" MODIFIED="1135424630995" TEXT="see connector-before-endpoint problem">
+<arrowlink DESTINATION="Freemind_Link_334475158" ENDARROW="Default" ENDINCLINATION="570;0;" ID="Freemind_Arrow_Link_280244067" STARTARROW="None" STARTINCLINATION="570;0;"/>
 </node>
 <node COLOR="#111111" CREATED="1133736647719" ID="Freemind_Link_1716678549" MODIFIED="1133736677115" TEXT="registerObserver on the Connector"/>
 <node COLOR="#111111" CREATED="1133736678959" ID="Freemind_Link_890196586" MODIFIED="1133736692540" TEXT="Connector uses receivePropertyChange to &#xa;watch for changes to endpoints&apos; locations"/>
-<node COLOR="#111111" CREATED="1133736970431" ID="Freemind_Link_1747405100" MODIFIED="1133736997249" TEXT="then uses dispatch to notify gui that its own endpoints changed"/>
+<node COLOR="#111111" CREATED="1135424648464" ID="Freemind_Link_206273111" MODIFIED="1135424654870" TEXT="then modifies its own locations attribute"/>
+<node COLOR="#111111" CREATED="1133736970431" ID="Freemind_Link_1747405100" MODIFIED="1135424664932" TEXT="then uses dispatch to notify gui that its .locations property changed"/>
 </node>
 </node>
-<node COLOR="#111111" CREATED="1128234337416" FOLDED="true" ID="Freemind_Link_1166119285" MODIFIED="1128463334230" TEXT="View handles all this explicitly.. how &#xa;many such persistent connections will there be?">
+<node COLOR="#111111" CREATED="1128204099724" FOLDED="true" ID="Freemind_Link_50547549" MODIFIED="1135424519417" TEXT="connectors are observers">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-1"/>
+<icon BUILTIN="button_cancel"/>
+<hook NAME="accessories/plugins/NodeNote.properties">
+<text>if model in self.endpoints:&#xa;  self.do_appropriate_thing()&#xa;</text>
+</hook>
+<node COLOR="#111111" CREATED="1128237255803" ID="Freemind_Link_752862997" MODIFIED="1128237280290" TEXT="registered with box by main view (gui)"/>
+<node COLOR="#111111" CREATED="1128237292627" ID="Freemind_Link_554445752" MODIFIED="1128237299808" TEXT="observer impl">
+<node COLOR="#111111" CREATED="1128237304902" ID="Freemind_Link_113589197" MODIFIED="1128237323969" TEXT="watch for location changes of endpoints"/>
+<node COLOR="#111111" CREATED="1128237324219" ID="Freemind_Link_586375096" MODIFIED="1128237330713" TEXT="when change happens, redraw arrow"/>
+</node>
+</node>
+<node COLOR="#111111" CREATED="1128234337416" FOLDED="true" ID="Freemind_Link_1166119285" MODIFIED="1135424521417" TEXT="View handles all this explicitly.. how &#xa;many such persistent connections will there be?">
 <icon BUILTIN="button_cancel"/>
 <icon BUILTIN="full-3"/>
 <node COLOR="#111111" CREATED="1128234491894" ID="Freemind_Link_108718011" MODIFIED="1128234498365" TEXT="endpoints">
@@ -256,20 +260,20 @@
 <node COLOR="#111111" CREATED="1128236980378" ID="Freemind_Link_374940306" MODIFIED="1128236985754" TEXT="answer: TOO MANY"/>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1128237376342" ID="Freemind_Link_1036012661" MODIFIED="1128237381806" TEXT="resolving ids-to-models">
+<node COLOR="#990000" CREATED="1128237376342" FOLDED="true" ID="Freemind_Link_1036012661" MODIFIED="1135424322809" TEXT="resolving ids-to-models">
 <font NAME="SansSerif" SIZE="14"/>
-<node COLOR="#111111" CREATED="1128237383148" ID="Freemind_Link_1368215985" MODIFIED="1128237401209" TEXT="maybe box can take over remote_models list"/>
-<node COLOR="#111111" CREATED="1128237596386" ID="Freemind_Link_1941201929" MODIFIED="1128237636854" TEXT="unmarshal() should resolve id&apos;s to models before returning model"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#111111" CREATED="1135424313278" ID="Freemind_Link_683145648" MODIFIED="1135424319262" TEXT="BiDict, model_registry is a global"/>
 </node>
-<node COLOR="#990000" CREATED="1128237486114" ID="Freemind_Link_334475158" MODIFIED="1128237541110" TEXT="connector-before-endpoint problem">
+<node COLOR="#990000" CREATED="1128237486114" FOLDED="true" ID="Freemind_Link_334475158" MODIFIED="1135424630995" TEXT="connector-before-endpoint problem">
 <font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="button_ok"/>
 <hook NAME="accessories/plugins/NodeNote.properties">
 <text>if connector is Add&apos;d before endpoints, it will point to nothing&#xa;how do we make sure the endpoints are always built before connectors that refer to them?</text>
 </hook>
-<node COLOR="#111111" CREATED="1135032771506" FOLDED="true" ID="Freemind_Link_1012611446" MODIFIED="1135032773600" TEXT="FakeModel">
-<node COLOR="#111111" CREATED="1135032779475" ID="Freemind_Link_499785700" MODIFIED="1135032785490" TEXT="object that can be adapted to an IModel"/>
-<node COLOR="#111111" CREATED="1135032785787" ID="Freemind_Link_1548521052" MODIFIED="1135032794740" TEXT="contains only the reference to the object key"/>
-</node>
+<node COLOR="#111111" CREATED="1135424330668" ID="Freemind_Link_1450380981" MODIFIED="1135424718869" TEXT="make Connector.endpoint a get/set property"/>
+<node COLOR="#111111" CREATED="1135424348559" ID="Freemind_Link_689297577" MODIFIED="1135424372700" TEXT="the getter tries to look up the model in model_registry before punting"/>
+<node COLOR="#111111" CREATED="1135424374918" ID="Freemind_Link_239811848" MODIFIED="1135424383481" TEXT="lazyModel() might return the model, if it can"/>
 </node>
 </node>
 <node COLOR="#00b439" CREATED="1128463170771" ID="Freemind_Link_720219263" MODIFIED="1128463220758" TEXT="why do objects stay &quot;grabbed&quot;?">
@@ -385,6 +389,7 @@
 </node>
 <node COLOR="#990000" CREATED="1128147944290" ID="Freemind_Link_1209346866" MODIFIED="1128185460897" TEXT="strategy?">
 <font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1135424743635" ID="Freemind_Link_1720962199" MODIFIED="1135424785181" TEXT="get rid of all &quot;senders&quot;.  Instead use different signals &#xa;to indicate Gui interest or Network peer interest"/>
 </node>
 </node>
 <node COLOR="#00b439" CREATED="1127447067286" FOLDED="true" ID="Freemind_Link_1612497864" MODIFIED="1128138796379" TEXT="duplicate functionality in avatar and client">
