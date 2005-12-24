@@ -1,3 +1,10 @@
+
+acd005eed93279b6091857d598e82113:
+    TYPE: TargetArrow
+    endpoints:
+            - edf1af0e82ca7dc2123753cfa43ca9f0
+            - 74a44937bb7c54b4a5d5a474484c0512
+
 74a44937bb7c54b4a5d5a474484c0512:
     TYPE: Character
     location: [150, 30]
@@ -8,15 +15,8 @@ edf1af0e82ca7dc2123753cfa43ca9f0:
 
 d7e4846c372a75b8456a924913f77e45:
     TYPE: Note
-    location: [45, 45]
+    location: [200, 200]
     text: >
         Woot!
 
         This is some text.
-
-acd005eed93279b6091857d598e82113:
-    TYPE: TargetArrow
-    endpoints:
-            - edf1af0e82ca7dc2123753cfa43ca9f0
-            - 74a44937bb7c54b4a5d5a474484c0512
-
