@@ -30,7 +30,7 @@ class LevelGenerator( MyObject ):
         feats = [ dict( [ ( key, vals[ i ] ) for key, vals in feats.items( ) ] ) for i in range( levels ) ]
         self.levels = [ ]
         for number, ( mod, feat ) in enumerate( zip( mods, feats ) ):
-            genfunc = lambda character, generator, mods, feats, number=number+1: effecttype( character, number, character.level, mods, feats )
+            genfunc = lambda character, generator, mods, feats, number=number: effecttype( character, number, character.level, mods, feats )
             self.levels.append( EffectGenerator( name, session, mod, feat, genfunc ) )
 
     def getLevel( self, character, number ):

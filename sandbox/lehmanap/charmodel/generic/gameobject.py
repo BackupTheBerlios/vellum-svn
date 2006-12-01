@@ -6,7 +6,7 @@ class GameObjectMetaclass( type ):
     def __init__( clss, name, bases, dictionary ):
         def generateProperty( attrType, attrTag, attrName ):
             """
-            Because lambdas do not rememebr their scope, if the stack is overwritten.
+            Because lambdas do not remember their scope, if the stack is overwritten.
             """
             return ( lambda self: self.attrs[ attrTag ] ), ( lambda self, value: attrType( self, attrTag, attrName, value ) )
 
